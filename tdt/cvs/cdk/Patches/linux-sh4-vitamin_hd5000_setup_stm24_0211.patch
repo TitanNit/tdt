@@ -238,16 +238,16 @@ diff -uNr linux-sh4-0209/arch/sh/boards/mach-vitamin_hd5000/setup.c linux-sh4-02
 +			.out1_enabled = 0, });
 +
 +	/* I2C xxxA - HDMI */
-+	stx7111_configure_ssc_i2c(0);
++	stx7111_configure_ssc_i2c(0, NULL);
 +	
 +	/* I2C xxxB - EEPROM, ALPU, FRONTEND, AV SWITCH */
-+	stx7111_configure_ssc_i2c(1); 
++	stx7111_configure_ssc_i2c(1, NULL); 
 +	
 +	/* I2C xxxC - CI */
-+	stx7111_configure_ssc_i2c(2);
++	stx7111_configure_ssc_i2c(2, NULL);
 +	
 +	/* I2C xxxD - INTERNAL FE900 */
-+	stx7111_configure_ssc_i2c(3);
++	stx7111_configure_ssc_i2c(3, NULL);
 +
 +	stx7111_configure_usb(&(struct stx7111_usb_config) {
 +			.invert_ovrcur = 1, });
