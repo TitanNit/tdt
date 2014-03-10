@@ -53,7 +53,7 @@ console_data;1.03;console-data-1.03;console-data_1.03.orig.tar.gz;extract:consol
 nano;2.0.6;nano-2.0.6;nano-2.0.6.tar.gz;extract:nano-2.0.6.tar.gz
 rsync;2.6.9;rsync-2.6.9;rsync-2.6.9.tar.gz;extract:rsync-2.6.9.tar.gz
 fuse;2.9.2;fuse-2.9.2;fuse-2.9.2.tar.gz;extract:fuse-2.9.2.tar.gz
-curlftpfs;0.9.2;curlftpfs-0.9.2;curlftpfs-0.9.2.tar.gz;extract:curlftpfs-0.9.2.tar.gz
+curlftpfs;0.9.2;curlftpfs-0.9.2;curlftpfs-0.9.2.tar.gz;extract:curlftpfs-0.9.2.tar.gz;patch:curlftpfs-0.9.2.patch
 fbset;2.1;fbset-2.1;fbset_2.1.orig.tar.gz:fbset_2.1-6.diff.gz:fbset_2.1-fb.modes-ST.patch;extract:fbset_2.1.orig.tar.gz;patch:fbset_2.1-6.diff.gz;patch:fbset_2.1-fb.modes-ST.patch
 pngquant;1.1;pngquant-1.1;pngquant-1.1-src.tgz;extract:pngquant-1.1-src.tgz
 mplayer;1.0;mplayer-export-*;mplayer-export-snapshot.tar.bz2;extract:mplayer-export-snapshot.tar.bz2
