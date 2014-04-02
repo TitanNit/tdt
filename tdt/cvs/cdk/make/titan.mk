@@ -127,7 +127,7 @@ titan-libdreamdvd-distclean:
 # titan-plugins
 #
 
-$(DEPDIR)/titan-plugins.do_prepare:
+$(DEPDIR)/titan-plugins.do_prepare: | libpng libjpeg libfreetype libcurl
 	[ -d "$(appsdir)/titan" ] && \
 	(cd $(appsdir)/titan; svn up; cd "$(buildprefix)";); \
 	[ -d "$(appsdir)/titan" ] || \
