@@ -113,10 +113,10 @@
 +							if (ioctl(ddvd_fdaudio, AUDIO_CLEAR_BUFFER) < 0)
 +								perror("LIBDVD: AUDIO_CLEAR_BUFFER");
 +#endif
- 							if (ioctl(ddvd_fdaudio, AUDIO_SET_AV_SYNC, 1) < 0)
- 								perror("LIBDVD: AUDIO_SET_AV_SYNC");
- 							if (ioctl(ddvd_fdaudio, AUDIO_SET_BYPASS_MODE, 1) < 0)
- 								perror("LIBDVD: AUDIO_SET_BYPASS_MODE");
+							if (ioctl(ddvd_fdaudio, AUDIO_SET_AV_SYNC, 1) < 0)
+								Perror("AUDIO_SET_AV_SYNC");
+							if (ioctl(ddvd_fdaudio, AUDIO_SET_BYPASS_MODE, 1) < 0)
+								Perror("AUDIO_SET_BYPASS_MODE");
 +#ifdef __sh__
 +							//start audio after encoding set
 +							if (ioctl(ddvd_fdaudio, AUDIO_PLAY) < 0)
@@ -136,10 +136,10 @@
 +							if (ioctl(ddvd_fdaudio, AUDIO_CLEAR_BUFFER) < 0)
 +								perror("LIBDVD: AUDIO_CLEAR_BUFFER");
 +#endif
- 							if (ioctl(ddvd_fdaudio, AUDIO_SET_AV_SYNC, 1) < 0)
- 								perror("LIBDVD: AUDIO_SET_AV_SYNC");
- 							if (ioctl(ddvd_fdaudio, AUDIO_SET_BYPASS_MODE, lpcm_mode) < 0)
- 								perror("LIBDVD: AUDIO_SET_BYPASS_MODE");
+							if (ioctl(ddvd_fdaudio, AUDIO_SET_AV_SYNC, 1) < 0)
+								Perror("AUDIO_SET_AV_SYNC");
+							if (ioctl(ddvd_fdaudio, AUDIO_SET_BYPASS_MODE, lpcm_mode) < 0)
+								Perror("AUDIO_SET_BYPASS_MODE");
 +#ifdef __sh__
 +							//start audio after encoding set
 +							if (ioctl(ddvd_fdaudio, AUDIO_PLAY) < 0)
@@ -165,7 +165,7 @@
 @@ -1368,6 +1432,11 @@
  							if (ioctl(ddvd_fdaudio, AUDIO_SET_BYPASS_MODE, 5) < 0)	// DTS VOB
  #endif
- 								perror("LIBDVD: AUDIO_SET_BYPASS_MODE");
+								Perror("AUDIO_SET_BYPASS_MODE");
 +#ifdef __sh__
 +							//start audio after encoding set
 +							if (ioctl(ddvd_fdaudio, AUDIO_PLAY) < 0)
@@ -199,9 +199,9 @@
 +#endif
 +
  							if (ioctl(ddvd_fdaudio, AUDIO_SET_AV_SYNC, 1) < 0)
- 								perror("LIBDVD: AUDIO_SET_AV_SYNC");
- 							if (ioctl(ddvd_fdaudio, AUDIO_SET_BYPASS_MODE, bypassmode) < 0)
- 									perror("LIBDVD: AUDIO_SET_BYPASS_MODE");
+								Perror("AUDIO_SET_AV_SYNC");
+							if (ioctl(ddvd_fdaudio, AUDIO_SET_BYPASS_MODE, bypassmode) < 0)
+									Perror("AUDIO_SET_BYPASS_MODE");
 +
 +#ifdef __sh__
 +							//start audio after encoding set
