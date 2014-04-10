@@ -88,6 +88,7 @@ echo "28) Kathrein UFS-913"
 echo "29) Kathrein UFC-960"
 echo "30) Vitamin HD5000"
 echo "31) Atemio530"
+echo "32) SagemCom 88 series"
 
 case $1 in
 	[1-9] | 1[0-9] | 2[0-9] | 3[0-9]) REPLY=$1
@@ -128,6 +129,7 @@ case "$REPLY" in
 	29) TARGET="--enable-ufc960";BOXTYPE="--with-boxtype=ufc960";;
 	30) TARGET="--enable-vitamin_hd5000";BOXTYPE="--with-boxtype=vitamin_hd5000";;
 	31) TARGET="--enable-atemio530";BOXTYPE="--with-boxtype=atemio530";;
+	32) TARGET="--enable-sagemcom88";BOXTYPE="--with-boxtype=sagemcom88";;
 	 *) TARGET="--enable-atevio7500";BOXTYPE="--with-boxtype=atevio7500";;
 esac
 CONFIGPARAM="$CONFIGPARAM $TARGET $BOXTYPE"

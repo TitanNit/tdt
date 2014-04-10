@@ -296,6 +296,14 @@ AC_ARG_ENABLE(vitamin_hd5000,
 AM_CONDITIONAL(ENABLE_VITAMIN_HD5000,test "$enable_vitamin_hd5000" = "yes")
 AC_SUBST(VITAMIN_HD5000)
 
+AC_ARG_ENABLE(sagemcom88,
+	AS_HELP_STRING(--enable-sagemcom88,    enable sagemcom88 stuff),
+	[case "${enableval}" in
+		yes) SAGEMCOM88=sagemcom88 ;;
+	esac],[enable_sagemcom88=no])
+AM_CONDITIONAL(ENABLE_SAGEMCOM88,test "$enable_sagemcom88" = "yes")
+AC_SUBST(SAGEMCOM88)
+
 AC_ARG_ENABLE(hs7110,
 	AS_HELP_STRING(--enable-hs7110, enable fortis hs7110 stuff),
 	[case "${enableval}" in
