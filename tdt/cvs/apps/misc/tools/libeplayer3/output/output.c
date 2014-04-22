@@ -161,8 +161,8 @@ static int Command(void  *_context, OutputCmd_t command, void * argument) {
                 ret |= context->output->subtitle->Command(context, OUTPUT_OPEN, "subtitle");
             if (context->playback->isDvbSubtitle)
                 ret |= context->output->dvbsubtitle->Command(context, command, "dvbsubtitle");
-            if (context->playback->isTeletext)
-                ret |= context->output->teletext->Command(context, command, "teletext");
+//            if (context->playback->isTeletext)
+//                ret |= context->output->teletext->Command(context, command, "teletext");
         } else
             ret = cERR_OUTPUT_INTERNAL_ERROR;
         break;
@@ -177,8 +177,8 @@ static int Command(void  *_context, OutputCmd_t command, void * argument) {
                 ret |= context->output->subtitle->Command(context, OUTPUT_CLOSE, "subtitle");
             if (context->playback->isDvbSubtitle)
                 ret |= context->output->dvbsubtitle->Command(context, command, "dvbsubtitle");
-            if (context->playback->isTeletext)
-                ret |= context->output->teletext->Command(context, command, "teletext");
+//            if (context->playback->isTeletext)
+//                ret |= context->output->teletext->Command(context, command, "teletext");
         } else
             ret = cERR_OUTPUT_INTERNAL_ERROR;
         break;
@@ -208,10 +208,10 @@ static int Command(void  *_context, OutputCmd_t command, void * argument) {
                     if (context->playback->isSubtitle)
                         ret = context->output->subtitle->Command(context, OUTPUT_PLAY, "subtitle");
                 }
-		if (context->playback->isDvbSubtitle)
-                    ret |= context->output->dvbsubtitle->Command(context, command, "dvbsubtitle");
-		if (context->playback->isTeletext)
-		    ret |= context->output->teletext->Command(context, command, "teletext");
+				if (context->playback->isDvbSubtitle)
+		           ret |= context->output->dvbsubtitle->Command(context, command, "dvbsubtitle");
+//				if (context->playback->isTeletext)
+//				   ret |= context->output->teletext->Command(context, command, "teletext");
             }
         } else
             ret = cERR_OUTPUT_INTERNAL_ERROR;
@@ -227,8 +227,8 @@ static int Command(void  *_context, OutputCmd_t command, void * argument) {
                 ret |= context->output->subtitle->Command(context, OUTPUT_STOP, "subtitle");
             if (context->playback->isDvbSubtitle)
                 ret |= context->output->dvbsubtitle->Command(context, command, "dvbsubtitle");
-            if (context->playback->isTeletext)
-                ret |= context->output->teletext->Command(context, command, "teletext");
+//            if (context->playback->isTeletext)
+//                ret |= context->output->teletext->Command(context, command, "teletext");
         } else
             ret = cERR_OUTPUT_INTERNAL_ERROR;
         break;
