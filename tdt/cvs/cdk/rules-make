@@ -147,6 +147,8 @@ gmediarender;0.0.6;gmediarender-0.0.6;gmediarender-0.0.6.tar.bz2;extract:gmediar
 tinyxml;2.6.2;tinyxml2.6.2;tinyxml_2_6_2.tar.gz;extract:tinyxml_2_6_2.tar.gz;move:tinyxml:tinyxml2.6.2;patch:tinyxml2.6.2.patch
 libnfs;c0ebf57b21;libnfs-c0ebf57b21;libnfs.git;extract:libnfs.git
 taglib;1.8;taglib-1.8;taglib-1.8.tar.gz;extract:taglib-1.8.tar.gz
+#libsdl;2.0.3;SDL2-2.0.3;SDL2-2.0.3.tar.gz;extract:SDL2-2.0.3.tar.gz
+libsdl;1.2.15;SDL-1.2.15;SDL-1.2.15.tar.gz;extract:SDL-1.2.15.tar.gz
 
 #
 # PYTHON

@@ -148,6 +148,8 @@ mediatomb-0.12.1.tar.gz;http://downloads.sourceforge.net/mediatomb
 tinyxml_2_6_2.tar.gz;http://ignum.dl.sourceforge.net/project/tinyxml/tinyxml/2.6.2
 taglib-1.8.tar.gz;https://github.com/downloads/taglib/taglib
 libnfs.git;git://github.com/sahlberg/libnfs.git;c0ebf57b212ffefe83e2a50358499f68e7289e93
+#SDL2-2.0.3.tar.gz;http://www.libsdl.org/release
+SDL-1.2.15.tar.gz;http://www.libsdl.org/release
 
 #
 # PYTHON

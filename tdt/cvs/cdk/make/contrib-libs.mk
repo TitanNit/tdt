@@ -2359,3 +2359,20 @@ $(DEPDIR)/taglib: bootstrap @DEPENDS_taglib@
 	@DISTCLEANUP_taglib@
 	touch $@
 
+#
+# libsdl
+#
+$(DEPDIR)/libsdl: bootstrap fuse libcurl @DEPENDS_libsdl@
+	@PREPARE_libsdl@
+	export PATH=$(hostprefix)/bin:$(PATH) && \
+	cd @DIR_libsdl@ && \
+		$(BUILDENV) \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix=/usr
+			--prefix=/usr && \
+		$(MAKE) all && \
+		@INSTALL_libsdl@
+	@DISTCLEANUP_libsdl@
+	touch $@
