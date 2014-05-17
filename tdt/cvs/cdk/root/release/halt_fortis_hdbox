@@ -48,6 +48,9 @@ then
 fi
 
 #halt -d -f -n -i $poweroff $hddown
+sync;sync
+setenv test1 dummy
+sleep 1
 
 /bin/fp_control -e
 

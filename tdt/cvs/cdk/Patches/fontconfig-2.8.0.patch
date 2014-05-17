@@ -1,0 +1,73 @@
+Index: fontconfig-2.7.3/configure.in
+===================================================================
+--- fontconfig-2.7.3.orig/configure.in	2009-09-08 16:45:25.000000000 +0100
++++ fontconfig-2.7.3/configure.in	2009-10-30 19:17:21.000000000 +0000
+@@ -24,6 +24,8 @@
+ dnl Process this file with autoconf to create configure.
+ 
+ AC_INIT(fonts.dtd)
++AC_CONFIG_MACRO_DIR([.])
++m4_include([acinclude.m4])
+ 
+ dnl ==========================================================================
+ dnl                               Versioning              
+Index: fontconfig-2.7.3/fc-case/Makefile.am
+===================================================================
+--- fontconfig-2.7.3.orig/fc-case/Makefile.am	2009-10-30 19:19:05.000000000 +0000
++++ fontconfig-2.7.3/fc-case/Makefile.am	2009-10-30 19:19:32.000000000 +0000
+@@ -23,6 +23,7 @@
+ #
+ 
+ CC = @CC_FOR_BUILD@
++CFLAGS = -O2
+ EXEEXT = @EXEEXT_FOR_BUILD@
+ LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+ 
+Index: fontconfig-2.7.3/doc/Makefile.am
+===================================================================
+--- fontconfig-2.7.3.orig/doc/Makefile.am	2009-10-30 19:26:29.000000000 +0000
++++ fontconfig-2.7.3/doc/Makefile.am	2009-10-30 19:26:41.000000000 +0000
+@@ -22,6 +22,7 @@
+ # PERFORMANCE OF THIS SOFTWARE.
+ 
+ CC = @CC_FOR_BUILD@
++CFLAGS = -O2
+ EXEEXT = @EXEEXT_FOR_BUILD@
+ LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+ 
+Index: fontconfig-2.7.3/fc-arch/Makefile.am
+===================================================================
+--- fontconfig-2.7.3.orig/fc-arch/Makefile.am	2009-10-30 19:25:45.000000000 +0000
++++ fontconfig-2.7.3/fc-arch/Makefile.am	2009-10-30 19:25:54.000000000 +0000
+@@ -23,6 +23,7 @@
+ #
+ 
+ CC = @CC_FOR_BUILD@
++CFLAGS = -O2
+ EXEEXT = @EXEEXT_FOR_BUILD@
+ LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+ 
+Index: fontconfig-2.7.3/fc-glyphname/Makefile.am
+===================================================================
+--- fontconfig-2.7.3.orig/fc-glyphname/Makefile.am	2009-10-30 19:25:19.000000000 +0000
++++ fontconfig-2.7.3/fc-glyphname/Makefile.am	2009-10-30 19:25:29.000000000 +0000
+@@ -23,6 +23,7 @@
+ #
+ 
+ CC = @CC_FOR_BUILD@
++CFLAGS = -O2
+ EXEEXT = @EXEEXT_FOR_BUILD@
+ LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+ 
+Index: fontconfig-2.7.3/fc-lang/Makefile.am
+===================================================================
+--- fontconfig-2.7.3.orig/fc-lang/Makefile.am	2009-10-30 19:24:27.000000000 +0000
++++ fontconfig-2.7.3/fc-lang/Makefile.am	2009-10-30 19:24:36.000000000 +0000
+@@ -23,6 +23,7 @@
+ #
+ 
+ CC = @CC_FOR_BUILD@
++CFLAGS = -O2
+ EXEEXT = @EXEEXT_FOR_BUILD@
+ LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+ 

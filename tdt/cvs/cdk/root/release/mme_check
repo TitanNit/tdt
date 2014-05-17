@@ -12,7 +12,7 @@ if [ -e /etc/mme.tmp ]; then
    case "$var" in
       0) echo "1W boxtype"
            /bin/evremote &
-           date -s "200901011200"
+           date -s "121220001970"
            gotosleep 20:00:02;;
      *)    var=$(lsmod | grep vfd)
            if [ -z "$var" ] ; then

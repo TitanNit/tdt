@@ -17,7 +17,7 @@ start()
   # Decide if we have CI and/or TWIN/TRIPLET
   CI="FALSE"
   TUNER="1"
-  for TARGET in cuberevo-9500hd cuberevo-mini2 cuberevo-mini cuberevo ufs922 ufs912 ufs913 ufc960 fortis atevio7500 octagon1008 hs7810a hs7110 atemio520 atemio530 ufs910 hl101 Edision-v1 Edision-v2 hs5101 tf7700 ipbox9900; do
+  for TARGET in cuberevo-9500hd cuberevo-mini2 cuberevo-mini cuberevo ufs922 ufs912 ufs913 ufc960 fortis atevio7500 octagon1008 hs7810a hs7110 whitebox ufs910 hl101 Edision-v1 Edision-v2 hs5101 tf7700 ipbox9900; do
     if [ ${HOST} == ${TARGET} ]; then
       CI="TRUE"
       break
@@ -40,7 +40,7 @@ start()
   
   # Decide if we support HDMI CEC
   HDMI_CEC="FALSE"
-  for TARGET in atevio7500 hs7110 hs7810a spark spark7162 ufs912 ufs913 atemio520 atemio530; do
+  for TARGET in atevio7500 hs7110 hs7810a spark spark7162 ufs912 ufs913 whitebox; do
     if [ ${HOST} == ${TARGET} ]; then
       HDMI_CEC="TRUE"
       break

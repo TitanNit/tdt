@@ -76,6 +76,8 @@ start()
   if [ ${CI} == "TRUE" ]; then
     ${MAKEDEV} dvb_ci
     ${MAKEDEV} dvb_ca
+  elif [ "${HOST}" == "cuberevo-2000hd" ]; then
+    ${MAKEDEV} dvb_ca
   else
     ${MAKEDEV} dvb_ca_no
   fi

@@ -48,6 +48,8 @@ then
 fi
 
 #halt -d -f -n -i $poweroff $hddown
+sync;sync
+sleep 1
 
 /bin/fp_control -e
 

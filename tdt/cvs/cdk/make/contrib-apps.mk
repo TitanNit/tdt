@@ -120,11 +120,10 @@ $(DEPDIR)/openrdate: bootstrap @DEPENDS_openrdate@ $(OPENRDATE_ADAPTED_ETC_FILES
 
 #
 # e2fsprogs
-# | $(UTIL_LINUX)
+#
 $(DEPDIR)/e2fsprogs: bootstrap utillinux @DEPENDS_e2fsprogs@
 	@PREPARE_e2fsprogs@
 	cd @DIR_e2fsprogs@ && \
-		ln -sf /bin/true ./ldconfig; \
 		CFLAGS="$(TARGET_CFLAGS)" \
 		CC=$(target)-gcc \
 		RANLIB=$(target)-ranlib \

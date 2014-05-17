@@ -25,7 +25,6 @@ start(){
 	mount /dev/sr0 /media/dvd
 	#mount -t ext3 /dev/sdb1 /hdd/movie
 
-	mkdir -p /var/run/lirc
         pidof lircd || /usr/bin/lircd
 
 	splash_exit

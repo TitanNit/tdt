@@ -1,0 +1,77 @@
+diff --git a/src/Makefile b/src/Makefile
+index 7b4b2b7..9387f8b 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -31,6 +31,7 @@ PLATS= aix ansi bsd freebsd generic linux macosx mingw posix solaris
+ LUA_A=	liblua.a
+ CORE_O=	lapi.o lcode.o lctype.o ldebug.o ldo.o ldump.o lfunc.o lgc.o llex.o \
+ 	lmem.o lobject.o lopcodes.o lparser.o lstate.o lstring.o ltable.o \
++	posix.o \
+ 	ltm.o lundump.o lvm.o lzio.o
+ LIB_O=	lauxlib.o lbaselib.o lbitlib.o lcorolib.o ldblib.o liolib.o \
+ 	lmathlib.o loslib.o lstrlib.o ltablib.o loadlib.o linit.o
+@@ -103,7 +104,7 @@ freebsd:
+ generic: $(ALL)
+ 
+ linux:
+-	$(MAKE) $(ALL) SYSCFLAGS="-DLUA_USE_LINUX" SYSLIBS="-Wl,-E -ldl -lreadline"
++	$(MAKE) $(ALL) SYSCFLAGS="-DLUA_USE_LINUX" SYSLIBS="-Wl,-E -ldl -lreadline -lrt"
+ 
+ macosx:
+ 	$(MAKE) $(ALL) SYSCFLAGS="-DLUA_USE_MACOSX" SYSLIBS="-lreadline" CC=cc
+@@ -164,6 +165,7 @@ loslib.o: loslib.c lua.h luaconf.h lauxlib.h lualib.h
+ lparser.o: lparser.c lua.h luaconf.h lcode.h llex.h lobject.h llimits.h \
+  lzio.h lmem.h lopcodes.h lparser.h ldebug.h lstate.h ltm.h ldo.h lfunc.h \
+  lstring.h lgc.h ltable.h
++posix.o: posix.c lua.h luaconf.h lauxlib.h
+ lstate.o: lstate.c lua.h luaconf.h lapi.h llimits.h lstate.h lobject.h \
+  ltm.h lzio.h lmem.h ldebug.h ldo.h lfunc.h lgc.h llex.h lstring.h \
+  ltable.h
+diff --git a/src/config.h b/src/config.h
+new file mode 100644
+index 0000000..3793eec
+--- /dev/null
++++ b/src/config.h
+@@ -0,0 +1,22 @@
++#define HAVE_DLFCN_H 1
++#define HAVE_INTTYPES_H 1
++#define HAVE_LAUXLIB_H 1
++#define HAVE_LUACONF_H 1
++#define HAVE_LUALIB_H 1
++#define HAVE_LUA_H 1
++#define HAVE_MEMORY_H 1
++#define HAVE_STATVFS 1
++#define HAVE_STDINT_H 1
++#define HAVE_STDLIB_H 1
++#define HAVE_STRINGS_H 1
++#define HAVE_STRING_H 1
++#define HAVE_SYS_STATVFS_H 1
++#define HAVE_SYS_STAT_H 1
++#define HAVE_SYS_TYPES_H 1
++#define HAVE_UNISTD_H 1
++#define _XOPEN_SOURCE 700
++#define _GNU_SOURCE 1
++#define VERSION "31"
++#include <strings.h>
++#define LUA_LIB
++
+diff --git a/src/linit.c b/src/linit.c
+index c1a3830..9c8a47a 100644
+--- a/src/linit.c
++++ b/src/linit.c
+@@ -19,6 +19,7 @@
+ #include "lua.h"
+ 
+ #include "lualib.h"
++LUALIB_API int (luaopen_posix_c) (lua_State *L);
+ #include "lauxlib.h"
+ 
+ 
+@@ -37,6 +38,7 @@ static const luaL_Reg loadedlibs[] = {
+   {LUA_BITLIBNAME, luaopen_bit32},
+   {LUA_MATHLIBNAME, luaopen_math},
+   {LUA_DBLIBNAME, luaopen_debug},
++  {"posix_c", luaopen_posix_c},
+   {NULL, NULL}
+ };
+ 

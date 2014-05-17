@@ -12,9 +12,6 @@ GCC_ALTERNATE_VERSION=2.95
 GPP_REQUIRED_VERSION=3.0
 GPP_ALTERNATE_VERSION=2.95
 
-PATH=/usr/kerberos/bin:/usr/local/bin:/bin:/usr/bin:/home/ks/bin:/home/ks/bin
-#export PATH=/home/data/ufs/box/host/bin:/home/data/ufs/box/devkit/sh4/bin:$PATH
-
 srcdir=`dirname $0`
 test -z "$srcdir" && srcdir=.
 
@@ -147,7 +144,7 @@ fi
 if test "$DIE" -eq 1; then
     echo
     echo "Please install/upgrade the missing tools and call me again."
-    echo	
+    echo
     exit 1
 fi
 

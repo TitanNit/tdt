@@ -86,14 +86,6 @@ AC_ARG_ENABLE(multicom406,
 AM_CONDITIONAL(ENABLE_MULTICOM406,test "$enable_multicom406" = "yes")
 AC_SUBST(MULTICOM406)
 
-AC_ARG_ENABLE(p0207,
-	AS_HELP_STRING(--enable-p0207, set up the CDK to use the STLinux 2.4 with patchlevel 0207),
-	[case "${enableval}" in
-		yes) P0207=p0207 ;;
-	esac], [enable_p0207=no])
-AM_CONDITIONAL(ENABLE_P0207,test "$enable_p0207" = "yes")
-AC_SUBST(P0207)
-
 AC_ARG_ENABLE(p0209,
 	AS_HELP_STRING(--enable-p0209, set up the CDK to use the STLinux 2.4 with patchlevel 0209),
 	[case "${enableval}" in
@@ -102,14 +94,6 @@ AC_ARG_ENABLE(p0209,
 AM_CONDITIONAL(ENABLE_P0209,test "$enable_p0209" = "yes")
 AC_SUBST(P0209)
 
-AC_ARG_ENABLE(p0210,
-	AS_HELP_STRING(--enable-p0210, set up the CDK to use the STLinux 2.4 with patchlevel 0210),
-	[case "${enableval}" in
-		yes) P0210=p0210 ;;
-	esac], [enable_p0210=no])
-AM_CONDITIONAL(ENABLE_P0210,test "$enable_p0210" = "yes")
-AC_SUBST(P0210)
-
 AC_ARG_ENABLE(p0211,
 	AS_HELP_STRING(--enable-p0211, set up the CDK to use the STLinux 2.4 with patchlevel 0211),
 	[case "${enableval}" in
@@ -117,6 +101,14 @@ AC_ARG_ENABLE(p0211,
 	esac], [enable_p0211=no])
 AM_CONDITIONAL(ENABLE_P0211,test "$enable_p0211" = "yes")
 AC_SUBST(P0211)
+
+AC_ARG_ENABLE(p0214,
+	AS_HELP_STRING(--enable-p021, set up the CDK to use the STLinux 2.4 with patchlevel 0214),
+	[case "${enableval}" in
+		yes) P0214=p0214 ;;
+	esac], [enable_p0214=no])
+AM_CONDITIONAL(ENABLE_P0214,test "$enable_p0214" = "yes")
+AC_SUBST(P0214)
 
 AC_ARG_WITH(cpu,
 	[  --with-cpu=MODEL    cpu model [[sh4]]],
@@ -133,12 +125,6 @@ AC_ARG_ENABLE(mediafwgstreamer,
 	,[enable_mediafwgstreamer=no])
 AM_CONDITIONAL(ENABLE_MEDIAFWGSTREAMER,test "$enable_mediafwgstreamer" = "yes")
 AC_SUBST(MEDIAFWGSTREAMER)
-
-AC_ARG_ENABLE(graphicfwdirectfb,
-	AS_HELP_STRING(--enable-graphicfwdirectfb,    set up the CDK to use graphicfw directfb),
-	,[enable_graphicfwdirectfb=no])
-AM_CONDITIONAL(ENABLE_GRAPHICFWDIRECTFB,test "$enable_graphicfwdirectfb" = "yes")
-AC_SUBST(GRAPHICFWDIRECTFB)
 
 AC_ARG_ENABLE(externallcd,
 	AS_HELP_STRING(--enable-externallcd,    set up the CDK to use graphlcd),
@@ -660,13 +646,13 @@ if test "$enable_ccache" = "yes"; then
 		fi
 		ccacheinfo="
 ----------------------------------------
-ccache installdir           : $ccachedir
+ccache installdir                   $ccachedir
 $($ccachedir/ccache -s)
 ----------------------------------------"
 	else
 		ccacheinfo="
 ----------------------------------------
-ccache installdir           : $ccachedir
+ccache installdir                    $ccachedir
 ccache is not yet installed, but installation starts on first build of cdk environment or you can run make ccache
 ----------------------------------------"
 	fi
@@ -695,28 +681,27 @@ AC_SUBST(DISTCLEANUP)
 AC_SUBST(KERNELVERSION)
 AC_SUBST(KERNELSTMLABEL)
 AC_SUBST(KERNELLABEL)
-TUXBOX_RULES_MAKE(linuxp0207)
-TUXBOX_RULES_MAKE(linuxp0209)
-TUXBOX_RULES_MAKE(linuxp0210)
-TUXBOX_RULES_MAKE(linuxp0211)
+AC_SUBST(PATCH_STR)
 
 if test "$enable_stm24" = "yes"; then
-	if test "$enable_p0207" == "yes"; then
-		KERNELVERSION=${VERSION_linuxp0207}
-		KERNELSTMLABEL="_${VERSION_linuxp0207#*_}"
-		KERNELLABEL="207"
-	elif test "$enable_p0209" == "yes"; then
+	if test "$enable_p0209" == "yes"; then
+		TUXBOX_RULES_MAKE(linuxp0209)
 		KERNELVERSION=${VERSION_linuxp0209}
 		KERNELSTMLABEL="_${VERSION_linuxp0209#*_}"
 		KERNELLABEL="209"
-	elif test "$enable_p0210" == "yes"; then
-		KERNELVERSION=${VERSION_linuxp0210}
-		KERNELSTMLABEL="_${VERSION_linuxp0210#*_}"
-		KERNELLABEL="210"
+		PATCH_STR="_0209"
 	elif test "$enable_p0211" == "yes"; then
+		TUXBOX_RULES_MAKE(linuxp0211)
 		KERNELVERSION=${VERSION_linuxp0211}
 		KERNELSTMLABEL="_${VERSION_linuxp0211#*_}"
 		KERNELLABEL="211"
+		PATCH_STR="_0211"
+	elif test "$enable_p0214" == "yes"; then
+		TUXBOX_RULES_MAKE(linuxp0214)
+		KERNELVERSION=${VERSION_linuxp0214}
+		KERNELSTMLABEL="_${VERSION_linuxp0214#*_}"
+		KERNELLABEL="214"
+		PATCH_STR="_0214"
 	fi
 fi
 
@@ -741,17 +726,6 @@ else
 	MEDIAFW="eplayer3"
 	MEDIAFW_DEP="ffmpeg"
 fi
-
-AC_SUBST(GRAPHICFW)
-AC_SUBST(GRAPHICFW_DEP)
-if test "$enable_graphicfwdirectfb" == "yes"; then
-	GRAPHICFW="directfb"
-	GRAPHICFW_DEP="directfb"
-else
-	GRAPHICFW="framebuffer"
-	GRAPHICFW_DEP=""
-fi
-
 
 #
 # core
@@ -813,7 +787,7 @@ TUXBOX_RULES_MAKE(libpng12)
 TUXBOX_RULES_MAKE(libpng)
 TUXBOX_RULES_MAKE(libungif)
 TUXBOX_RULES_MAKE(libgif)
-TUXBOX_RULES_MAKE(libgif_current)
+TUXBOX_RULES_MAKE(libgif_e2)
 TUXBOX_RULES_MAKE(libcurl)
 TUXBOX_RULES_MAKE(libfribidi)
 TUXBOX_RULES_MAKE(libsigc)
@@ -878,7 +852,6 @@ TUXBOX_RULES_MAKE(gmediarender)
 TUXBOX_RULES_MAKE(tinyxml)
 TUXBOX_RULES_MAKE(libnfs)
 TUXBOX_RULES_MAKE(taglib)
-TUXBOX_RULES_MAKE(libsdl)
 
 #
 # python
@@ -931,7 +904,6 @@ TUXBOX_RULES_MAKE(hotplug_e2)
 TUXBOX_RULES_MAKE(graphlcd)
 TUXBOX_RULES_MAKE(lcd4_linux)
 TUXBOX_RULES_MAKE(libusb)
-TUXBOX_RULES_MAKE(libusb2)
 TUXBOX_RULES_MAKE(libusbcompat)
 TUXBOX_RULES_MAKE(libgd2)
 TUXBOX_RULES_MAKE(libdpfax)
@@ -970,12 +942,13 @@ TUXBOX_RULES_MAKE(wireless_tools)
 TUXBOX_RULES_MAKE(zd1211)
 TUXBOX_RULES_MAKE(wpa_supplicant)
 TUXBOX_RULES_MAKE(ethtool)
+TUXBOX_RULES_MAKE(xupnpd)
 
 #
 # RPM stuff
 #
-configprefix=$prefix/config
 crossprefix=$prefix/devkit/sh4
+configprefix=$prefix/config
 devkitprefix=$prefix/devkit
 rpmdbprefix=${targetprefix}-rpmdb
 kernelprefix=$buildprefix
@@ -989,8 +962,8 @@ AC_SUBST(kernelprefix)
 # localmacros
 #
 $INSTALL -d SOURCES SPECS BUILD SRPMS RPMS/{noarch,${host_arch},sh4}
-test -f config && rm config || true
-ln -sf $configprefix/rpm config || true
+##test -f config && rm config || true
+##ln -sf $configprefix/rpm config || true
 echo "%_topdir $buildprefix" >localmacros
 echo "%_specdir %_topdir/SPECS" >>localmacros
 echo "%_sourcedir %_topdir/SOURCES" >>localmacros
@@ -1066,10 +1039,9 @@ kernelversion               : $KERNELVERSION
 localversion                : $KERNELSTMLABEL
 STLinux 2.4                 : $enable_stm24
 GCC 4.7.2                   : $enable_gcc47
-Patchlevel P0207            : $enable_p0207
 Patchlevel P0209            : $enable_p0209
-Patchlevel P0210            : $enable_p0210
 Patchlevel P0211            : $enable_p0211
+Patchlevel P0214            : $enable_p0214
 ccache                      : $enable_ccache
 target prefix               : $targetprefix
 boot prefix                 : $bootprefix
@@ -1093,13 +1065,10 @@ Multicom406                 : $enable_multicom406
 MediaFw Gstreamer           : $enable_mediafwgstreamer
 MediaFw                     : $MEDIAFW
 MediaFw Dep                 : $MEDIAFW_DEP
-GraphicFw DirectFB          : $enable_graphicfwdirectfb
-GraphicFw                   : $GRAPHICFW
-GraphicFw Dep               : $GRAPHICFW_DEP
 EXTERNALLCD                 : $enable_externallcd
 EXTERNALLCD_DEP             : $EXTERNALLCD_DEP
 ccache support              : $enable_ccache
-                              $ccacheinfo
+$ccacheinfo
 ])
 
 if test "$dircheck" = "fail"; then

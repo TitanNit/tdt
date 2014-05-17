@@ -10,9 +10,10 @@ SYSVINIT_SPEC_PATCH :=
 SYSVINIT_PATCHES :=
 
 SYSVINIT_RPM := RPMS/sh4/$(STLINUX)-sh4-$(SYSVINIT)-$(SYSVINIT_VERSION).sh4.rpm
+INITSCRIPTS_RPM := RPMS/sh4/$(STLINUX)-sh4-$(INITSCRIPTS)-$(SYSVINIT_VERSION).sh4.rpm
 SYSVINITTOOLS_RPM := RPMS/sh4/$(STLINUX)-sh4-$(SYSVINITTOOLS)-$(SYSVINIT_VERSION).sh4.rpm
 
-$(SYSVINIT_RPM) $(SYSVINITTOOLS_RPM): \
+$(SYSVINIT_RPM) $(SYSVINITTOOLS_RPM) $(INITSCRIPTS_RPM): \
 		$(addprefix Patches/,$(SYSVINIT_SPEC_PATCH) $(SYSVINIT_PATCHES)) \
 		$(archivedir)/$(STLINUX)-target-$(SYSVINIT)-$(SYSVINIT_VERSION).src.rpm
 	rpm $(DRPM) --nosignature -Uhv $(lastword $^) && \
@@ -21,20 +22,45 @@ $(SYSVINIT_RPM) $(SYSVINITTOOLS_RPM): \
 	export PATH=$(hostprefix)/bin:$(PATH) && \
 	rpmbuild $(DRPMBUILD) -bb -v --clean --target=sh4-linux SPECS/$(SYSVINIT_SPEC)
 
-$(DEPDIR)/$(SYSVINIT): $(INITSCRIPTS_ADAPTED_ETC_FILES:%=root/etc/%) $(SYSVINIT_ADAPTED_ETC_FILES:%=root/etc/%) $(SYSVINIT_RPM)
+$(DEPDIR)/$(SYSVINIT): $(SYSVINIT_ADAPTED_ETC_FILES:%=root/etc/%) $(SYSVINIT_RPM)
 	@rpm --dbpath $(prefix)/$*cdkroot-rpmdb $(DRPM) --ignorearch --nodeps --force -Uhv \
 		--badreloc --relocate $(targetprefix)=$(prefix)/$*cdkroot $(lastword $^) && \
 	( cd root/etc && for i in $(SYSVINIT_ADAPTED_ETC_FILES); do \
 		[ -f $$i ] && $(INSTALL) -m644 $$i $(prefix)/$*cdkroot/etc/$$i || true; \
 		[ "$${i%%/*}" = "init.d" ] && chmod 755 $(prefix)/$*cdkroot/etc/$$i || true; done )
-	( cd root/etc && for i in $(INITSCRIPTS_ADAPTED_ETC_FILES); do \
-		[ -f $$i ] && $(INSTALL) -m644 $$i $(prefix)/$*cdkroot/etc/$$i || true; \
-		[ "$${i%%/*}" = "init.d" ] && chmod 755 $(prefix)/$*cdkroot/etc/$$i || true; done ) || true
 	touch $@
 
 $(DEPDIR)/$(SYSVINITTOOLS): $(SYSVINITTOOLS_RPM)
 	@rpm --dbpath $(prefix)/$*cdkroot-rpmdb $(DRPM) --ignorearch --nodeps --force -Uhv \
 		--badreloc --relocate $(targetprefix)=$(prefix)/$*cdkroot $<
+	touch $@
+
+$(DEPDIR)/$(INITSCRIPTS): $(INITSCRIPTS_ADAPTED_ETC_FILES:%=root/etc/%) $(INITSCRIPTS_RPM) | filesystem
+	@rpm --dbpath $(prefix)/$*cdkroot-rpmdb $(DRPM) --ignorearch --nodeps --force --nopost -Uhv \
+		--badreloc --relocate $(targetprefix)=$(prefix)/$*cdkroot $(lastword $^) && \
+	( cd $(prefix)/$*cdkroot/etc/init.d/ && \
+		sed -e "s|-uid 0 ||g" -i bootclean.sh && \
+		sed -e "s|-empty ||g" -i bootclean.sh && \
+		sed -e "s/chmod \-f/chmod/g" -i bootmisc.sh && \
+		sed -e "s/chown \-f/chown/g" -i bootmisc.sh && \
+		sed -e "s|/etc/nologin|/var/tmp/nologin|g" -i bootmisc.sh && \
+		sed -e "s|PATH=/lib/init:/bin:/sbin|PATH=/lib/init:/bin:/sbin:/usr/bin:/usr/sbin|g" -i checkroot.sh && \
+		sed -e "s/hostname \-\-file/hostname \-F/g" -i hostname.sh && \
+		sed -e "s|PATH=/lib/init:/sbin:/bin|PATH=/lib/init:/bin:/sbin:/usr/bin:/usr/sbin|g" -i rmnologin && \
+		sed -e "s|# chkconfig: 2345 99 0|# chkconfig: 2345 69 0|" -i rmnologin && \
+		sed -e "s|readlink -f /etc/nologin|readlink -f /var/tmp/nologin|g" -i rmnologin ) 
+	( cd $(prefix)/$*cdkroot/etc/default/ && \
+		sed -e "s|EDITMOTD=yes|EDITMOTD=no|g" -i rcS )
+	( cd root/etc && for i in $(INITSCRIPTS_ADAPTED_ETC_FILES); do \
+		[ -f $$i ] && $(INSTALL) -m644 $$i $(prefix)/$*cdkroot/etc/$$i || true; \
+		[ "$${i%%/*}" = "init.d" ] && chmod 755 $(prefix)/$*cdkroot/etc/$$i || true; done ) || true 
+	( export HHL_CROSS_TARGET_DIR=$(prefix)/$*cdkroot && cd $(prefix)/$*cdkroot/etc/init.d && \
+		for s in init.d/mountvirtfs bootlogd checkroot.sh checkfs.sh mountall.sh \
+		hostname.sh mountnfs.sh bootmisc.sh urandom \
+		sendsigs umountnfs.sh umountfs halt reboot \
+		rmnologin single stop-bootlogd ; do \
+			$(hostprefix)/bin/target-initdconfig --add $${s#init.d/} || \
+			echo "Unable to enable initd service: $${s#init.d/}" ; done && rm *rpmsave *.orig 2>/dev/null || true )
 	touch $@
 
 #

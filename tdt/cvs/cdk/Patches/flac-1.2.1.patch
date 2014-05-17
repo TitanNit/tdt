@@ -1,10 +1,41 @@
---- flac-1.2.1/examples/cpp/encode/file/main.cpp.org	2007-09-13 08:58:03.000000000 -0700
-+++ flac-1.2.1/examples/cpp/encode/file/main.cpp	2011-10-19 04:28:33.000000000 -0700
-@@ -28,6 +28,7 @@
- #  include <config.h>
- #endif
+--- flac-1.2.1-orig/src/Makefile.am	2010-06-23 15:06:29.167865355 +0800
++++ flac-1.2.1-new/src/Makefile.am	2010-06-25 16:23:05.555202728 +0800
+@@ -15,10 +15,6 @@
+ #  restrictive of those mentioned above.  See the file COPYING.Xiph in this
+ #  distribution.
  
-+#include <string.h>
+-if FLaC__HAS_XMMS
+-XMMS_DIRS = plugin_common plugin_xmms
+-endif
+-
+ if FLaC__WITH_CPPLIBS
+ CPPLIBS_DIRS = libFLAC++ test_libFLAC++
+ endif
+@@ -29,7 +25,6 @@
+ 	flac \
+ 	metaflac \
+ 	monkeys_audio_utilities \
+-	$(XMMS_DIRS) \
+ 	plugin_winamp2 \
+ 	test_grabbag \
+ 	test_libs_common \
+--- flac-1.2.1-orig/examples/cpp/encode/file/main.cpp	2010-06-23 15:06:29.159481339 +0800
++++ flac-1.2.1/examples/cpp/encode/file/main.cpp	2010-06-23 15:06:46.233384883 +0800
+@@ -30,6 +30,7 @@
+ 
  #include <stdio.h>
  #include <stdlib.h>
++#include <string.h>
  #include "FLAC++/metadata.h"
+ #include "FLAC++/encoder.h"
+ 
+--- flac-1.2.1/configure.in	2007-09-13 18:48:42.000000000 +0300
++++ flac-1.2.1/configure.in	2013-01-03 08:20:07.454704587 +0200
+@@ -44,7 +44,7 @@
+ AC_CHECK_SIZEOF(void*,0)
+
+ #@@@ new name is AC_CONFIG_HEADERS
+-AM_CONFIG_HEADER(config.h)
++AC_CONFIG_HEADERS(config.h)
+
+ AC_C_BIGENDIAN

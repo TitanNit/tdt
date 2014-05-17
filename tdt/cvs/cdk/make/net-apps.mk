@@ -254,3 +254,15 @@ $(DEPDIR)/wpa_supplicant: bootstrap openssl openssl-dev wireless_tools @DEPENDS_
 		@INSTALL_wpa_supplicant@
 	@DISTCLEANUP_wpa_supplicant@
 	touch $@
+
+#
+# xupnpd
+#
+$(DEPDIR)/xupnpd: bootstrap @DEPENDS_xupnpd@
+	@PREPARE_xupnpd@
+	cd @DIR_xupnpd@ && \
+		$(BUILDENV) \
+		$(MAKE) TARGET=$(target) sh4 && \
+		@INSTALL_xupnpd@
+	@DISTCLEANUP_xupnpd@
+	touch $@

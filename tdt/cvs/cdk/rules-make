@@ -12,10 +12,10 @@
 #
 # core
 #
-linuxp0207;2.6.32.28_stm24_0207;linux-sh4-2.6.32.28_stm24_0207;stlinux24-host-kernel-source-sh4-2.6.32.28_stm24_0207-207.src.rpm
 linuxp0209;2.6.32.46_stm24_0209;linux-sh4-2.6.32.46_stm24_0209;stlinux24-host-kernel-source-sh4-2.6.32.46_stm24_0209-209.src.rpm
-linuxp0210;2.6.32.57_stm24_0210;linux-sh4-2.6.32.57_stm24_0210;stlinux24-host-kernel-source-sh4-2.6.32.57_stm24_0210-210.src.rpm
 linuxp0211;2.6.32.59_stm24_0211;linux-sh4-2.6.32.59_stm24_0211;stlinux24-host-kernel-source-sh4-2.6.32.59_stm24_0211-211.src.rpm
+linuxp0214;2.6.32.61_stm24_0214;linux-sh4-2.6.32.61_stm24_0214;stlinux24-host-kernel-source-sh4-2.6.32.61_stm24_0214-214.src.rpm
+
 squashfs;3.0;mksquashfs;squashfs3.0.tar.gz:mksquashfs_lzma.diff:lzma442.tar.bz2:lzma_zlib-stream.diff;dircreate:mksquashfs;extract:lzma442.tar.bz2;patch:lzma_zlib-stream.diff;extract:squashfs3.0.tar.gz;patch:mksquashfs_lzma.diff
 squashfs;4.0;mksquashfs;squashfs4.0.tar.gz:squashfs-tools-4.0-lzma.patch:lzma465.tar.bz2;dircreate:mksquashfs;extract:lzma465.tar.bz2;extract:squashfs4.0.tar.gz;patch:squashfs-tools-4.0-lzma.patch
 cramfs;1.1;cramfs-1.1;cramfs-1.1.tar.gz;extract:cramfs-1.1.tar.gz
@@ -25,17 +25,17 @@ host_python;2.7.3;host-python-2.7.3;Python-2.7.3.tar.bz2:python_2.7.3.diff;extra
 host_libtool;2.4.2;libtool-2.4.2;libtool-2.4.2.tar.gz;extract:libtool-2.4.2.tar.gz;patch:libtool-2.4.2-duckbox-branding.patch
 host_pkgconfig;0.28;pkg-config-0.28;pkg-config-0.28.tar.gz;extract:pkg-config-0.28.tar.gz
 host_automake;1.11.6;automake-1.11.6;automake-1.11.6.tar.gz;extract:automake-1.11.6.tar.gz;patch:automake-py-compile-compile-only-optimized-byte-code.patch
-host_autoconf;2.64;autoconf-2.64;autoconf-2.64.tar.gz;extract:autoconf-2.64.tar.gz;patch:autoconf-remove-usr-local-lib-from-m4.patch
+host_autoconf;2.64;autoconf-2.64;autoconf-2.64.tar.gz;extract:autoconf-2.64.tar.gz;patch:autoconf-remove-usr-local-lib-from-m4.patch;patch:autoconf.texi.2.65.patch
 
 #
 # ccache
 #
-ccache;3.1.8;ccache-3.1.8;ccache-3.1.8.tar.gz;extract:ccache-3.1.8.tar.gz
+ccache;3.1.9;ccache-3.1.9;ccache-3.1.9.tar.gz;extract:ccache-3.1.9.tar.gz
 
 #
 # root
 #
-busybox;1.21.1;busybox-1.21.1;busybox-1.21.1.tar.bz2;extract:busybox-1.21.1.tar.bz2
+busybox;1.22.1;busybox-1.22.1;busybox-1.22.1.tar.bz2;extract:busybox-1.22.1.tar.bz2
 lsb;3.2-20;lsb-3.2;lsb_3.2-20.tar.gz;extract:lsb_3.2-20.tar.gz
 ipkg;0.99.163;ipkg-0.99.163;ipkg-0.99.163.tar.gz;extract:ipkg-0.99.163.tar.gz
 module_init_tools;3.16;module-init-tools-3.16;module-init-tools-3.16.tar.bz2;extract:module-init-tools-3.16.tar.bz2;patch:module-init-tools-no-man.patch
@@ -53,7 +53,7 @@ console_data;1.03;console-data-1.03;console-data_1.03.orig.tar.gz;extract:consol
 nano;2.0.6;nano-2.0.6;nano-2.0.6.tar.gz;extract:nano-2.0.6.tar.gz
 rsync;2.6.9;rsync-2.6.9;rsync-2.6.9.tar.gz;extract:rsync-2.6.9.tar.gz
 fuse;2.9.2;fuse-2.9.2;fuse-2.9.2.tar.gz;extract:fuse-2.9.2.tar.gz
-curlftpfs;0.9.2;curlftpfs-0.9.2;curlftpfs-0.9.2.tar.gz;extract:curlftpfs-0.9.2.tar.gz;patch:curlftpfs-0.9.2.patch
+curlftpfs;0.9.2;curlftpfs-0.9.2;curlftpfs-0.9.2.tar.gz;extract:curlftpfs-0.9.2.tar.gz
 fbset;2.1;fbset-2.1;fbset_2.1.orig.tar.gz:fbset_2.1-6.diff.gz:fbset_2.1-fb.modes-ST.patch;extract:fbset_2.1.orig.tar.gz;patch:fbset_2.1-6.diff.gz;patch:fbset_2.1-fb.modes-ST.patch
 pngquant;1.1;pngquant-1.1;pngquant-1.1-src.tgz;extract:pngquant-1.1-src.tgz
 mplayer;1.0;mplayer-export-*;mplayer-export-snapshot.tar.bz2;extract:mplayer-export-snapshot.tar.bz2
@@ -66,7 +66,7 @@ shairport;1.0;shairport;shairport.git;extract:shairport.git
 #
 # contrib libs
 #
-liblua;5.2.1;lua-5.2.1;lua-5.2.1.tar.gz;extract:lua-5.2.1.tar.gz;patch:lua-5.2.1-luaposix.patch
+liblua;5.2.3;lua-5.2.3;lua-5.2.3.tar.gz;extract:lua-5.2.3.tar.gz;patch:liblua-5.2.3-luaposix-31.patch
 libao;1.1.0;libao-1.1.0;libao-1.1.0.tar.gz;extract:libao-1.1.0.tar.gz
 howl;1.0.0;howl-1.0.0;howl-1.0.0.tar.gz;extract:howl-1.0.0.tar.gz
 libopenthreads;1.00;openthreads;;
@@ -78,17 +78,17 @@ lirc;0.9.0;lirc-0.9.0;lirc-0.9.0.tar.gz:lirc-0.9.0-try_first_last_remote.diff;ex
 libjpeg;8d;jpeg-8d;jpegsrc.v8d.tar.gz:jpeg.diff;extract:jpegsrc.v8d.tar.gz;patch:jpeg.diff
 libjpeg_turbo;1.2.1;libjpeg-turbo-1.2.1;libjpeg-turbo-1.2.1.tar.gz;extract:libjpeg-turbo-1.2.1.tar.gz
 libpng12;1.2.50;libpng-1.2.50;libpng-1.2.50.tar.bz2;extract:libpng-1.2.50.tar.bz2
-libpng;1.5.6;libpng-1.5.6;libpng-1.5.6.tar.gz;extract:libpng-1.5.6.tar.gz;patch:libpng-1.5.6-workaround_for_stmfb_alpha_error.patch
-#libpng;1.6.3;libpng-1.6.3;libpng-1.6.3.tar.gz;extract:libpng-1.6.3.tar.gz;patch:libpng-1.5.6-workaround_for_stmfb_alpha_error.patch
+libpng;1.6.6;libpng-1.6.6;libpng-1.6.6.tar.gz;extract:libpng-1.6.6.tar.gz;patch:libpng-1.5.6-workaround_for_stmfb_alpha_error.patch
 libungif;4.1.4;libungif-4.1.4;libungif-4.1.4.tar.bz2;extract:libungif-4.1.4.tar.bz2
-libgif;4.1.6;giflib-4.1.6;giflib-4.1.6.tar.bz2;extract:giflib-4.1.6.tar.bz2
-libgif_current;5.0.4;giflib-5.0.4;giflib-5.0.4.tar.bz2;extract:giflib-5.0.4.tar.bz2
-libcurl;7.30.0;curl-7.30.0;curl-7.30.0.tar.bz2;extract:curl-7.30.0.tar.bz2
+libgif_e2;4.1.6;giflib-4.1.6;giflib-4.1.6.tar.bz2;extract:giflib-4.1.6.tar.bz2
+libgif;5.0.4;giflib-5.0.4;giflib-5.0.4.tar.bz2;extract:giflib-5.0.4.tar.bz2
+libcurl;7.34.0;curl-7.34.0;curl-7.34.0.tar.bz2;extract:curl-7.34.0.tar.bz2;patch:libcurl-7.34.0.patch
 libfribidi;0.19.5;fribidi-0.19.5;fribidi-0.19.5.tar.bz2;extract:fribidi-0.19.5.tar.bz2;patch:fribidi-0.19.5.patch
 libsigc;1.2.5;libsigc++-1.2.5;libsigc++-1.2.5.tar.gz;extract:libsigc++-1.2.5.tar.gz
-libmad;0.15.1b;libmad-0.15.1b;libmad-0.15.1b.tar.gz:libmad.diff;extract:libmad-0.15.1b.tar.gz;patch:libmad.diff
-libid3tag;0.15.1b;libid3tag-0.15.1b;libid3tag-0.15.1b.tar.gz:libid3tag.diff;extract:libid3tag-0.15.1b.tar.gz;patch:libid3tag.diff
-libvorbisidec;1.0.2+svn18153;libvorbisidec-1.0.2+svn18153;libvorbisidec_1.0.2+svn18153.orig.tar.gz:tremor.diff;extract:libvorbisidec_1.0.2+svn18153.orig.tar.gz;patch:tremor.diff
+libmad;0.15.1b;libmad-0.15.1b;libmad-0.15.1b.tar.gz:libmad.patch;extract:libmad-0.15.1b.tar.gz;patch:libmad.patch
+libid3tag;0.15.1b;libid3tag-0.15.1b;libid3tag-0.15.1b.tar.gz:libid3tag.patch;extract:libid3tag-0.15.1b.tar.gz;patch:libid3tag.patch
+libvorbisidec;1.0.2+svn18153;libvorbisidec-1.0.2+svn18153;libvorbisidec_1.0.2+svn18153.orig.tar.gz:tremor.patch;extract:libvorbisidec_1.0.2+svn18153.orig.tar.gz;patch:tremor.patch
+libvorbis;1.3.3;libvorbis-1.3.3;libvorbis-1.3.3.tar.gz:libvorbis-1.3.3.patch;extract:libvorbis-1.3.3.tar.gz;patch:libvorbis-1.3.3.patch
 glib2;2.28.3;glib-2.28.3;glib-2.28.3.tar.gz:glib-2.28.3.patch;extract:glib-2.28.3.tar.gz;patch:glib-2.28.3.patch
 libiconv;1.14;libiconv-1.14;libiconv-1.14.tar.gz;extract:libiconv-1.14.tar.gz
 libmng;1.0.10;libmng-1.0.10;libmng-1.0.10.tar.bz2;extract:libmng-1.0.10.tar.bz2
@@ -106,15 +106,15 @@ libsoup;2.33.90;libsoup-2.33.90;libsoup-2.33.90.tar.gz;extract:libsoup-2.33.90.t
 pixman;0.18.0;pixman-0.18.0;pixman-0.18.0.tar.gz;extract:pixman-0.18.0.tar.gz
 cairo;1.8.10;cairo-1.8.10;cairo-1.8.10.tar.gz;extract:cairo-1.8.10.tar.gz;patch:cairo-1.8.10.diff
 libexpat;2.1.0;expat-2.1.0;expat-2.1.0.tar.gz;extract:expat-2.1.0.tar.gz
-fontconfig;2.5.93;fontconfig-2.5.93;fontconfig-2.5.93.tar.gz;extract:fontconfig-2.5.93.tar.gz
+fontconfig;2.8.0;fontconfig-2.8.0;fontconfig-2.8.0.tar.gz;extract:fontconfig-2.8.0.tar.gz;patch:fontconfig-2.8.0.patch
 libxmlccwrap;0.0.12;libxmlccwrap-0.0.12;libxmlccwrap-0.0.12.tar.gz;extract:libxmlccwrap-0.0.12.tar.gz
 a52dec;0.7.4;a52dec-0.7.4;a52dec-0.7.4.tar.gz;extract:a52dec-0.7.4.tar.gz
 libdvdcss;1.2.12;libdvdcss-1.2.12;libdvdcss-1.2.12.tar.bz2;extract:libdvdcss-1.2.12.tar.bz2
 libdvdnav;4.2.0;libdvdnav-4.2.0;libdvdnav-4.2.0.tar.bz2:libdvdnav_4.2.0.patch;extract:libdvdnav-4.2.0.tar.bz2;patch:libdvdnav_4.2.0.patch
 libdvdread;4.2.0;libdvdread-4.2.0;libdvdread-4.2.0.tar.bz2:libdvdread_4.2.0.patch;extract:libdvdread-4.2.0.tar.bz2;patch:libdvdread_4.2.0.patch
 ffmpeg_old;1.2.1;ffmpeg-1.2.1;ffmpeg-1.2.1.tar.gz;extract:ffmpeg-1.2.1.tar.gz;patch:ffmpeg-1.2.1.patch
-ffmpeg;2.0.2;ffmpeg-2.0.2;ffmpeg-2.0.2.tar.bz2;extract:ffmpeg-2.0.2.tar.bz2;patch:ffmpeg-2.0.patch
-libass;0.10.1;libass-0.10.1;libass-0.10.1.tar.gz;extract:libass-0.10.1.tar.gz
+ffmpeg;2.0.3;ffmpeg-2.0.3;ffmpeg-2.0.3.tar.bz2;extract:ffmpeg-2.0.3.tar.bz2;patch:ffmpeg-2.0.patch
+libass;0.11.1;libass-0.11.1;libass-0.11.1.tar.gz;extract:libass-0.11.1.tar.gz;patch:libass-0.11.1.patch
 libcap;2.22;libcap-2.22;libcap-2.22.tar.bz2;extract:libcap-2.22.tar.bz2
 libogg;1.2.2;libogg-1.2.2;libogg-1.2.2.tar.gz;extract:libogg-1.2.2.tar.gz
 libflac;1.2.1;flac-1.2.1;flac-1.2.1.tar.gz:flac-1.2.1.patch;extract:flac-1.2.1.tar.gz;patch:flac-1.2.1.patch
@@ -124,10 +124,9 @@ brofs;1.2;BroFS1.2;BroFS1.2.tgz;extract:BroFS1.2.tgz
 libalsa;1.0.25;alsa-lib-1.0.25;alsa-lib-1.0.25.tar.bz2;extract:alsa-lib-1.0.25.tar.bz2
 alsautils;1.0.25;alsa-utils-1.0.25;alsa-utils-1.0.25.tar.bz2;extract:alsa-utils-1.0.25.tar.bz2
 rtmpdump;2.4;rtmpdump-2.4;rtmpdump-2.4.tar.gz;extract:rtmpdump-2.4.tar.gz;move:rtmpdump:rtmpdump-2.4;patch:rtmpdump-2.4.patch
-libdvbsipp;0.3.6;libdvbsi++-0.3.6;libdvbsi++-0.3.6.tar.bz2;extract:libdvbsi++-0.3.6.tar.bz2;patch:libdvbsi++-0.3.6.patch
+libdvbsipp;0.3.7;libdvbsi++-0.3.7;libdvbsi++-0.3.7.tar.bz2;extract:libdvbsi++-0.3.7.tar.bz2;patch:libdvbsi++-0.3.7.patch
 libmpeg2;0.5.1;libmpeg2-0.5.1;libmpeg2-0.5.1.tar.gz;extract:libmpeg2-0.5.1.tar.gz
 libsamplerate;0.1.8;libsamplerate-0.1.8;libsamplerate-0.1.8.tar.gz;extract:libsamplerate-0.1.8.tar.gz
-libvorbis;1.3.2;libvorbis-1.3.2;libvorbis-1.3.2.tar.bz2;extract:libvorbis-1.3.2.tar.bz2
 libmodplug;0.8.8.4;libmodplug-0.8.8.4;libmodplug-0.8.8.4.tar.gz;extract:libmodplug-0.8.8.4.tar.gz
 tiff;4.0.1;tiff-4.0.1;tiff-4.0.1.tar.gz;extract:tiff-4.0.1.tar.gz
 lzo;2.06;lzo-2.06;lzo-2.06.tar.gz;extract:lzo-2.06.tar.gz
@@ -147,8 +146,6 @@ gmediarender;0.0.6;gmediarender-0.0.6;gmediarender-0.0.6.tar.bz2;extract:gmediar
 tinyxml;2.6.2;tinyxml2.6.2;tinyxml_2_6_2.tar.gz;extract:tinyxml_2_6_2.tar.gz;move:tinyxml:tinyxml2.6.2;patch:tinyxml2.6.2.patch
 libnfs;c0ebf57b21;libnfs-c0ebf57b21;libnfs.git;extract:libnfs.git
 taglib;1.8;taglib-1.8;taglib-1.8.tar.gz;extract:taglib-1.8.tar.gz
-#libsdl;2.0.3;SDL2-2.0.3;SDL2-2.0.3.tar.gz;extract:SDL2-2.0.3.tar.gz
-libsdl;1.2.15;SDL-1.2.15;SDL-1.2.15.tar.gz;extract:SDL-1.2.15.tar.gz
 
 #
 # PYTHON
@@ -201,21 +198,20 @@ hotplug_e2;1.0;hotplug-e2-helper;hotplug-e2-helper.git;extract:hotplug-e2-helper
 #
 graphlcd;base-touchcol;graphlcd-base-touchcol;graphlcd-base-touchcol.git:graphlcd.patch;extract:graphlcd-base-touchcol.git;patch:graphlcd.patch
 lcd4_linux;;lcd4linux;lcd4linux.svn;extract:lcd4linux.svn;patch:lcd4linux-dpf.patch;patch:lcd4linux-spf.patch
-libusb;0.1.12;libusb-0.1.12;libusb-0.1.12.tar.gz;extract:libusb-0.1.12.tar.gz
-libusb2;1.0.9;libusb-1.0.9;libusb-1.0.9.tar.bz2;extract:libusb-1.0.9.tar.bz2
-libusbcompat;0.1.3;libusb-compat-0.1.3;libusb-compat-0.1.3.tar.bz2;extract:libusb-compat-0.1.3.tar.bz2
+libusb;1.0.9;libusb-1.0.9;libusb-1.0.9.tar.bz2;extract:libusb-1.0.9.tar.bz2;patch:libusb-1.0.9.patch
+libusbcompat;0.1.5;libusb-compat-0.1.5;libusb-compat-0.1.5.tar.bz2;extract:libusb-compat-0.1.5.tar.bz2
 libgd2;2.0.35;gd-2.0.35;gd-2.0.35.tar.gz;extract:gd-2.0.35.tar.gz
 #libdpfax;ax;dpf-ax;dpf-ax.svn:libdpfax.diff;extract:dpf-ax.svn;patch:libdpfax.diff
-libdpfax;ax;dpf-ax;dpf-ax.svn:libdpfax.diff;extract:dpf-ax.svn
+libdpfax;ax;dpf-ax;dpf-ax.svn;extract:dpf-ax.svn
 libdpf;0.12;dpflib-0.12;dpflib-0.12.tar.gz;extract:dpflib-0.12.tar.gz
 
 #
 # ide apps
 #
-autofs;4.1.4;autofs-4.1.4;autofs-4.1.4.tar.gz;extract:autofs-4.1.4.tar.gz;patch:autofs-4.1.4.patch;patch:autofs-4.1.4-ext4.patch
+autofs;4.1.4;autofs-4.1.4;autofs-4.1.4.tar.gz;extract:autofs-4.1.4.tar.gz;patch:autofs-4.1.4.patch
 #autofs;5.0.7;autofs-5.0.7;autofs-5.0.7.tar.gz;extract:autofs-5.0.7.tar.gz
 dosfstools;3.0.16;dosfstools-3.0.16;dosfstools-3.0.16.tar.gz;extract:dosfstools-3.0.16.tar.gz
-e2fsprogs;1.42.8;e2fsprogs-1.42.8;e2fsprogs-1.42.8.tar.gz;extract:e2fsprogs-1.42.8.tar.gz;patch:e2fsprogs-remove.ldconfig.call.patch
+e2fsprogs;1.42.9;e2fsprogs-1.42.9;e2fsprogs-1.42.9.tar.gz;extract:e2fsprogs-1.42.9.tar.gz;patch:e2fsprogs-1.42.8.patch
 fdisk;1.3.0a;fdisk-1.3.0a;fdisk-1.3.0a.tar.gz;extract:fdisk-1.3.0a.tar.gz
 hddtemp;0.3-beta15;hddtemp-0.3-beta15;hddtemp-0.3-beta15.tar.bz2;extract:hddtemp-0.3-beta15.tar.bz2
 hdparm;9.43;hdparm-9.43;hdparm-9.43.tar.gz;extract:hdparm-9.43.tar.gz
@@ -224,6 +220,7 @@ lm_sensors;2.9.2;lm_sensors-2.9.2;lm_sensors-2.9.2.tar.gz;extract:lm_sensors-2.9
 sdparm;1.07;sdparm-1.07;sdparm-1.07.tgz;extract:sdparm-1.07.tgz
 parted;3.0;parted-3.0;parted-3.0.tar.gz;extract:parted-3.0.tar.gz
 utillinux;2.23;util-linux-2.23;util-linux-2.23.tar.bz2;extract:util-linux-2.23.tar.bz2
+#utillinux;2.24;util-linux-2.24;util-linux-2.24.tar.bz2;extract:util-linux-2.24.tar.bz2
 xfsprogs;3.1.8;xfsprogs-3.1.8;xfsprogs-3.1.8.tar.gz;extract:xfsprogs-3.1.8.tar.gz
 
 #
@@ -233,7 +230,7 @@ portmap;6.0.0;portmap-6.0.0;portmap_6.0.0.orig.tar.gz:portmap_6.0.diff:portmap_6
 nfs_utils;1.2.3;nfs-utils-1.2.3;nfs-utils-1.2.3.tar.bz2;extract:nfs-utils-1.2.3.tar.bz2;patch:nfs-utils-1.2.3.patch
 libevent;2.0.20-stable;libevent-2.0.20-stable;libevent-2.0.20-stable.tar.gz;extract:libevent-2.0.20-stable.tar.gz
 libnfsidmap;0.25;libnfsidmap-0.25;libnfsidmap-0.25.tar.gz;extract:libnfsidmap-0.25.tar.gz
-vsftpd;2.3.4;vsftpd-2.3.4;vsftpd-2.3.4.tar.gz:vsftpd_2.3.4.diff;extract:vsftpd-2.3.4.tar.gz;patch:vsftpd_2.3.4.diff
+vsftpd;3.0.2;vsftpd-3.0.2;vsftpd-3.0.2.tar.gz:vsftpd_3.0.2.patch;extract:vsftpd-3.0.2.tar.gz;patch:vsftpd_3.0.2.patch
 netkit_ftp;0.17;netkit-ftp-0.17;netkit-ftp-0.17.tar.gz:netkit-ftp.diff;extract:netkit-ftp-0.17.tar.gz;patch:netkit-ftp.diff
 ntp;4.2.6p5;ntp-4.2.6p5;ntp-4.2.6p5.tar.gz;extract:ntp-4.2.6p5.tar.gz;patch:ntp-4.2.6p5.patch
 samba;3.6.12;samba-3.6.12;samba-3.6.12.tar.gz:samba-3.6.12.patch;extract:samba-3.6.12.tar.gz;patch:samba-3.6.12.patch
@@ -244,6 +241,7 @@ wireless_tools;29;wireless_tools.29;wireless_tools.29.tar.gz;extract:wireless_to
 wpa_supplicant;0.7.3;wpa_supplicant-0.7.3;wpa_supplicant-0.7.3.tar.gz;extract:wpa_supplicant-0.7.3.tar.gz
 #wpa_supplicant;1.0;wpa_supplicant-1.0;wpa_supplicant-1.0.tar.gz;extract:wpa_supplicant-1.0.tar.gz
 ethtool;6;ethtool-6;ethtool-6.tar.gz;extract:ethtool-6.tar.gz
+xupnpd;1.0;xupnpd;xupnpd.svn;extract:xupnpd.svn;patch:xupnpd.patch
 
 
 >>?;rules-make-local

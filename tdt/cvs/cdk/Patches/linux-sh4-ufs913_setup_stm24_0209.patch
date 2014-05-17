@@ -600,7 +600,7 @@
 +		.wr_off		= 50,
 +		.rd_on		= 20,
 +		.rd_off		= 50,
-+		.chip_delay	= 50,		/* in us */
++		.chip_delay	= 40,		/* in us */
  	},
 +	.emi_withinbankoffset	= 0,
  };

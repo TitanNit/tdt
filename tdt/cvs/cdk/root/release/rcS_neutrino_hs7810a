@@ -1,0 +1,162 @@
+#!/bin/sh
+
+MODDIR=/lib/modules
+echo "init frontpanel"
+insmod $MODDIR/nuvoton.ko paramDebug=0
+insmod $MODDIR/simu_button.ko
+
+if [ -e /var/etc/.firstboot ]; then
+   echo "WAIT 1 min" >/dev/vfd
+   echo "WAIT 1 min"
+   rm /var/etc/.firstboot
+   touch /dev/.devfsd
+fi
+
+/etc/init.d/mountvirtfs start
+/etc/init.d/portmap start
+
+insmod $MODDIR/e2_proc.ko
+
+# start automounter with umount timeout of 5 seconds
+insmod $MODDIR/autofs4.ko
+/usr/sbin/automount --timeout=5 /autofs file /etc/auto.usb
+
+if [ ! -e /var/etc/.firstboot ]; then
+
+   echo "Starting DEBUG Interface"
+   /etc/init.d/mountall start
+   /etc/init.d/hostname start
+
+#   echo "starting telnetd"
+#   /usr/sbin/telnetd -l /bin/autologin
+
+   echo "init stmfb"
+   insmod $MODDIR/stmcore-display-sti7111.ko
+   insmod $MODDIR/stmfb.ko display0=1280x720-32@50:15m:pal:yuv:yuv
+
+   echo "LOADING MODULES"
+   echo "LOAD" > /dev/vfd
+
+   if [ ! -e /lib/firmware/audio.elf ]; then
+      echo "FW MISSING!!!"
+   fi
+
+   echo "load video firmware"
+   /bin/dd if=/dev/zero of=/dev/st231-0 bs=1024 count=4096
+#   /bin/stslave -t st231.0 -R /lib/firmware/video.elf
+   /bin/ustslave /dev/st231-0 /lib/firmware/video.elf
+
+   echo "load audio firmware"
+   /bin/dd if=/dev/zero of=/dev/st231-1 bs=1024 count=4096
+#   /bin/stslave -t st231.1 -R /lib/firmware/audio.elf
+   /bin/ustslave /dev/st231-1 /lib/firmware/audio.elf
+
+   echo "init embx"
+   insmod $MODDIR/embxshell.ko
+   insmod $MODDIR/embxmailbox.ko mailbox0=0xfe211000:136:set2 mailbox1=0xfe212000:0 ;
+   insmod $MODDIR/embxshm.ko mailbox0=shm:0:7:0x60000000:0:256:256:0:512:0x40000000:0x10000000 ;
+   insmod $MODDIR/mme_host.ko transport0=shm
+
+   echo "init AVS"
+   insmod $MODDIR/avs.ko type=avs_pio
+
+   player=`cat /proc/stb/player/version`
+   player=`cat /proc/stb/player/version | awk '{ print substr( $0, length($0) - 2, length($0) ) }'`
+   echo "init player $player"
+
+   insmod $MODDIR/mmelog.ko
+   insmod $MODDIR/ksound.ko
+   insmod $MODDIR/p2div64.ko
+   insmod $MODDIR/stm_v4l2.ko
+   if [ $player -gt 131 ]; then
+	insmod $MODDIR/stmvout.ko
+	insmod $MODDIR/stmvbi.ko
+   fi
+   insmod $MODDIR/pseudocard.ko
+
+   insmod $MODDIR/lnb.ko type=a8293
+   insmod $MODDIR/stv090x.ko paramDebug=0
+   insmod $MODDIR/starci.ko
+   if [ $player -gt 131 ]; then
+	insmod $MODDIR/pti.ko
+	insmod $MODDIR/stm_monitor.ko
+	insmod $MODDIR/stmsysfs.ko
+    	insmod $MODDIR/stmdvb.ko
+   else
+	insmod $MODDIR/pti.ko
+	insmod $MODDIR/stmdvb.ko
+	insmod $MODDIR/stm_monitor.ko
+   fi	
+   insmod $MODDIR/player2.ko
+   insmod $MODDIR/sth264pp.ko
+   insmod $MODDIR/stmalloc.ko
+   insmod $MODDIR/platform.ko
+   insmod $MODDIR/silencegen.ko
+   insmod $MODDIR/smartcard.ko
+
+   insmod $MODDIR/bpamem.ko
+   mknod /dev/bpamem c 153 0
+
+   showiframe -p /var/boot/bootlogo.mvi &
+   stfbcontrol a 0
+
+   mknod /dev/rc c 147 1 
+   mknod /dev/lnb c 149 0
+   mknod /dev/sci0 c 169 0
+   mknod /dev/sci1 c 169 1 
+
+   /bin/evremote2 hdbox 100 &
+
+   stfbcontrol a 255
+
+   echo "starting telnetd"
+   /usr/sbin/telnetd -l /bin/autologin
+#   /etc/init.d/vsftpd start
+   /usr/sbin/inetd
+
+   NFS=`grep -c nfs /proc/cmdline`
+   if [ "$NFS" -eq "1" ]; then 
+      echo "Booting from nfs, don't set network" 
+   else 
+      if [ -e /etc/network/interfaces ]; then 
+	 ip addr flush eth0 
+	 /etc/init.d/networking stop 
+	 DHCP=`grep -c dhcp /etc/network/interfaces`
+	 if [ "$DHCP" -eq "1" ]; then 
+	    echo "Starting dhcp"
+            /etc/init.d/udhcpc start 
+	 fi 
+	 /etc/init.d/networking start 
+      fi 
+   fi
+
+   #timefix
+   date -s "200901011200"
+
+   echo "neu" > /dev/vfd
+   echo "LOADING NEUTRINO"
+
+   until false
+   do
+      echo "starting neutrino ->"
+      /usr/local/bin/neutrino
+      rtv=$?
+      echo "neutrino ended <- RTV: " $rtv
+      case "$rtv" in
+		0) echo "0"
+		   echo "SHUTDOWN"
+		   init 0;;
+		1) echo "1"
+		   echo "REBOOT"
+		   init 6;;
+		*) echo "*"
+		   echo "ERROR"
+		   init 6;;
+      esac
+   done
+fi
+
+#never reached
+echo "REBOOT HS7810A" > /dev/vfd
+echo "REBOOT HS7810A"
+init 6

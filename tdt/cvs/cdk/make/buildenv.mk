@@ -1,38 +1,9 @@
-#
-#
-#
 export CFLAGS
 export CXXFLAGS
-
 export DRPM
 export DRPMBUILD
 
 AUTOMAKE_OPTIONS = -Wno-portability
-
-#
-#
-#
-KERNEL_DEPENDS = @DEPENDS_linux24@
-if ENABLE_P0207
-KERNEL_DIR = @DIR_linuxp0207@
-else
-if ENABLE_P0209
-KERNEL_DIR = @DIR_linuxp0209@
-else
-if ENABLE_P0210
-KERNEL_DIR = @DIR_linuxp0210@
-else
-if ENABLE_P0211
-KERNEL_DIR = @DIR_linuxp0211@
-else
-endif
-endif
-endif
-endif
-
-KERNEL_PREPARE = @PREPARE_linux24@
-
-DEPMOD = $(hostprefix)/bin/depmod
 
 #
 # Stlinux Version
@@ -40,6 +11,19 @@ DEPMOD = $(hostprefix)/bin/depmod
 STLINUX := stlinux24
 STM_SRC := $(STLINUX)
 STM_RELOCATE := /opt/STM/STLinux-2.4
+
+#
+# kernel dir
+#
+if ENABLE_P0209
+KERNEL_DIR = @DIR_linuxp0209@
+endif
+if ENABLE_P0211
+KERNEL_DIR = @DIR_linuxp0211@
+endif
+if ENABLE_P0214
+KERNEL_DIR = @DIR_linuxp0214@
+endif
 
 #
 # Python Version
@@ -69,6 +53,7 @@ endif
 #
 #
 #
+export RM=$(shell which rm) -f
 INSTALL_DIR=$(INSTALL) -d
 INSTALL_BIN=$(INSTALL) -m 755
 INSTALL_FILE=$(INSTALL) -m 644
@@ -81,6 +66,18 @@ ADAPTED_ETC_FILES =
 ETC_RW_FILES =
 SOCKSIFY=
 WGET=$(SOCKSIFY) wget
+
+
+BASE_DIR    := $(shell pwd)
+PATCHES      = $(BASE_DIR)/Patches
+BUILD_TMP    = $(BASE_DIR)/BUILD
+
+# unpack tarballs, clean up
+UNTAR = tar -C $(BUILD_TMP) -xf $(archivedir)
+REMOVE = rm -rf $(BUILD_TMP)
+PATCH = patch -p1 -i $(PATCHES)
+# wget tarballs into archive directory
+WGETN = wget -t3 -T10 -c -P $(archivedir)
 
 #
 #

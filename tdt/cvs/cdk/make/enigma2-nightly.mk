@@ -25,7 +25,7 @@ $(DEPDIR)/enigma2-nightly.do_prepare:
 	echo "5) Fri,  5 Nov 2010 00:16 - E2 V2.4 libplayer3 7fd4241a1d7b8d7c36385860b24882636517473b"; \
 	echo "6) Wed,  6 Jul 2011 11:17 - E2 V3.1 gstreamer  388dcd814d4e99720cb9a6c769611be4951e4ad4"; \
 	echo "7) current inactive... comming soon, here is the next stable (case 7 == DIFF=7)"; \
-	REPLY=0; \
+	read -p "Select: "; \
 	echo "Selection: " $$REPLY; \
 	[ "$$REPLY" == "0" ] && DIFF="0" && HEAD="experimental"; \
 	[ "$$REPLY" == "1" ] && DIFF="1" && HEAD="experimental" && REVISION="e013d09af0e010f15e225a12dcc217abc052ee19"; \
@@ -52,11 +52,11 @@ $(DEPDIR)/enigma2-nightly.do_prepare:
 	cp -ra $(appsdir)/enigma2-nightly $(appsdir)/enigma2-nightly.patched
 	touch $@
 
-$(appsdir)/enigma2-nightly/config.status: bootstrap freetype expat fontconfig libpng jpeg libgif libfribidi libid3tag libmad libsigc libreadline \
-		libdvbsi++ python libxml2 libxslt elementtree zope_interface twisted pyopenssl lxml libxmlccwrap ncurses-dev libdreamdvd sdparm curl $(MEDIAFW_DEP) $(EXTERNALLCD_DEP)
+$(appsdir)/enigma2-nightly/config.status: bootstrap libfreetype expat fontconfig libpng libjpeg libgif libfribidi libid3tag libmad libsigc libreadline \
+		libdvbsi++ python libxml2 libxslt elementtree zope_interface twisted pyopenssl lxml libxmlccwrap ncurses-dev libdreamdvd sdparm $(MEDIAFW_DEP) $(EXTERNALLCD_DEP)
 	cd $(appsdir)/enigma2-nightly && \
 		./autogen.sh && \
-		sed -e 's|#!/usr/bin/python|#!$(crossprefix)/bin/python|' -i po/xml2po.py && \
+		sed -e 's|#!/usr/bin/python|#!$(hostprefix)/bin/python|' -i po/xml2po.py && \
 		./configure \
 			--host=$(target) \
 			--without-libsdl \

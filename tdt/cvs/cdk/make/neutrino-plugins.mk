@@ -28,6 +28,7 @@ $(appsdir)/neutrino-mp-plugins/config.status: bootstrap
 			--with-target=cdk \
 			--oldinclude=$(targetprefix)/include \
 			--enable-maintainer-mode \
+			--enable-giflib \
 			--with-boxtype=$(BOXTYPE) \
 			--with-plugindir=/var/plugins \
 			--with-libdir=/usr/lib \
