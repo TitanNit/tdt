@@ -121,3 +121,7 @@ yaud-neutrino-hd2-exp-plugins: yaud-none lirc \
 yaud-enigma2-pli-nightly: yaud-none host_python lirc \
 		boot-elf remote firstboot enigma2-pli-nightly enigma2-plugins release
 	@TUXBOX_YAUD_CUSTOMIZE@
+
+yaud-titan: yaud-none lirc \
+		boot-elf remote firstboot titan release_titan
+	@TUXBOX_YAUD_CUSTOMIZE@

@@ -64,6 +64,9 @@ include make/neutrino.mk
 # Include neutrino-plugins targets
 include make/neutrino-plugins.mk
 
+# Include titan gui targets
+include make/titan.mk
+
 # Include misc targets (SPECS derived)
 include make/misc-specs.mk
 
@@ -80,6 +83,8 @@ include make/disttargets.mk
 include make/release.mk
 
 include make/release_neutrino.mk
+
+include make/release_titan.mk
 
 # Give the user rope to hang himself :-).  (Note: read from the
 # generated Makefile during make run, automake or configure does not
