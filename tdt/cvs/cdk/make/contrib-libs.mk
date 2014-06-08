@@ -1918,7 +1918,7 @@ $(DEPDIR)/tuxtxtlib: bootstrap @DEPENDS_tuxtxtlib@
 		aclocal -I $(hostprefix)/share/aclocal && \
 		autoheader && \
 		autoconf && \
-		automake --foreign && \
+		automake --foreign --add-missing && \
 		libtoolize --force && \
 		$(BUILDENV) \
 		./configure \
