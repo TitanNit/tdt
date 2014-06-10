@@ -2,7 +2,7 @@
 # IMPORTANT: it is expected that only one define is set
 #
 CUBEMOD = $(CUBEREVO)$(CUBEREVO_MINI)$(CUBEREVO_MINI2)$(CUBEREVO_MINI_FTA)$(CUBEREVO_250HD)$(CUBEREVO_2000HD)$(CUBEREVO_9500HD)
-MODNAME = $(UFS910)$(UFS912)$(UFS913)$(UFS922)$(UFC960)$(TF7700)$(HL101)$(VIP1_V2)$(VIP2_V1)$(CUBEMOD)$(FORTIS_HDBOX)$(ATEVIO7500)$(OCTAGON1008)$(HS7810A)$(HS7110)$(ATEMIO530)$(ATEMIO520)$(HOMECAST5101)$(IPBOX9900)$(IPBOX99)$(IPBOX55)$(ADB_BOX)$(SPARK)$(SPARK7162)$(VITAMIN_HD5000)$(SAGEMCOM88)
+MODNAME = $(UFS910)$(UFS912)$(UFS913)$(UFS922)$(UFC960)$(TF7700)$(HL101)$(VIP1_V2)$(VIP2_V1)$(CUBEMOD)$(FORTIS_HDBOX)$(ATEVIO7500)$(OCTAGON1008)$(HS7810A)$(HS7110)$(ATEMIO530)$(ATEMIO520)$(HOMECAST5101)$(IPBOX9900)$(IPBOX99)$(IPBOX55)$(ADB_BOX)$(SPARK)$(SPARK7162)$(VITAMIN_HD5000)
 DEPMOD = $(hostprefix)/bin/depmod
 
 #
@@ -21,8 +21,8 @@ COMMONPATCHES_24 = \
 		linux-ftdi_sio.c_stm24$(PATCH_STR).patch \
 		linux-sh4-lzma-fix_stm24$(PATCH_STR).patch \
 		linux-tune_stm24.patch \
-		$(if $(P0209)$(P0211)$(P0214),linux-sh4-permit_gcc_command_line_sections_stm24.patch) \
-		$(if $(P0209)$(P0211)$(P0214),linux-sh4-mmap_stm24.patch) \
+		linux-sh4-permit_gcc_command_line_sections_stm24.patch \
+		linux-sh4-mmap_stm24.patch \
 		$(if $(P0209),linux-sh4-dwmac_stm24_0209.patch) \
 		$(if $(P0209),linux-sh4-directfb_stm24$(PATCH_STR).patch)
 
@@ -63,7 +63,6 @@ OCTAGON1008PATCHES_24 = $(COMMONPATCHES_24) \
 ATEVIO7500PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-lmb_stm24$(PATCH_STR).patch \
 		linux-sh4-atevio7500_setup_stm24$(PATCH_STR).patch \
-		linux-sh4-atevio7500_mtdconcat_stm24$(PATCH_STR).patch \
 		linux-sh4-stmmac_stm24$(PATCH_STR).patch
 
 HS7810APATCHES_24 = $(COMMONPATCHES_24) \
@@ -76,7 +75,11 @@ HS7110PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-stmmac_stm24$(PATCH_STR).patch \
 		linux-sh4-lmb_stm24$(PATCH_STR).patch \
 		linux-sh4-hs7110_setup_stm24$(PATCH_STR).patch \
-		linux-sh4-i2c-stm-downgrade_stm24$(PATCH_STR).patch
+		$(if $(P0209)$(P0211),linux-sh4-i2c-stm-downgrade_stm24$(PATCH_STR).patch) \
+		linux-squashfs-downgrade-stm24$(PATCH_STR)-to-stm23.patch \
+		linux-squashfs3.0_lzma_stm24.patch \
+		linux-squashfs-downgrade-stm24-2.6.25.patch \
+		linux-squashfs-downgrade-stm24-rm_d_alloc_anon.patch
 
 ATEMIO520PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-stmmac_stm24$(PATCH_STR).patch \
@@ -102,13 +105,13 @@ UFS922PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-ufs922_setup_stm24$(PATCH_STR).patch \
 		linux-sh4-stmmac_stm24$(PATCH_STR).patch \
 		linux-sh4-i2c-st40-pio_stm24$(PATCH_STR).patch \
-		$(if $(P0209)$(P0211)$(P0214),linux-sh4-fortis_hdbox_i2c_st40_stm24$(PATCH_STR).patch)
+		linux-sh4-fortis_hdbox_i2c_st40_stm24$(PATCH_STR).patch
 
 UFC960PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-ufs922_setup_stm24$(PATCH_STR).patch \
 		linux-sh4-stmmac_stm24$(PATCH_STR).patch \
 		linux-sh4-i2c-st40-pio_stm24$(PATCH_STR).patch \
-		$(if $(P0209)$(P0211)$(P0214),linux-sh4-fortis_hdbox_i2c_st40_stm24$(PATCH_STR).patch)
+		linux-sh4-fortis_hdbox_i2c_st40_stm24$(PATCH_STR).patch
 
 HL101_PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-hl101_setup_stm24$(PATCH_STR).patch \
@@ -180,11 +183,6 @@ VITAMINHD5000PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-lmb_stm24$(PATCH_STR).patch \
 		$(if $(P0207),linux-sh4-i2c-stm-downgrade_stm24$(PATCH_STR).patch)
 
-SAGEMCOM88PATCHES_24 = $(COMMONPATCHES_24) \
-		linux-sh4-sagemcom88_setup_stm24$(PATCH_STR).patch \
-		linux-sh4-stmmac_stm24$(PATCH_STR).patch \
-		linux-sh4-lmb_stm24$(PATCH_STR).patch
-
 KERNELPATCHES_24 = \
 		$(if $(UFS910),$(UFS910PATCHES_24)) \
 		$(if $(UFS912),$(UFS912PATCHES_24)) \
@@ -209,8 +207,7 @@ KERNELPATCHES_24 = \
 		$(if $(IPBOX99),$(IPBOX99PATCHES_24)) \
 		$(if $(IPBOX55),$(IPBOX55PATCHES_24)) \
 		$(if $(CUBEMOD),$(CUBEREVOPATCHES_24)) \
-		$(if $(VITAMIN_HD5000),$(VITAMINHD5000PATCHES_24)) \
-		$(if $(SAGEMCOM88),$(SAGEMCOM88PATCHES_24))
+		$(if $(VITAMIN_HD5000),$(VITAMINHD5000PATCHES_24))
 
 #
 # KERNEL-HEADERS
@@ -276,6 +273,7 @@ endif
 if ENABLE_P0214
 HOST_KERNEL_VERSION = 2.6.32.61$(KERNELSTMLABEL)-$(KERNELLABEL)
 endif
+
 HOST_KERNEL_SPEC = stm-$(HOST_KERNEL)-sh4.spec
 HOST_KERNEL_SPEC_PATCH =
 HOST_KERNEL_PATCHES = $(KERNELPATCHES_24)
@@ -336,7 +334,12 @@ $(DEPDIR)/linux-kernel: bootstrap $(DEPDIR)/linux-kernel.do_compile
 	rm $(prefix)/$*cdkroot/lib/modules/$(KERNELVERSION)/source || true
 	touch $@
 
-linux-kernel-distclean: $(KERNELHEADERS)-distclean
+linux-kernel-distclean:
+	rm $(prefix)/$*cdkroot-rpmdb/*
+#	$(KERNELHEADERS)-distclean
+	rm -f $(DEPDIR)/linux-kernel
+	rm -f $(DEPDIR)/linux-kernel.do_compile
+	rm -f $(DEPDIR)/linux-kernel.do_prepare
 
 $(DEPDIR)/driver: $(driverdir)/Makefile glibc-dev linux-kernel.do_compile
 	$(if $(PLAYER191),cp $(driverdir)/stgfb/stmfb/linux/drivers/video/stmfb.h $(targetprefix)/usr/include/linux)
@@ -376,4 +379,3 @@ linux-kernel.%:
 	@echo ""
 	diff $(KERNEL_DIR)/.config.old $(KERNEL_DIR)/.config
 	@echo ""
-

@@ -1,0 +1,13 @@
+--- busybox/libbb/printable_string.c	2014-05-11 00:00:52.000000000 +0200
++++ busybox/libbb/printable_string.c	2014-05-16 10:11:55.454229691 +0200
+@@ -31,8 +31,10 @@
+ 		}
+ 		if (c < ' ')
+ 			break;
++#if !ENABLE_UNICODE_SUPPORT
+ 		if (c >= 0x7f)
+ 			break;
++#endif
+ 		s++;
+ 	}
+ 

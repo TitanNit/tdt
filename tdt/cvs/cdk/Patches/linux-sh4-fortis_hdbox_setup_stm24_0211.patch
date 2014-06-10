@@ -26,7 +26,7 @@
 +      {
 +	      .name  = "LMI_SYS",
 +	      .start = 0,
-+	      .size  = 0x02600000,
++	      .size  = 0x01300000,
 +	      .flags = 0,
 +	      .aka   = LMI_SYS_partalias
 +      }
@@ -75,13 +75,13 @@
 +	},
 +	{
 +		.name = "ROOT SQUASHFS",
-+		.size =   0x00a00000, //root 0x240000-0xcffff 10,0MB
++		.size =   0x00C00000, //root 0x240000-0xcffff 12,0MB
 +		.offset = 0x00240000
 +	},
 +	{
 +		.name = "VAR-JFFS2",
-+		.size =   0x013C0000,  //0xa40000-0x1dfffff 19,5MB
-+		.offset = 0x00C40000
++		.size =   0x011C0000,  //0xa40000-0x1dfffff 17,5MB
++		.offset = 0x00E40000
 +	},
 +	{
 +		.name = "Boot Config",

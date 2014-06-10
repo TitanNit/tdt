@@ -8,3 +8,13 @@
      *)
        echo "unknown option: $1" | tee -a configure.log
        echo "$0 --help for help" | tee -a configure.log
+--- zlib-1.2.8.orig/Makefile.in	2012-01-28 23:48:50.000000000 +0100
++++ zlib-1.2.8/Makefile.in	2012-02-13 15:38:20.577700723 +0100
+@@ -199,7 +199,6 @@
+ 	  rm -f $(DESTDIR)$(sharedlibdir)/$(SHAREDLIB) $(DESTDIR)$(sharedlibdir)/$(SHAREDLIBM); \
+ 	  ln -s $(SHAREDLIBV) $(DESTDIR)$(sharedlibdir)/$(SHAREDLIB); \
+ 	  ln -s $(SHAREDLIBV) $(DESTDIR)$(sharedlibdir)/$(SHAREDLIBM); \
+-	  ($(LDCONFIG) || true)  >/dev/null 2>&1; \
+ 	fi
+ 	cp zlib.3 $(DESTDIR)$(man3dir)
+ 	chmod 644 $(DESTDIR)$(man3dir)/zlib.3

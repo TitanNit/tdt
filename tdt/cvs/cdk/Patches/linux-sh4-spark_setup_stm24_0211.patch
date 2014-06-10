@@ -60,22 +60,22 @@
 +/*
 +0x40000000 - 0x403FFFFF - cocpu 1 ram (4mb)
 +0x40400000 - 0x407FFFFF - cocpu 2 ram (4mb)
-+0x40800000 - 0x47FFFFFF - linux   (120mb)
-+0x48000000 - 0x49FFFFFF - bigphys ( 32mb)
-+0x4A000000 - 0x4FFFFFFF - lmi_io  ( 96mb)
++0x40800000 - 0x49FFFFFF - linux   (159mb)
++0x4A000000 - 0x4B1FFFFF - bigphys ( 18mb)
++0x4B200000 - 0x4FFFFFFF - lmi_io  ( 78mb)
 +*/
 +static struct bpa2_partition_desc bpa2_parts_table[] = {
 +    {
 + 	    .name  = "bigphysarea",
-+ 	    .start = 0x48000000,
-+ 	    .size  = 0x02000000, /* 32 Mb */
++ 	    .start = 0x4A000000,
++ 	    .size  = 0x01200000, /* 18 Mb */
 + 	    .flags = 0,
 + 	    .aka   = NULL
 +    },
 +    {
 + 	    .name  = "LMI_IO",
-+ 	    .start = 0x4A000000,
-+ 	    .size  = 0x06000000, /* 96 Mb */
++ 	    .start = 0x4B200000,
++ 	    .size  = 0x04E00000, /* 78 Mb */
 + 	    .flags = 0,
 + 	    .aka   = LMI_IO_partalias
 +    },
@@ -223,7 +223,7 @@
 +		 .offset = 0x18000000
 +	     }, {
 +		 .name = "E2 RootFs",
-+		 .size = 0x7700000,
++		 .size = 0x5000000,
 +		 .offset = 0x18800000
 +	     },
  	},
@@ -361,28 +361,8 @@
  		pr_info("%s: unexpected status %08x\n", __func__, intr_status);
  	/* Clear the interrupt by writing a logic 1 to the CSR5[15-0] */
  	writel((intr_status & 0x1ffff), ioaddr + DMA_STATUS);
-
---- linux-sh4/drivers/mtd/nand/nand_ids.c.org	2012-08-03 16:51:16.000000000 +0200
-+++ linux-sh4/drivers/mtd/nand/nand_ids.c	2012-08-20 18:34:23.000000000 +0200
-@@ -638,6 +638,15 @@
- 	    id[1] == 0xD3 && id[2] == 0x90 && id[3] == 0x26 && id[4] == 0x76)
- 		id_len = 5;
- 
-+	printk("id_len = %d\n", id_len);
-+	printk("type->pagesize = %d\n", type->pagesize);
-+
-+	if (id[0] == NAND_MFR_TOSHIBA && id_len == max_id_len &&
-+	    id[1] == 0xDC && id[2] == 0x90 && id[3] == 0x15 && id[4] == 0x76)
-+	{
-+		id_len = 5;
-+	}
-+
- 	/*
- 	 * Decode ID string
- 	 */
-
-*** linux-sh4-2.6.32.28_stm24_0207.orig/drivers/mtd/nand/nand_ecc.c	2011-11-16 23:19:57.000000000 +0200
---- linux-sh4/drivers/mtd/nand/nand_ecc.c	2011-11-17 21:10:15.882600432 +0200
+*** linux-sh4/drivers/mtd/nand/nand_ecc.c_org
+--- linux-sh4/drivers/mtd/nand/nand_ecc.c
 ***************
 *** 492,503 ****
   	}
@@ -410,8 +390,8 @@
   	return -1;
   }
   EXPORT_SYMBOL(__nand_correct_data);
-*** linux-sh4-2.6.32.28_stm24_0207.orig/drivers/mtd/nand/nand_base.c	2011-11-16 23:19:57.000000000 +0200
---- linux-sh4/drivers/mtd/nand/nand_base.c	2011-11-17 21:15:21.970973574 +0200
+*** linux-sh4/drivers/mtd/nand/nand_base.c_org
+--- linux-sh4/drivers/mtd/nand/nand_base.c
 ***************
 *** 1201,1220 ****
   

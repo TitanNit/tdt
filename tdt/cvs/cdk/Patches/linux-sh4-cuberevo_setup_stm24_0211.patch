@@ -85,7 +85,7 @@
 +	{
 +		.name  = "LMI_SYS",
 +		.start = 0,
-+		.size  = 0x02600000,
++		.size  = 0x01400000,
 +		.flags = 0,
 +		.aka   = LMI_SYS_partalias
 +	}
@@ -176,7 +176,7 @@
 +#define WELCOME_SIZE	0x020000	// welcomeboot config
 +#define KERNEL_SIZE	0x220000	// kernel size
 +#define ROOT_SIZE	(WINDOW_SIZE-WELCOME_SIZE-KERNEL_SIZE-DB_SIZE-BOOT_SIZE)
-+#define DB_SIZE	0x800000
++#define DB_SIZE	0xA00000
 +
 +#elif defined(FLASH_16MB) 
 +

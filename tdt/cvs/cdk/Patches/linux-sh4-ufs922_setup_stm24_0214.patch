@@ -37,14 +37,14 @@
 +      {
 +	      .name  = "LMI_VID",
 +	      .start = 0x10800000,
-+	      .size  = 0x03800000,
++	      .size  = 0x02E00000,
 +	      .flags = 0,
 +	      .aka   = LMI_VID_partalias
 +      },
 +      {
 +	      .name  = "LMI_SYS",
 +	      .start = 0,
-+	      .size  = 0x02600000,
++	      .size  = 0x01C00000,
 +	      .flags = 0,
 +	      .aka   = LMI_SYS_partalias
 +      }
@@ -80,27 +80,27 @@
 +
 +static struct mtd_partition mtd_parts_table[5] = {
 +	{
-+		.name = "Boot firmware :        0xA000.0000-0xA003.FFFF",
++		.name = "Boot firmware",
 +		.size = 0x00040000,
 +		.offset = 0x00000000,
 +	},
 +	{
-+		.name = "Kernel - RAW           0xA004.0000-0xA01D.FFFF",
++		.name = "Kernel - RAW",
 +		.size = 0x1a0000,
 +		.offset = 0x00040000,
 +	},
 +	{
-+		.name = "Root   - SQUASHFS      0xA01E.0000-0xA0B9.FFFF",
-+		.size = 0x9c0000,
++		.name = "Root   - SQUASHFS",
++		.size = 0xb40000,
 +		.offset = 0x1e0000,
 +	},
 +	{
-+		.name = "Var    - JFFS2         0xA0BA.0000-0xA0FF.FFFF",
-+		.size = 0x460000, 
-+		.offset = 0xba0000,
++		.name = "Var    - JFFS2",
++		.size = 0x2e0000, 
++		.offset = 0xd20000,
 +	},
 +	{	
-+		.name = "Full w/o Bootloader   0xA004.0000-0xA0FF.FFFF", 
++		.name = "Full w/o Bootloader", 
 +		.size = 0x00FC0000,
 +		.offset = 0x00040000, 
 +	}
