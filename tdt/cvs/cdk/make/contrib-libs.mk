@@ -786,6 +786,8 @@ FFMPEG_CONFIGURE += --enable-decoder=aac --enable-decoder=dvbsub --enable-decode
 FFMPEG_CONFIGURE += --enable-decoder=h263i --enable-decoder=h264 --enable-decoder=iff_byterun1 --enable-decoder=mjpeg
 FFMPEG_CONFIGURE += --enable-decoder=mp3 --enable-decoder=mpeg1video --enable-decoder=mpeg2video --enable-decoder=png
 FFMPEG_CONFIGURE += --enable-decoder=theora --enable-decoder=vorbis --enable-decoder=wmv3 --enable-decoder=pcm_s16le
+FFMPEG_CONFIGURE += --enable-decoder=rawvideo --enable-decoder=wmapro --enable-decoder=wmav1 --enable-decoder=wmav2 --enable-decoder=wmavoice
+FFMPEG_CONFIGURE += --enable-decoder=iff_byterun1 --enable-decoder=ra_144 --enable-decoder=ra_288
 FFMPEG_CONFIGURE += --enable-demuxer=mjpeg --enable-demuxer=wav --enable-demuxer=rtsp
 FFMPEG_CONFIGURE += --enable-parser=mjpeg
 FFMPEG_CONFIGURE += --disable-indevs --disable-outdevs --disable-bsfs --disable-debug
