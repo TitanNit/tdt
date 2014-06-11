@@ -1,43 +1,3 @@
-*** a/arch/sh/kernel/setup.c	2011-01-05 10:45:31.000000000 +0100
---- b/setup.c	2011-01-22 12:22:31.340928000 +0100
-***************
-*** 388,393 ****
---- 388,421 ----
-  #endif
-  #endif
-  
-+ 	{
-+ 	char org_command_line[] = "console=ttyAS0,115200 root=/dev/mtdblock4";
-+ 	char tdt_command_line[] = "console=ttyAS0,115200 root=/dev/mtdblock3 rw rootfstype=jffs2 init=/bin/devinit coprocessor_mem=4m@0x40000000,4m@0x40400000 printk=1 stmmaceth=ethaddr:";
-+ 	char mac[] = "00:00:00:00:00:00";
-+ 	int command_line_len = strlen(command_line);
-+ 	int org_command_line_len = strlen(org_command_line);
-+ 
-+ 	if(command_line_len >= org_command_line_len && !strncmp(command_line, org_command_line, org_command_line_len))
-+ 	{
-+ 		int i;
-+ 		for(i = 0; i < (command_line_len - 7); i++)
-+ 		{
-+ 			if(!strncmp(command_line + i, "ethaddr", 7))
-+ 			{
-+ 				strlcpy(mac, command_line + i + 8, sizeof(mac));
-+ 				break;
-+ 			}
-+ 			if(!strncmp(command_line + i, "hwaddr", 6))
-+ 			{
-+ 				strlcpy(mac, command_line + i + 7, sizeof(mac));
-+ 				break;
-+ 			}
-+ 		}
-+ 		strlcpy(command_line, tdt_command_line, sizeof(command_line));
-+ 		strlcat(command_line, mac, sizeof(command_line));
-+ 	}
-+ 	}
-+ 
-  	/* Save unparsed command line copy for /proc/cmdline */
-  	memcpy(boot_command_line, command_line, COMMAND_LINE_SIZE);
-  	*cmdline_p = command_line;
-
 --- a/drivers/stm/stx7111_comms.c.org	2011-07-02 05:58:19.000000000 -0700
 +++ b/drivers/stm/stx7111_comms.c	2011-07-03 05:30:59.771608244 -0700
 @@ -211,10 +211,17 @@
@@ -60,8 +20,8 @@
  			/* This is a signal from SPI block */
  			/* Hope this is set correctly by default */
  
---- a/arch/sh/boards/mach-mb618/setup.c.org	2014-06-07 20:58:30.000000000 +0200
-+++ b/arch/sh/boards/mach-mb618/setup.c	2014-06-11 13:10:38.000000000 +0200
+--- a/arch/sh/boards/mach-mb618/setup.c.org	2012-03-08 08:58:51.000000000 -0800
++++ b/arch/sh/boards/mach-mb618/setup.c	2012-03-09 08:48:35.000000000 -0800
 @@ -17,35 +17,78 @@
  #include <linux/phy.h>
  #include <linux/i2c.h>
@@ -154,7 +114,7 @@
  
  static void __init mb618_setup(char** cmdline_p)
  {
-@@ -53,155 +96,109 @@
+@@ -53,119 +70,85 @@
  
  	stx7111_early_device_init();
  
@@ -202,14 +162,14 @@
 -		.code = BTN_1,
 -		.gpio = stm_gpio(6, 3),
 -		.desc = "SW3",
+-	}, {
+-		.code = BTN_2,
+-		.gpio = stm_gpio(6, 4),
+-		.desc = "SW4",
 +		.name   = "NOR U-BOOT     0xA000.0000-0xA007.FFFF (512KB)",
 +		.size   = 0x00080000,
 +		.offset = 0
  	}, {
--		.code = BTN_2,
--		.gpio = stm_gpio(6, 4),
--		.desc = "SW4",
--	}, {
 -		.code = BTN_3,
 -		.gpio = stm_gpio(6, 5),
 -		.desc = "SW5",
@@ -311,10 +271,6 @@
 +	 .name   = "NAND SWAP",
 +	 .size   = MTDPART_SIZ_FULL,	/* will expand to the end of the flash */
 +	 .offset = MTDPART_OFS_APPEND
-+	 }, {
-+	 .name   = "NAND Full",
-+	 .size   = MTDPART_SIZ_FULL,
-+	 .offset = 0
 +	 }
 +#endif
 +};
@@ -338,6 +294,8 @@
  	.timing_data	= &(struct stm_nand_timing_data) {
  		.sig_setup	= 50,		/* times in ns */
  		.sig_hold	= 50,
+@@ -171,37 +154,21 @@
+ 		.sig_hold	= 50,
  		.CE_deassert	= 0,
  		.WE_to_RBn	= 100,
 -		.wr_on		= 20,
@@ -348,7 +306,7 @@
 +		.wr_off		= 30,
 +		.rd_on		= 10,
 +		.rd_off		= 30,
- 		.chip_delay	= 50,		/* in us */
+		.chip_delay	= 50,		/* in us */
  	},
 +	.emi_withinbankoffset	= 0,
  };
@@ -385,7 +343,7 @@
  	},
  };
  
-@@ -216,13 +213,13 @@
+@@ -216,13 +183,13 @@
  	return 1;
  }
  
@@ -401,7 +359,7 @@
  	.name		= "epld",
  	.id		= -1,
  	.num_resources	= 1,
-@@ -239,129 +236,39 @@
+@@ -239,129 +206,39 @@
  	},
  };
  
@@ -543,7 +501,7 @@
  
  	return platform_add_devices(mb618_devices, ARRAY_SIZE(mb618_devices));
  }
-@@ -405,7 +312,7 @@
+@@ -405,7 +282,7 @@
  	const int version_offset = 0;
  	int version;
  
@@ -552,7 +510,7 @@
  
  	epld_write(0, 0);	/* bank = Test */
  	epld_write(0x63, test_offset);
-@@ -438,10 +345,9 @@
+@@ -438,10 +315,9 @@
  }
  
  struct sh_machine_vector mv_mb618 __initmv = {

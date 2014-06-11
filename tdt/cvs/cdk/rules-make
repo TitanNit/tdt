@@ -15,6 +15,7 @@
 linuxp0209;2.6.32.46_stm24_0209;linux-sh4-2.6.32.46_stm24_0209;stlinux24-host-kernel-source-sh4-2.6.32.46_stm24_0209-209.src.rpm
 linuxp0211;2.6.32.59_stm24_0211;linux-sh4-2.6.32.59_stm24_0211;stlinux24-host-kernel-source-sh4-2.6.32.59_stm24_0211-211.src.rpm
 linuxp0214;2.6.32.61_stm24_0214;linux-sh4-2.6.32.61_stm24_0214;stlinux24-host-kernel-source-sh4-2.6.32.61_stm24_0214-214.src.rpm
+linuxp0215;2.6.32.61_stm24_0215;linux-sh4-2.6.32.61_stm24_0215;stlinux24-host-kernel-source-sh4-2.6.32.61_stm24_0215-215.src.rpm
 
 squashfs;3.0;mksquashfs;squashfs3.0.tar.gz:mksquashfs_lzma.diff:lzma442.tar.bz2:lzma_zlib-stream.diff;dircreate:mksquashfs;extract:lzma442.tar.bz2;patch:lzma_zlib-stream.diff;extract:squashfs3.0.tar.gz;patch:mksquashfs_lzma.diff
 squashfs;4.0;mksquashfs;squashfs4.0.tar.gz:squashfs-tools-4.0-lzma.patch:lzma465.tar.bz2;dircreate:mksquashfs;extract:lzma465.tar.bz2;extract:squashfs4.0.tar.gz;patch:squashfs-tools-4.0-lzma.patch
@@ -31,6 +32,11 @@ host_autoconf;2.64;autoconf-2.64;autoconf-2.64.tar.gz;extract:autoconf-2.64.tar.
 # ccache
 #
 ccache;3.1.9;ccache-3.1.9;ccache-3.1.9.tar.gz;extract:ccache-3.1.9.tar.gz
+
+#
+# texinfo
+#
+texinfo;4.13a;texinfo-4.13;texinfo-4.13a.tar.gz;extract:texinfo-4.13a.tar.gz
 
 #
 # root
@@ -58,10 +64,11 @@ fbset;2.1;fbset-2.1;fbset_2.1.orig.tar.gz:fbset_2.1-6.diff.gz:fbset_2.1-fb.modes
 pngquant;1.1;pngquant-1.1;pngquant-1.1-src.tgz;extract:pngquant-1.1-src.tgz
 mplayer;1.0;mplayer-export-*;mplayer-export-snapshot.tar.bz2;extract:mplayer-export-snapshot.tar.bz2
 mencoder;1.0;mplayer-export-*;mplayer-export-snapshot.tar.bz2;extract:mplayer-export-snapshot.tar.bz2
-opkg;0.1.8+svnr587;opkg-0.1.8+svnr587;opkg-0.1.8+svnr587.tar.gz;extract:opkg-0.1.8+svnr587.tar.gz;patch:opkg-0.1.8-dont-segfault.diff
+opkg;0.2.0;opkg-0.2.0;opkg-0.2.0.tar.gz;extract:opkg-0.2.0.tar.gz;patch:opkg-0.2.0-dont-segfault.patch
 sysstat;10.0.4;sysstat-10.0.4;sysstat-10.0.4.tar.gz;extract:sysstat-10.0.4.tar.gz
 imagemagick;6.7.7-7;ImageMagick-6.7.7-7;ImageMagick-6.7.7-7.tar.bz2;extract:ImageMagick-6.7.7-7.tar.bz2
 shairport;1.0;shairport;shairport.git;extract:shairport.git
+wget;1.15;wget-1.15;wget-1.15.tar.gz;extract:wget-1.15.tar.gz
 
 #
 # contrib libs
@@ -197,13 +204,13 @@ hotplug_e2;1.0;hotplug-e2-helper;hotplug-e2-helper.git;extract:hotplug-e2-helper
 # EXTERNAL_LCD
 #
 graphlcd;base-touchcol;graphlcd-base-touchcol;graphlcd-base-touchcol.git:graphlcd.patch;extract:graphlcd-base-touchcol.git;patch:graphlcd.patch
-lcd4_linux;;lcd4linux;lcd4linux.svn;extract:lcd4linux.svn;patch:lcd4linux-dpf.patch;patch:lcd4linux-spf.patch
+lcd4_linux;;lcd4linux;lcd4linux.svn;extract:lcd4linux.svn;patch:lcd4linux.patch
 libusb;1.0.9;libusb-1.0.9;libusb-1.0.9.tar.bz2;extract:libusb-1.0.9.tar.bz2;patch:libusb-1.0.9.patch
 libusbcompat;0.1.5;libusb-compat-0.1.5;libusb-compat-0.1.5.tar.bz2;extract:libusb-compat-0.1.5.tar.bz2
-libgd2;2.0.35;gd-2.0.35;gd-2.0.35.tar.gz;extract:gd-2.0.35.tar.gz
+libgd2;2.1.0;libgd-2.1.0;libgd-2.1.0.tar.gz;extract:libgd-2.1.0.tar.gz
 #libdpfax;ax;dpf-ax;dpf-ax.svn:libdpfax.diff;extract:dpf-ax.svn;patch:libdpfax.diff
 libdpfax;ax;dpf-ax;dpf-ax.svn;extract:dpf-ax.svn
-libdpf;0.12;dpflib-0.12;dpflib-0.12.tar.gz;extract:dpflib-0.12.tar.gz
+#libdpf;0.12;dpflib-0.12;dpflib-0.12.tar.gz;extract:dpflib-0.12.tar.gz
 
 #
 # ide apps

@@ -2,7 +2,7 @@
 
 if [ "$1" == -h ] || [ "$1" == --help ]; then
  echo "Parameter 1: target system (1-31)"
- echo "Parameter 2: kernel (1-3)"
+ echo "Parameter 2: kernel (1-4)"
  echo "Parameter 3: debug (y/N)"
  echo "Parameter 4: player (1-2)"
  echo "Parameter 5: Media Framework (1-4)"
@@ -86,14 +86,13 @@ echo "28) Kathrein UFS-913"
 echo "29) Kathrein UFC-960"
 echo "30) Vitamin HD5000"
 echo "31) Atemio530"
-echo "32) SagemCom 88 series"
 
 case $1 in
-	[1-9] | 1[0-9] | 2[0-9] | 3[0-9]) REPLY=$1
+	[1-9] | 1[0-9] | 2[0-9]) REPLY=$1
 	echo -e "\nSelected target: $REPLY\n"
 	;;
 	*)
-	read -p "Select target (1-32)? ";;
+	read -p "Select target (1-31)? ";;
 esac
 
 case "$REPLY" in
@@ -127,7 +126,6 @@ case "$REPLY" in
 	29) TARGET="--enable-ufc960";BOXTYPE="--with-boxtype=ufc960";;
 	30) TARGET="--enable-vitamin_hd5000";BOXTYPE="--with-boxtype=vitamin_hd5000";;
 	31) TARGET="--enable-atemio530";BOXTYPE="--with-boxtype=atemio530";;
-	32) TARGET="--enable-sagemcom88";BOXTYPE="--with-boxtype=sagemcom88";;
 	 *) TARGET="--enable-atevio7500";BOXTYPE="--with-boxtype=atevio7500";;
 esac
 CONFIGPARAM="$CONFIGPARAM $TARGET $BOXTYPE"
@@ -179,18 +177,20 @@ echo -e "\nKernel:"
 echo "   1) STM 24 P0209"
 echo "   2) STM 24 P0211 (recommended)"
 echo "   3) STM 24 P0214 (experimental)"
+echo "   4) STM 24 P0215 (experimental)"
 case $2 in
-	[1-3]) REPLY=$2
+	[1-4]) REPLY=$2
 	echo -e "\nSelected kernel: $REPLY\n"
 	;;
 	*)
-	read -p "Select kernel (1-3)? ";;
+	read -p "Select kernel (1-4)? ";;
 esac
 
 case "$REPLY" in
 	1)  KERNEL="--enable-stm24 --enable-p0209";STMFB="stm24";;
 	2)  KERNEL="--enable-stm24 --enable-p0211";STMFB="stm24";;
 	3)  KERNEL="--enable-stm24 --enable-p0214";STMFB="stm24";;
+	4)  KERNEL="--enable-stm24 --enable-p0215";STMFB="stm24";;
 	*)  KERNEL="--enable-stm24 --enable-p0211";STMFB="stm24";;
 esac
 CONFIGPARAM="$CONFIGPARAM $KERNEL"
@@ -321,14 +321,14 @@ esac
 echo -e "\nMedia Framework:"
 echo "   1) eplayer3"
 echo "   2) gstreamer"
-echo "   3) use build-in"
+echo "   3) use build-in (recommended)"
 echo "   4) gstreamer+eplayer3"
 case $5 in
 	[1-4]) REPLY=$5
 	echo -e "\nSelected media framework: $REPLY\n"
 	;;
 	*)
-	read -p "Select media framework (1-3)? ";;
+	read -p "Select media framework (1-4)? ";;
 esac
 
 case "$REPLY" in
@@ -361,7 +361,7 @@ esac
 ##############################################
 
 # Check this option if you want to use the version of GCC.
-CONFIGPARAM="$CONFIGPARAM --enable-gcc47"
+#CONFIGPARAM="$CONFIGPARAM --enable-gcc47"
 
 ##############################################
 
