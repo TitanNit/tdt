@@ -20,8 +20,8 @@
  			/* This is a signal from SPI block */
  			/* Hope this is set correctly by default */
  
---- a/arch/sh/boards/mach-mb618/setup.c.org	2012-03-08 08:58:51.000000000 -0800
-+++ b/arch/sh/boards/mach-mb618/setup.c	2012-03-09 08:48:35.000000000 -0800
+--- a/arch/sh/boards/mach-mb618/setup.c.org	2014-06-11 15:54:03.000000000 +0200
++++ b/arch/sh/boards/mach-mb618/setup.c	2014-06-11 17:20:55.000000000 +0200
 @@ -17,35 +17,78 @@
  #include <linux/phy.h>
  #include <linux/i2c.h>
@@ -114,7 +114,7 @@
  
  static void __init mb618_setup(char** cmdline_p)
  {
-@@ -53,119 +70,85 @@
+@@ -53,155 +96,109 @@
  
  	stx7111_early_device_init();
  
@@ -162,14 +162,14 @@
 -		.code = BTN_1,
 -		.gpio = stm_gpio(6, 3),
 -		.desc = "SW3",
--	}, {
--		.code = BTN_2,
--		.gpio = stm_gpio(6, 4),
--		.desc = "SW4",
 +		.name   = "NOR U-BOOT     0xA000.0000-0xA007.FFFF (512KB)",
 +		.size   = 0x00080000,
 +		.offset = 0
  	}, {
+-		.code = BTN_2,
+-		.gpio = stm_gpio(6, 4),
+-		.desc = "SW4",
+-	}, {
 -		.code = BTN_3,
 -		.gpio = stm_gpio(6, 5),
 -		.desc = "SW5",
@@ -271,6 +271,10 @@
 +	 .name   = "NAND SWAP",
 +	 .size   = MTDPART_SIZ_FULL,	/* will expand to the end of the flash */
 +	 .offset = MTDPART_OFS_APPEND
++	 }, {
++	 .name   = "NAND Full",
++	 .size   = MTDPART_SIZ_FULL,
++	 .offset = 0
 +	 }
 +#endif
 +};
@@ -294,8 +298,6 @@
  	.timing_data	= &(struct stm_nand_timing_data) {
  		.sig_setup	= 50,		/* times in ns */
  		.sig_hold	= 50,
-@@ -171,37 +154,21 @@
- 		.sig_hold	= 50,
  		.CE_deassert	= 0,
  		.WE_to_RBn	= 100,
 -		.wr_on		= 20,
@@ -306,7 +308,7 @@
 +		.wr_off		= 30,
 +		.rd_on		= 10,
 +		.rd_off		= 30,
-		.chip_delay	= 50,		/* in us */
+ 		.chip_delay	= 50,		/* in us */
  	},
 +	.emi_withinbankoffset	= 0,
  };
@@ -343,7 +345,7 @@
  	},
  };
  
-@@ -216,13 +183,13 @@
+@@ -216,13 +213,13 @@
  	return 1;
  }
  
@@ -359,7 +361,7 @@
  	.name		= "epld",
  	.id		= -1,
  	.num_resources	= 1,
-@@ -239,129 +206,39 @@
+@@ -239,129 +236,39 @@
  	},
  };
  
@@ -501,7 +503,7 @@
  
  	return platform_add_devices(mb618_devices, ARRAY_SIZE(mb618_devices));
  }
-@@ -405,7 +282,7 @@
+@@ -405,7 +312,7 @@
  	const int version_offset = 0;
  	int version;
  
@@ -510,7 +512,7 @@
  
  	epld_write(0, 0);	/* bank = Test */
  	epld_write(0x63, test_offset);
-@@ -438,10 +315,9 @@
+@@ -438,10 +345,9 @@
  }
  
  struct sh_machine_vector mv_mb618 __initmv = {
