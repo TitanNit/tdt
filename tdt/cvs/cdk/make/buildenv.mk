@@ -24,6 +24,9 @@ endif
 if ENABLE_P0214
 KERNEL_DIR = @DIR_linuxp0214@
 endif
+if ENABLE_P0215
+KERNEL_DIR = @DIR_linuxp0215@
+endif
 
 #
 # Python Version
