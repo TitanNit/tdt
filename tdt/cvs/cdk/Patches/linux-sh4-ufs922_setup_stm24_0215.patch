@@ -16,11 +16,8 @@
  		},
  	},
  	[2] = {
---- a/arch/sh/boards/mach-mb448/setup.c	2011-07-14 21:52:21.000000000 +0200
-+++ b/setup.c	2011-07-15 19:06:25.349805986 +0200
-
---- setup.c	2014-06-11 15:54:03.000000000 +0200
-+++ setup.c.patched	2014-06-13 17:47:48.000000000 +0200
+--- a/arch/sh/boards/mach-mb448/setup.c	2014-06-11 15:54:03.000000000 +0200
++++ b/setup.c	2014-06-13 17:47:48.000000000 +0200
 @@ -19,6 +19,7 @@
  #include <linux/mtd/physmap.h>
  #include <linux/stm/platform.h>
