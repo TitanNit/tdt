@@ -8,7 +8,7 @@
   
 + 	{
 + 	char org_command_line[] = "console=ttyAS0,115200 root=/dev/mtdblock3";
-+ 	char tdt_command_line[] = "console=ttyAS0,115200 root=/dev/mtdblock4 rw rootfstype=jffs2 init=/bin/devinit coprocessor_mem=4m@0x40000000,4m@0x40400000 printk=1 stmmaceth=ethaddr:";
++ 	char tdt_command_line[] = "console=ttyAS0,115200 root=/dev/mtdblock2 rootfstype=squashfs init=/bin/devinit coprocessor_mem=4m@0x40000000,4m@0x40400000 printk=1 console_loglevel=7 stmmaceth=ethaddr:";
 + 	char mac[] = "00:00:00:00:00:00";
 + 	int command_line_len = strlen(command_line);
 + 	int org_command_line_len = strlen(org_command_line);
@@ -53,7 +53,7 @@
  
  
  #define MB680_PIO_PHY_RESET stm_gpio(5, 5)
-@@ -38,6 +38,32 @@
+@@ -38,6 +39,32 @@
  #define MB680_PIO_PCI_RESET stm_gpio(15, 6)
  #define MB680_PIO_MII_BUS_SWITCH stm_gpio(11, 2)
  
@@ -63,30 +63,30 @@
 +/*
 +0x40000000 - 0x403FFFFF - cocpu 1 ram (4mb)
 +0x40400000 - 0x407FFFFF - cocpu 2 ram (4mb)
-+0x40800000 - 0x49FFFFFF - linux   (159mb)
-+0x4A000000 - 0x4B1FFFFF - bigphys ( 18mb)
-+0x4B200000 - 0x4FFFFFFF - lmi_io  ( 78mb)
++0x40800000 - 0x49FFFFFF - linux   (149mb)
++0x4A000000 - 0x4B1FFFFF - bigphys ( 23mb)
++0x4B200000 - 0x4FFFFFFF - lmi_io  ( 83mb)
 +*/
 +static struct bpa2_partition_desc bpa2_parts_table[] = {
 +    {
 + 	    .name  = "bigphysarea",
-+ 	    .start = 0x4A000000,
-+ 	    .size  = 0x01200000, /* 18 Mb */
++ 	    .start = 0x49600000,
++ 	    .size  = 0x01700000, /* 23 Mb */
 + 	    .flags = 0,
 + 	    .aka   = NULL
 +    }, 
 +    {
 + 	    .name  = "LMI_IO",
-+ 	    .start = 0x4B200000,
-+ 	    .size  = 0x04E00000, /* 78 Mb */
++ 	    .start = 0x4AD00000,
++ 	    .size  = 0x05300000, /* 83 Mb */
 + 	    .flags = 0,
 + 	    .aka   = LMI_IO_partalias
-+    }
++    }, 
 + };
  
  
  static void __init mb680_setup(char** cmdline_p)
-@@ -48,70 +74,17 @@
+@@ -48,70 +75,17 @@
  
  	stx7105_configure_asc(2, &(struct stx7105_asc_config) {
  			.routing.asc2 = stx7105_asc2_pio4,
@@ -97,9 +97,9 @@
 -			.hw_flow_control = 1,
 -			.is_console = 0, });
 -}
--
 +	bpa2_init(bpa2_parts_table, ARRAY_SIZE(bpa2_parts_table));
  
+-
 -
 -static struct platform_device mb680_leds = {
 -	.name = "leds-gpio",
@@ -140,14 +140,14 @@
 -static void ll_phy_reset(void)
 -{
 -	mb705_reset(EPLD_EMI_RESET_SW0, 150);
- }
+-}
 -#else
 -static void ll_phy_reset(void)
 -{
 -	gpio_set_value(MB680_PIO_PHY_RESET, 0);
 -	udelay(150);
 -	gpio_set_value(MB680_PIO_PHY_RESET, 1);
--}
+ }
 -#endif
  
  static int mb680_phy_reset(void *bus)
@@ -162,7 +162,7 @@
  
  	return 0;
  }
-@@ -122,127 +95,76 @@
+@@ -122,127 +96,73 @@
  	.phy_mask = 0,
  };
  
@@ -170,38 +170,35 @@
 -	&mb680_leds,
 +static struct mtd_partition mb680_physmap_flash_partitions[] = {
 +	{
-+		.name = "U-BOOT",
-+		.size = 0x00040000,
-+		.offset = 0x00000000
-+	}, {
-+		.name = "Kernel",
-+		.size = 0x00300000,
-+		.offset = 0x00100000
-+	}, {
-+		.name = "FW",
-+		.size = 0x006E0000,
-+		.offset = 0x00B20000
-+	}, {
-+		.name = "VAR",
-+		.size = 0x00BC0000,
-+		.offset = 0x01220000
-+	}, {
-+		.name = "ROOT",
-+		.size = 0x001E00000,
-+		.offset = 0x02200000
-+	}, {
-+		.name = "SWAP (VOLATILE)",
-+		.size = 0x006E0000,
-+		.offset = 0x00420000
-+	}, {
-+		.name = "U-BOOT ENV",
-+		.size = 0x00020000,
-+		.offset = 0x00040000
-+	}, {
++		.name = "Boot firmware",
++		.size = 0x60000,
++		.offset = 0
++	 },
++	 {
++	 	.name = "Kernel",
++		.size = 0x2a0000,
++		.offset = 0x60000
++	 },
++	 {
++		.name = "Root",
++		.size = 0xe20000,
++		.offset = 0x300000
++	 },
++	 {
++	 	.name = "Var",
++	 	.size = MTDPART_SIZ_FULL,
++	 	.offset = 0x3a00000
++	 },
++	 {
++		.name = "Swap",
++		.size = 0x28e0000,
++		.offset = 0x1120000
++	 },
++	 {
 +		.name = "Full",
 +		.size = MTDPART_SIZ_FULL,
-+		.offset = 0x00100000
-+	}
++		.offset = 0x60000
++	 }
  };
  
 -/* PCI configuration */
@@ -347,7 +344,7 @@
  	/* NIM AB/STRecord I2C bus*/
  	stx7105_configure_ssc_i2c(2, &(struct stx7105_ssc_config) {
  			.routing.ssc2.sclk = stx7105_ssc2_sclk_pio3_4,
-@@ -264,7 +193,7 @@
+@@ -264,7 +184,7 @@
  	 * alt	| 12[6]	J5B:1-2  J6G:open	14[7]	J10B:1-2  J11H:open
  	 */
  	stx7105_configure_usb(0, &(struct stx7105_usb_config) {
@@ -356,7 +353,7 @@
  			.pwr_enabled = 1,
  			.routing.usb0.ovrcur = stx7105_usb0_ovrcur_pio4_4,
  			.routing.usb0.pwr = stx7105_usb0_pwr_pio4_5, });
-@@ -276,8 +205,6 @@
+@@ -276,8 +196,6 @@
  
  	gpio_request(MB680_PIO_PHY_RESET, "notPioResetMII");
  	gpio_direction_output(MB680_PIO_PHY_RESET, 1);
@@ -365,7 +362,7 @@
  
  	stx7105_configure_ethernet(0, &(struct stx7105_ethernet_config) {
  			.mode = stx7105_ethernet_mode_mii,
-@@ -287,22 +214,8 @@
+@@ -287,22 +205,8 @@
  			.mdio_bus_data = &stmmac_mdio_bus,
  		});
  
