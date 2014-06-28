@@ -175,31 +175,31 @@
 +#define BOOT_SIZE	0x040000	// boot loader
 +#define WELCOME_SIZE	0x020000	// welcomeboot config
 +#define KERNEL_SIZE	0x220000	// kernel size
-+#define ROOT_SIZE	(WINDOW_SIZE-WELCOME_SIZE-KERNEL_SIZE-DB_SIZE-BOOT_SIZE)
-+#define DB_SIZE	0xa00000
-+
++#define ROOT_SIZE	(WINDOW_SIZE-WELCOME_SIZE-KERNEL_SIZE-DB_SIZE-BOOT_SIZE-MNT_SIZE)
++#define DB_SIZE	0x400000
++#define MNT_SIZE	0x580000
 +#elif defined(FLASH_16MB) 
 +
 +// 16MB flash
 +#define WINDOW_ADDR	0xA0000000
 +#define WINDOW_SIZE	0x01000000
-+
++#define MNT_SIZE	0x100000
 +#define BOOT_SIZE	0x040000	// boot loader
 +#define WELCOME_SIZE	0x020000	// welcomeboot config
 +#define KERNEL_SIZE	0x1A0000	// kernel size
-+#define ROOT_SIZE	(WINDOW_SIZE-WELCOME_SIZE-KERNEL_SIZE-DB_SIZE-BOOT_SIZE)
-+#define DB_SIZE		0x600000
++#define ROOT_SIZE	(WINDOW_SIZE-WELCOME_SIZE-KERNEL_SIZE-DB_SIZE-BOOT_SIZE-MNT_SIZE)
++#define DB_SIZE		0x300000
 +#else
 +
 +// 8MB flash
 +#define WINDOW_ADDR     0xA0000000 	 
 +#define WINDOW_SIZE     0x00800000 	 
-+
++#define MNT_SIZE	     0x10000
 +#define BOOT_SIZE       0x030000        // boot loader 	 
 +#define WELCOME_SIZE    0x010000        // welcomeboot config 	 
 +#define KERNEL_SIZE     0x180000        // kernel size 	 
-+#define ROOT_SIZE       (WINDOW_SIZE-WELCOME_SIZE-KERNEL_SIZE-DB_SIZE-BOOT_SIZE) 	 
-+#define DB_SIZE         0x230000
++#define ROOT_SIZE       (WINDOW_SIZE-WELCOME_SIZE-KERNEL_SIZE-DB_SIZE-BOOT_SIZE-MNT_SIZE) 	 
++#define DB_SIZE         0x220000
 +
 +
 +#endif
@@ -213,54 +213,54 @@
 +
 +static struct mtd_partition mtd_parts_table[] = {
 +   {
-+       .name       = "Bootloader", //"nor.boot",
++       .name       = "Bootloader",
 +       .offset     = 0x00000000,
 +       .size       = BOOT_SIZE,
 +       .mask_flags = MTD_WRITEABLE,    /* force read-only */
 +   },
 +   {
-+       .name       = "Config", //"nor.config_welcome",
++       .name       = "Config",
 +       .offset     = BOOT_SIZE,
 +       .size       = WELCOME_SIZE,
 +   },
-+   {   .name       = "Kernel", //"nor.kernel",
-+       .offset     = 0x60000, //BOOT_SIZE + WELCOME_SIZE,
-+       .size       = 0x2a0000, //KERNEL_SIZE,
++   {   .name       = "Kernel",
++       .offset     = BOOT_SIZE + WELCOME_SIZE,
++       .size       = KERNEL_SIZE,
 +       //.mask_flags = MTD_WRITEABLE,
 +   },
 +   {
-+       .name       = "Root", //"nor.root",
-+       .offset     = 0x300000, //BOOT_SIZE + WELCOME_SIZE + KERNEL_SIZE,
-+       .size       = 0xd40000, //ROOT_SIZE,
++       .name       = "Root",
++       .offset     = BOOT_SIZE + WELCOME_SIZE + KERNEL_SIZE,
++       .size       = ROOT_SIZE,
 +       //.mask_flags = MTD_WRITEABLE,
 +   },
 +   {
-+       .name       = "Var", //"nor.var",
-+       .offset     = 0x1040000, //BOOT_SIZE+WELCOME_SIZE+KERNEL_SIZE+ROOT_SIZE,
-+       .size       = 0x400000, //DB_SIZE,
++       .name       = "Var",
++       .offset     = BOOT_SIZE+WELCOME_SIZE+KERNEL_SIZE+ROOT_SIZE,
++       .size       = DB_SIZE,
 +   },
 +   /* partitions for upgrade */
 +   {
-+       .name       = "Swap", //"nor.mtd2_mtd3",
-+       .offset     = 0x1440000, //BOOT_SIZE+WELCOME_SIZE,
-+       .size       = MTDPART_SIZ_FULL //KERNEL_SIZE+ROOT_SIZE,
++       .name       = "Mnt",
++       .offset     = BOOT_SIZE+WELCOME_SIZE+KERNEL_SIZE+ROOT_SIZE-MNT_SIZE,
++       .size       = DB_SIZE,
 +   },
 +   {
-+       .name       = "Full", "nor.mtd2_mtd3_mtd4",
-+       .offset     = 0x60000, //BOOT_SIZE+WELCOME_SIZE,
-+       .size       = MTDPART_SIZ_FULL //KERNEL_SIZE+ROOT_SIZE+DB_SIZE,
++       .name       = "Full",
++       .offset     = BOOT_SIZE+WELCOME_SIZE,
++       .size       = KERNEL_SIZE+ROOT_SIZE+DB_SIZE,
 +   },
-+//   {
-+//       .name       = "nor.full",
-+//       .offset     = BOOT_SIZE,
-+//       .size       = (WINDOW_SIZE-BOOT_SIZE),
-+//   },
-+//   {
-+//       .name       = "nor.all",
-+//       .offset     = 0,
-+//       .size       = WINDOW_SIZE,
-+//       .mask_flags = MTD_WRITEABLE,    /* force read-only */
-+//   },
++   {
++       .name       = "nor.fill",
++       .offset     = BOOT_SIZE,
++       .size       = (WINDOW_SIZE-BOOT_SIZE),
++   },
++   {
++       .name       = "nor.all",
++       .offset     = 0,
++       .size       = WINDOW_SIZE,
++       .mask_flags = MTD_WRITEABLE,    /* force read-only */
++   },
  };
  
  static void mb442_set_vpp(struct map_info *info, int enable)
