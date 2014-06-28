@@ -213,54 +213,54 @@
 +
 +static struct mtd_partition mtd_parts_table[] = {
 +   {
-+       .name       = "nor.boot",
++       .name       = "Bootloader", //"nor.boot",
 +       .offset     = 0x00000000,
 +       .size       = BOOT_SIZE,
 +       .mask_flags = MTD_WRITEABLE,    /* force read-only */
 +   },
 +   {
-+       .name       = "nor.config_welcome",
++       .name       = "Config", //"nor.config_welcome",
 +       .offset     = BOOT_SIZE,
 +       .size       = WELCOME_SIZE,
 +   },
-+   {   .name       = "nor.kernel",
-+       .offset     = BOOT_SIZE + WELCOME_SIZE,
-+       .size       = KERNEL_SIZE,
++   {   .name       = "Kernel", //"nor.kernel",
++       .offset     = 0x60000, //BOOT_SIZE + WELCOME_SIZE,
++       .size       = 0x2a0000, //KERNEL_SIZE,
 +       //.mask_flags = MTD_WRITEABLE,
 +   },
 +   {
-+       .name       = "nor.root",
-+       .offset     = BOOT_SIZE + WELCOME_SIZE + KERNEL_SIZE,
-+       .size       = ROOT_SIZE,
++       .name       = "Root", //"nor.root",
++       .offset     = 0x300000, //BOOT_SIZE + WELCOME_SIZE + KERNEL_SIZE,
++       .size       = 0xd40000, //ROOT_SIZE,
 +       //.mask_flags = MTD_WRITEABLE,
 +   },
 +   {
-+       .name       = "nor.var",
-+       .offset     = BOOT_SIZE+WELCOME_SIZE+KERNEL_SIZE+ROOT_SIZE,
-+       .size       = DB_SIZE,
++       .name       = "Var", //"nor.var",
++       .offset     = 0x1040000, //BOOT_SIZE+WELCOME_SIZE+KERNEL_SIZE+ROOT_SIZE,
++       .size       = 0x400000, //DB_SIZE,
 +   },
 +   /* partitions for upgrade */
 +   {
-+       .name       = "nor.mtd2_mtd3",
-+       .offset     = BOOT_SIZE+WELCOME_SIZE,
-+       .size       = KERNEL_SIZE+ROOT_SIZE,
++       .name       = "Swap", //"nor.mtd2_mtd3",
++       .offset     = 0x1440000, //BOOT_SIZE+WELCOME_SIZE,
++       .size       = MTDPART_SIZ_FULL //KERNEL_SIZE+ROOT_SIZE,
 +   },
 +   {
-+       .name       = "nor.mtd2_mtd3_mtd4",
-+       .offset     = BOOT_SIZE+WELCOME_SIZE,
-+       .size       = KERNEL_SIZE+ROOT_SIZE+DB_SIZE,
++       .name       = "Full", "nor.mtd2_mtd3_mtd4",
++       .offset     = 0x60000, //BOOT_SIZE+WELCOME_SIZE,
++       .size       = MTDPART_SIZ_FULL //KERNEL_SIZE+ROOT_SIZE+DB_SIZE,
 +   },
-+   {
-+       .name       = "nor.full",
-+       .offset     = BOOT_SIZE,
-+       .size       = (WINDOW_SIZE-BOOT_SIZE),
-+   },
-+   {
-+       .name       = "nor.all",
-+       .offset     = 0,
-+       .size       = WINDOW_SIZE,
-+       .mask_flags = MTD_WRITEABLE,    /* force read-only */
-+   },
++//   {
++//       .name       = "nor.full",
++//       .offset     = BOOT_SIZE,
++//       .size       = (WINDOW_SIZE-BOOT_SIZE),
++//   },
++//   {
++//       .name       = "nor.all",
++//       .offset     = 0,
++//       .size       = WINDOW_SIZE,
++//       .mask_flags = MTD_WRITEABLE,    /* force read-only */
++//   },
  };
  
  static void mb442_set_vpp(struct map_info *info, int enable)
