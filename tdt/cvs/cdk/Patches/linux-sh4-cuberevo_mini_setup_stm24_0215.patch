@@ -177,7 +177,7 @@
 +#define KERNEL_SIZE	0x220000	// kernel size
 +#define ROOT_SIZE	(WINDOW_SIZE-WELCOME_SIZE-KERNEL_SIZE-DB_SIZE-BOOT_SIZE-MNT_SIZE)
 +#define DB_SIZE	0x400000
-+#define MNT_SIZE	0x580000
++#define MNT_SIZE	0xC40000
 +#elif defined(FLASH_16MB) 
 +
 +// 16MB flash
@@ -242,13 +242,13 @@
 +   /* partitions for upgrade */
 +   {
 +       .name       = "Mnt",
-+       .offset     = BOOT_SIZE+WELCOME_SIZE+KERNEL_SIZE+ROOT_SIZE-MNT_SIZE,
++       .offset     = BOOT_SIZE+WELCOME_SIZE+KERNEL_SIZE+ROOT_SIZE+DB_SIZE,
 +       .size       = MNT_SIZE,
 +   },
 +   {
 +       .name       = "Full",
 +       .offset     = BOOT_SIZE+WELCOME_SIZE,
-+       .size       = KERNEL_SIZE+ROOT_SIZE+DB_SIZE,
++       .size       = KERNEL_SIZE+ROOT_SIZE+DB_SIZE+MNT_SIZE,
 +   },
 +//   {
 +//       .name       = "nor.fill",
