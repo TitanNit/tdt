@@ -243,24 +243,24 @@
 +   {
 +       .name       = "Mnt",
 +       .offset     = BOOT_SIZE+WELCOME_SIZE+KERNEL_SIZE+ROOT_SIZE-MNT_SIZE,
-+       .size       = DB_SIZE,
++       .size       = MNT_SIZE,
 +   },
 +   {
 +       .name       = "Full",
 +       .offset     = BOOT_SIZE+WELCOME_SIZE,
 +       .size       = KERNEL_SIZE+ROOT_SIZE+DB_SIZE,
 +   },
-+   {
-+       .name       = "nor.fill",
-+       .offset     = BOOT_SIZE,
-+       .size       = (WINDOW_SIZE-BOOT_SIZE),
-+   },
-+   {
-+       .name       = "nor.all",
-+       .offset     = 0,
-+       .size       = WINDOW_SIZE,
-+       .mask_flags = MTD_WRITEABLE,    /* force read-only */
-+   },
++//   {
++//       .name       = "nor.fill",
++//       .offset     = BOOT_SIZE,
++//       .size       = (WINDOW_SIZE-BOOT_SIZE),
++//   },
++//   {
++//       .name       = "nor.all",
++//       .offset     = 0,
++//       .size       = WINDOW_SIZE,
++//       .mask_flags = MTD_WRITEABLE,    /* force read-only */
++//   },
  };
  
  static void mb442_set_vpp(struct map_info *info, int enable)
