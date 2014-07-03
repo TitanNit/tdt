@@ -410,29 +410,6 @@
  	ilc_route_external(ILC_EXT_IRQ1, 5, 0);		/* ATA */
  	ilc_route_external(ILC_EXT_IRQ2, 6, 0);		/* Unused */
  	ilc_route_external(ILC_EXT_MDINT, 7, 0);	/* STe100 PHY */
---- linux-sh4/sound/stm/fsynth.c	2011-08-16 18:58:02.000000000 +0200
-+++ b/fsynth.c	2011-10-01 09:52:18.540101024 +0200
-@@ -42,7 +42,7 @@
- 
- /* PLL inside the synthesizer multiplies input frequency
-  * (which is 30MHz in our case) by 8... */
--#define PLL_FREQ 8 * 30 * 1000 * 1000
-+#define PLL_FREQ 8 * 27 * 1000 * 1000
- 
- 
- 
-@@ -623,8 +623,11 @@
- 	value |= mask__AUDCFG_FSYN_CFG__NPDA__NORMAL(fsynth);
- 	value |= mask__AUDCFG_FSYN_CFG__NDIV__27_30_MHZ(fsynth);
- 	value |= mask__AUDCFG_FSYN_CFG__BW_SEL__GOOD_REFERENCE(fsynth);
-+/* 27 mhz for 250hd and mini_fts
- 	value |= mask__AUDCFG_FSYN_CFG__REF_CLK_IN__30_MHZ_CLOCK(fsynth);
--
-+*/
-+    value |= mask__AUDCFG_FSYN_CFG__REF_CLK_IN__SYSCLKINALT(fsynth);
-+    
- 	set__AUDCFG_FSYN_CFG(fsynth, value);
- 	barrier();
 --- linux-sh4/arch/sh/include/asm/setup.h	2009-12-03 04:51:21.000000000 +0100
 +++ b/setup.h	2011-10-01 10:02:00.790393249 +0200
 @@ -15,12 +15,48 @@
