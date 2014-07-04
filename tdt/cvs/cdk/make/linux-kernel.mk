@@ -10,7 +10,7 @@ DEPMOD = $(hostprefix)/bin/depmod
 #
 COMMONPATCHES_24 = \
 		linux-sh4-linuxdvb_stm24$(PATCH_STR).patch \
-		$(if $(P0209),linux-sh4-makefile_stm24.patch) \
+		$(if $(P0207)$(P0209),linux-sh4-makefile_stm24.patch) \
 		linux-sh4-sound_stm24$(PATCH_STR).patch \
 		linux-sh4-time_stm24$(PATCH_STR).patch \
 		linux-sh4-init_mm_stm24$(PATCH_STR).patch \
@@ -18,12 +18,16 @@ COMMONPATCHES_24 = \
 		linux-sh4-strcpy_stm24$(PATCH_STR).patch \
 		linux-sh4-ext23_as_ext4_stm24$(PATCH_STR).patch \
 		bpa2_procfs_stm24$(PATCH_STR).patch \
+		$(if $(P0207),xchg_fix_stm24$(PATCH_STR).patch) \
+		$(if $(P0207),mm_cache_update_stm24$(PATCH_STR).patch) \
+		$(if $(P0207),linux-sh4-ehci_stm24$(PATCH_STR).patch) \
 		linux-ftdi_sio.c_stm24$(PATCH_STR).patch \
 		linux-sh4-lzma-fix_stm24$(PATCH_STR).patch \
 		linux-tune_stm24.patch \
 		linux-sh4-permit_gcc_command_line_sections_stm24.patch \
 		linux-sh4-mmap_stm24.patch \
 		$(if $(P0209),linux-sh4-dwmac_stm24_0209.patch) \
+		$(if $(P0207),linux-sh4-sti7100_missing_clk_alias_stm24$(PATCH_STR).patch) \
 		$(if $(P0209),linux-sh4-directfb_stm24$(PATCH_STR).patch)
 
 TF7700PATCHES_24 = $(COMMONPATCHES_24) \
