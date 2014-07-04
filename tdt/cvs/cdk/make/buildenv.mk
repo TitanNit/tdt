@@ -18,6 +18,9 @@ STM_RELOCATE := /opt/STM/STLinux-2.4
 if ENABLE_P0207
 KERNEL_DIR = @DIR_linuxp0207@
 endif
+if ENABLE_P0209
+KERNEL_DIR = @DIR_linuxp0209@
+endif
 if ENABLE_P0211
 KERNEL_DIR = @DIR_linuxp0211@
 endif
