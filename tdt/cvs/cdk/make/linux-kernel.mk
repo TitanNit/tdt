@@ -210,6 +210,9 @@ $(DEPDIR)/kernel-headers: linux-kernel.do_prepare
 	touch $@
 
 KERNELHEADERS := linux-kernel-headers
+if ENABLE_P0207
+KERNELHEADERS_VERSION := 2.6.32.16-44
+endif
 if ENABLE_P0209
 KERNELHEADERS_VERSION := 2.6.32.46-47
 endif
@@ -255,6 +258,9 @@ endif !DEBUG
 #
 HOST_KERNEL := host-kernel
 
+if ENABLE_P0207
+HOST_KERNEL_VERSION = 2.6.32.28$(KERNELSTMLABEL)-$(KERNELLABEL)
+endif
 if ENABLE_P0209
 HOST_KERNEL_VERSION = 2.6.32.46$(KERNELSTMLABEL)-$(KERNELLABEL)
 endif

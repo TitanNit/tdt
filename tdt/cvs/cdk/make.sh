@@ -174,7 +174,7 @@ esac
 ##############################################
 
 echo -e "\nKernel:"
-echo "   1) STM 24 P0209"
+echo "   1) STM 24 P0207"
 echo "   2) STM 24 P0211 (recommended)"
 echo "   3) STM 24 P0214 (experimental)"
 echo "   4) STM 24 P0215 (experimental)"
@@ -187,7 +187,7 @@ case $2 in
 esac
 
 case "$REPLY" in
-	1)  KERNEL="--enable-stm24 --enable-p0209";STMFB="stm24";;
+	1)  KERNEL="--enable-stm24 --enable-p0207";STMFB="stm24";;
 	2)  KERNEL="--enable-stm24 --enable-p0211";STMFB="stm24";;
 	3)  KERNEL="--enable-stm24 --enable-p0214";STMFB="stm24";;
 	4)  KERNEL="--enable-stm24 --enable-p0215";STMFB="stm24";;
