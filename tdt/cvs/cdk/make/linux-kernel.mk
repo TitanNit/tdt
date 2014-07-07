@@ -17,6 +17,7 @@ COMMONPATCHES_24 = \
 		linux-sh4-copro_stm24$(PATCH_STR).patch \
 		linux-sh4-strcpy_stm24$(PATCH_STR).patch \
 		linux-sh4-ext23_as_ext4_stm24$(PATCH_STR).patch \
+		linux-squashfs-lzma_stm24$(PATCH_STR).patch \
 		bpa2_procfs_stm24$(PATCH_STR).patch \
 		$(if $(P0207),xchg_fix_stm24$(PATCH_STR).patch) \
 		$(if $(P0207),mm_cache_update_stm24$(PATCH_STR).patch) \
@@ -28,7 +29,11 @@ COMMONPATCHES_24 = \
 		$(if $(P0209)$(P0211)$(P0215),linux-sh4-mmap_stm24.patch) \
 		$(if $(P0209),linux-sh4-dwmac_stm24_0209.patch) \
 		$(if $(P0207),linux-sh4-sti7100_missing_clk_alias_stm24$(PATCH_STR).patch) \
-		$(if $(P0209),linux-sh4-directfb_stm24$(PATCH_STR).patch)
+		$(if $(P0209),linux-sh4-directfb_stm24$(PATCH_STR).patch) \
+		linux-squashfs-downgrade-stm24$(PATCH_STR)-to-stm23.patch \
+		linux-squashfs3.0_lzma_stm24.patch \
+		linux-squashfs-downgrade-stm24-2.6.25.patch \
+		linux-squashfs-downgrade-stm24-rm_d_alloc_anon.patch
 
 TF7700PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-tf7700_setup_stm24$(PATCH_STR).patch \
