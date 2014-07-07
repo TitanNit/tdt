@@ -33,7 +33,6 @@ Date        Modification                                    Name
 
 #include "pcmplayer_ksound.h"
 #include "st_relay.h"
-#include <linux/version.h>
 
 extern "C" int sprintf(char * buf, const char * fmt, ...);
 
@@ -45,6 +44,7 @@ extern "C" int sprintf(char * buf, const char * fmt, ...);
 #define MAX_TIME_TO_GET_AUDIO_DELAY (500ull)
 
 #ifndef __TDT__
+
 #if defined (CONFIG_KERNELVERSION)
 #define FSYNTH_CONTROL_NAME "PCM Playback Oversampling Freq. Adjustment"
 #define FSYNTH_CONTROL_UNITY 0
@@ -52,7 +52,9 @@ extern "C" int sprintf(char * buf, const char * fmt, ...);
 #define FSYNTH_CONTROL_NAME "PLAYBACK Clock Adjust"
 #define FSYNTH_CONTROL_UNITY 100000
 #endif
+
 #else
+
 #if LINUX_VERSION_CODE > KERNEL_VERSION(2,6,17)
 #define FSYNTH_CONTROL_NAME "PCM Playback Oversampling Freq. Adjustment"
 #define FSYNTH_CONTROL_UNITY 0
@@ -60,6 +62,7 @@ extern "C" int sprintf(char * buf, const char * fmt, ...);
 #define FSYNTH_CONTROL_NAME "PLAYBACK Clock Adjust"
 #define FSYNTH_CONTROL_UNITY 100000
 #endif
+
 #endif
 
 ////////////////////////////////////////////////////////////////////////////

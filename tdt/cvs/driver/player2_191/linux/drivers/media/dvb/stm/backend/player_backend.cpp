@@ -818,9 +818,9 @@ int DisplayCreate      (char*           Media,
     return 0;
 }
 //}}}
-
 #ifdef __TDT__
 //{{{  DisplayCreate
+//Dagobert
 int isDisplayCreated (char*           Media,
                       unsigned int    SurfaceId)
 {
@@ -830,7 +830,6 @@ int isDisplayCreated (char*           Media,
 }
 //}}}  
 #endif
-
 //{{{  DisplayDelete
 int DisplayDelete      (char*           Media,
                         unsigned int    SurfaceId)

@@ -32,7 +32,6 @@ Date        Modification                                    Name
 #define H_DVB_DEMUX
 
 #include "dvbdev.h"
-#include <dvb_demux.h>
 
 #if 0
 int DmxWrite   (struct dmx_demux*       Demux,

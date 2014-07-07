@@ -452,7 +452,8 @@ struct dvb_backend_operations
                                        unsigned int            SurfaceId);
 
 #ifdef __TDT__
-    int (*is_display_created)         (char*                   Media,
+/*Dagobert */
+    int (*is_display_created)             (char*                   Media,
                                        unsigned int            SurfaceId);
 #endif
 };

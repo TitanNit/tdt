@@ -52,8 +52,10 @@ Date        Modification                                    Name
 extern int AudioIoctlSetAvSync (struct DeviceContext_s* Context, unsigned int State);
 extern int AudioIoctlStop (struct DeviceContext_s* Context);
 
-extern int stpti_start_feed (struct dvb_demux_feed *dvbdmxfeed, struct DeviceContext_s *DeviceContext);
-extern int stpti_stop_feed (struct dvb_demux_feed *dvbdmxfeed,  struct DeviceContext_s *pContext);
+extern int stpti_start_feed (struct dvb_demux_feed *dvbdmxfeed,
+                             struct DeviceContext_s *DeviceContext);
+extern int stpti_stop_feed (struct dvb_demux_feed *dvbdmxfeed,
+                     struct DeviceContext_s *pContext);
 #endif
 
 /********************************************************************************
@@ -202,12 +204,11 @@ int StartFeed (struct dvb_demux_feed* Feed)
  ********************************************************************************/
 #if defined(ADB_BOX)
 extern int glowica;
-enum {
+enum{
     SINGLE,
 	TWIN,
-};
+	    };
 #endif
-
 extern void stm_tsm_init ( int cfg );
 extern int reset_tsm;
 
@@ -217,8 +218,8 @@ int	(*StopFeed_)(struct dvb_demux_feed* Feed);
 
 void extern_startfeed_init(int(*StartFeed)(struct dvb_demux_feed* Feed),int(*StopFeed)(struct dvb_demux_feed* Feed))
 {
-	StartFeed_=StartFeed;
-	StopFeed_=StopFeed;
+StartFeed_=StartFeed;
+StopFeed_=StopFeed;
 };
 
 EXPORT_SYMBOL(extern_startfeed_init);
@@ -238,7 +239,7 @@ int StartFeed (struct dvb_demux_feed* Feed)
     unsigned int                        Video           = false;
     unsigned int                        Audio           = false;
 #ifdef __TDT__
-    struct DeviceContext_s*             AvContext       = NULL;
+    struct DeviceContext_s *AvContext = NULL;
 #endif
 
     DVB_DEBUG ("(demux%d)\n", Context->Id);
@@ -270,27 +271,27 @@ int StartFeed (struct dvb_demux_feed* Feed)
 #endif
 
 #if defined(ADB_BOX)//tutaj
-    if (glowica == SINGLE)
-    {
-         if ((Context->pPtiSession->source==DMX_SOURCE_FRONT1)&&(StartFeed_!=NULL))
-             StartFeed_(Feed);
-    }
-    else if (glowica == TWIN)
-    {
-        if ((Context->pPtiSession->source==DMX_SOURCE_FRONT2)&&(StartFeed_!=NULL))
-            StartFeed_(Feed);
-    }
+ if (glowica == SINGLE) {
+            
+ if ((Context->pPtiSession->source==DMX_SOURCE_FRONT1)&&(StartFeed_!=NULL)) StartFeed_(Feed);
+           
+         }
+         else if (glowica == TWIN) {
+if ((Context->pPtiSession->source==DMX_SOURCE_FRONT2)&&(StartFeed_!=NULL)) StartFeed_(Feed);
+           
+         }
 #endif
 
 #ifdef __TDT__
 #ifdef no_subtitles
-    if ((Feed->type == DMX_TYPE_TS) && (Feed->pes_type > DMX_TS_PES_OTHER))
+  if ((Feed->type == DMX_TYPE_TS) && (Feed->pes_type > DMX_TS_PES_OTHER))
     {
-        DVB_DEBUG ("pes_type %d > %d (OTHER)>\n", Feed->pes_type, DMX_TS_PES_OTHER);
-        return -EINVAL;
+      DVB_DEBUG ("pes_type %d > %d (OTHER)>\n", Feed->pes_type,
+                 DMX_TS_PES_OTHER);
+      return -EINVAL;
     }
 #endif
-    DVB_DEBUG("t = %d, pt = %d, pid = %d\n", Feed->type, Feed->pes_type, Feed->pid);
+  DVB_DEBUG("t = %d, pt = %d, pid = %d\n", Feed->type, Feed->pes_type, Feed->pid);
 #endif
 
     switch (Feed->type)
@@ -313,29 +314,30 @@ int StartFeed (struct dvb_demux_feed* Feed)
                 }
             }
 #ifdef __TDT__
-            AvContext = &Context->DvbContext->DeviceContext[i];
-            //fix freeze if record starts in background
-            //AvContext->DemuxContext      = Context;
+          AvContext = &Context->DvbContext->DeviceContext[i];
+          //fix freeze if record starts in background
+          //AvContext->DemuxContext      = Context;
 
-            //videotext & subtitles (other)
-            if ((Feed->pes_type == DMX_TS_PES_TELETEXT) ||
+          //videotext & subtitles (other)
+          if ((Feed->pes_type == DMX_TS_PES_TELETEXT) ||
               (Feed->pes_type == DMX_TS_PES_OTHER))
             {
-                mutex_lock (&(DvbContext->Lock));
+              mutex_lock (&(DvbContext->Lock));
 
-                Context->numRunningFeeds++;
-                //printk("%s:%d numRunningFeeds: %d\n", __func__,__LINE__,Context->numRunningFeeds);
+              Context->numRunningFeeds++;
+              //printk("%s:%d numRunningFeeds: %d\n", __func__,__LINE__,Context->numRunningFeeds);
 
-                stpti_start_feed (Feed, Context);
-                mutex_unlock (&(DvbContext->Lock));
+              stpti_start_feed (Feed, Context);
+              mutex_unlock (&(DvbContext->Lock));
 
-                break;
+              break;
             }
 #endif
+
             if (!Audio && !Video)
             {
 #ifdef __TDT__
-		    DVB_DEBUG ("pes_type = %d\n<\n", Feed->pes_type);
+		DVB_DEBUG ("pes_type = %d\n<\n", Feed->pes_type);
 #endif
                 /*mutex_unlock (&(DvbContext->Lock));  This doesn't look right we haven't taken it yet*/
                 return 0;
@@ -349,7 +351,6 @@ int StartFeed (struct dvb_demux_feed* Feed)
                 return -EBADF;
             }
 #endif
-
             if ((Context->Playback == NULL) && (Context->SyncContext->Playback == NULL))
             {
                 Result      = DvbPlaybackCreate (&Context->Playback);
@@ -373,14 +374,15 @@ int StartFeed (struct dvb_demux_feed* Feed)
 #endif
                 }
 #ifdef __TDT__
-		        if ((Context->VideoPlayInterval.start != DVB_TIME_NOT_BOUNDED) || (Context->VideoPlayInterval.end   != DVB_TIME_NOT_BOUNDED))
+		        if ((Context->VideoPlayInterval.start != DVB_TIME_NOT_BOUNDED) ||
+                            (Context->VideoPlayInterval.end   != DVB_TIME_NOT_BOUNDED))
 		        {
                     Result = VideoIoctlSetPlayInterval (Context, &Context->AudioPlayInterval);
 		            if (Result < 0)
-                    {
-                  	    mutex_unlock (&(DvbContext->Lock));
-                  	    return Result;
-                    }
+                            {
+                  	        mutex_unlock (&(DvbContext->Lock));
+                  	        return Result;
+                            }
 		        }
 #endif
             }
@@ -404,23 +406,25 @@ int StartFeed (struct dvb_demux_feed* Feed)
 #ifdef __TDT__
 	        if (Video)
 	        {
-                Context->numRunningFeeds++;
-                //printk("%s:%d numRunningFeeds: %d\n", __func__,__LINE__,Context->numRunningFeeds);
 
-		        stpti_start_feed (Feed, Context);
+			Context->numRunningFeeds++;
+                       //printk("%s:%d numRunningFeeds: %d\n", __func__,__LINE__,Context->numRunningFeeds);
 
-		        if(Feed->ts_type & TS_DECODER)
-		            VideoIoctlSetId (AvContext, Feed->pid);
+		       stpti_start_feed (Feed, Context);
+
+		       if(Feed->ts_type & TS_DECODER)
+		          VideoIoctlSetId (AvContext, Feed->pid);
 	        }
 	        else if (Audio)
 	        {
+
 		        Context->numRunningFeeds++;
-			    //printk("%s:%d numRunningFeeds: %d\n", __func__,__LINE__,Context->numRunningFeeds);
+			//printk("%s:%d numRunningFeeds: %d\n", __func__,__LINE__,Context->numRunningFeeds);
 
-		        stpti_start_feed (Feed, Context);
+		       stpti_start_feed (Feed, Context);
 
-		        if(Feed->ts_type & TS_DECODER)
-		            AudioIoctlSetId (AvContext, Feed->pid);
+		       if(Feed->ts_type & TS_DECODER)
+		          AudioIoctlSetId (AvContext, Feed->pid);
 	        }
 #else
             if (Video)
@@ -455,7 +459,7 @@ int StartFeed (struct dvb_demux_feed* Feed)
 
             mutex_lock (&(DvbContext->Lock));
 
-	        Context->numRunningFeeds++;
+	    Context->numRunningFeeds++;
             //printk("%s:%d numRunningFeeds: %d\n", __func__,__LINE__,Context->numRunningFeeds);
 
             stpti_start_feed (Feed, Context);
@@ -486,23 +490,22 @@ int StopFeed (struct dvb_demux_feed* Feed)
     struct DvbContext_s*        DvbContext      = Context->DvbContext;
     /*int                         Result          = 0;*/
 #ifdef __TDT__
-    int                         i               = 0;
+    int i                                       = 0;
 #endif
 
 #if defined(ADB_BOX)//tutaj
-    if (glowica == SINGLE)
-    {
-        if ((Context->pPtiSession->source==DMX_SOURCE_FRONT1) && (StopFeed_!=NULL))
-            StopFeed_(Feed);
-        }
-        else if (glowica == TWIN)
-        {
-            if ((Context->pPtiSession->source==DMX_SOURCE_FRONT2) && (StopFeed_!=NULL))
-                StopFeed_(Feed);
-        }
+	 if (glowica == SINGLE) {
+            
+ if ((Context->pPtiSession->source==DMX_SOURCE_FRONT1)&&(StopFeed_!=NULL)) StopFeed_(Feed);
+           
+         }
+         else if (glowica == TWIN) {
+if ((Context->pPtiSession->source==DMX_SOURCE_FRONT2)&&(StopFeed_!=NULL)) StopFeed_(Feed);
+           
+         }
 #endif
 
-    switch (Feed->type)
+	switch (Feed->type)
     {
         case DMX_TYPE_TS:
 #ifdef __TDT__
@@ -541,7 +544,7 @@ int StopFeed (struct dvb_demux_feed* Feed)
                     if (Context->numRunningFeeds < 0)
                         printk(KERN_ERR "%s: numRunningFeeds < 0: %d\n", __func__, Context->numRunningFeeds);
 
-                    break;
+                break;
                 }
                 //videotext & subtitles (other)
                 // FIXME: TTX1, TTX2, TTX3, PCR1 etc.
@@ -557,10 +560,10 @@ int StopFeed (struct dvb_demux_feed* Feed)
                     if (Context->numRunningFeeds < 0)
                         printk(KERN_ERR "%s: numRunningFeeds < 0: %d\n", __func__, Context->numRunningFeeds);
 
-                        break;
+              break;
                 }
                 else if (Feed->pes_type == DMX_TS_PES_PCR)
-                    break;
+                        break;
             }
 
             if (i >= DVB_MAX_DEVICES_PER_ADAPTER)
@@ -616,7 +619,6 @@ int StopFeed (struct dvb_demux_feed* Feed)
             Context->numRunningFeeds--;
             //printk("%s:%d numRunningFeeds: %d\n", __func__,__LINE__,Context->numRunningFeeds);	
             mutex_unlock (&(DvbContext->Lock));
-
             if (Context->numRunningFeeds < 0)
                 printk(KERN_ERR "%s: numRunningFeeds < 0: %d\n", __func__, Context->numRunningFeeds);
 
@@ -624,7 +626,7 @@ int StopFeed (struct dvb_demux_feed* Feed)
             break;
         default:
 #ifdef __TDT
-			printk("%s(): INVALID FEED TYPE (%d)\n", __func__, Feed->type);
+	    printk("%s(): INVALID FEED TYPE (%d)\n", __func__, Feed->type);
 #endif
             return -EINVAL;
     }
@@ -636,26 +638,25 @@ int StopFeed (struct dvb_demux_feed* Feed)
 /* Uncomment the define to enable player decoupling from the DVB API.
    With this workaround packets sent to the player do not block the DVB API
    and do not cause the scheduling bug (waiting on buffers during spin_lock).
-   However, there is a side effect - playback may disturb recordings.
-*/
+   However, there is a side effect - playback may disturb recordings. */
 #define DECOUPLE_PLAYER_FROM_DVBAPI
 #ifndef DECOUPLE_PLAYER_FROM_DVBAPI
 
 /*{{{  WriteToDecoder*/
 int WriteToDecoder (struct dvb_demux_feed *Feed, const u8 *buf, size_t count)
 {
-    struct dvb_demux* demux = Feed->demux;
-    struct DeviceContext_s* Context = (struct DeviceContext_s*)demux->priv;
-    int j = 0;
-    int audio = 0;
+  struct dvb_demux* demux = Feed->demux;
+  struct DeviceContext_s* Context = (struct DeviceContext_s*)demux->priv;
+  int j = 0;
+  int audio = 0;
 
-    if(Feed->type != DMX_TYPE_TS)
-        return 0;
+  if(Feed->type != DMX_TYPE_TS)
+    return 0;
 
-    /* select the context */
-    /* no more than two output devices supported */
-    switch (Feed->pes_type)
-    {
+  /* select the context */
+  /* no more than two output devices supported */
+  switch (Feed->pes_type)
+  {
     case DMX_PES_AUDIO0:
       audio = 1;
     case DMX_PES_VIDEO0:
@@ -668,32 +669,32 @@ int WriteToDecoder (struct dvb_demux_feed *Feed, const u8 *buf, size_t count)
       break;
     default:
       return 0;
-    }
+  }
+  /* injecting scrambled data crashes the player */
+  while (j < count)
+  {
+      if ((buf[j+3] & 0xc0) > 0)
+          return count;
+      j+=188;
+  }
 
-    /* injecting scrambled data crashes the player */
-    while (j < count)
-    {
-        if ((buf[j+3] & 0xc0) > 0)
+  /* don't inject if playback is stopped */
+  if (audio == 1)
+  {
+    if (Context->AudioState.play_state == AUDIO_STOPPED)
             return count;
-        j+=188;
-    }
-
-    /* don't inject if playback is stopped */
-    if (audio == 1)
-    {
-        if (Context->AudioState.play_state == AUDIO_STOPPED)
+  }
+  else if (Context->VideoState.play_state == VIDEO_STOPPED)
             return count;
-    }
-    else if (Context->VideoState.play_state == VIDEO_STOPPED)
-        return count;
 
-    return DvbStreamInject(Context->DemuxContext->DemuxStream, buf, count);
+  return DvbStreamInject(Context->DemuxContext->DemuxStream, buf, count);
 }
 
 void demultiplexDvbPackets(struct dvb_demux* demux, const u8 *buf, int count)
 {
       dvb_dmx_swfilter_packets(demux, buf, count);
 }
+
 #else
 
 /*{{{  WriteToDecoder*/
@@ -718,7 +719,7 @@ int WriteToDecoder (struct dvb_demux_feed *Feed, const u8 *buf, size_t count)
 
   return 0;
 }
-/*}}}*/
+/*}}}  */
 
 int writeToDecoder (struct dvb_demux *demux, int pes_type, const u8 *buf, size_t count)
 {

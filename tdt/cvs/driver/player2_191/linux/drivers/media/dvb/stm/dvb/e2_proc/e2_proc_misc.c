@@ -80,4 +80,5 @@ int proc_misc_12V_output_read (char *page, char **start, off_t off, int count, i
 
 	return len;
 }
+
 #endif

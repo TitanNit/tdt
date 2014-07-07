@@ -37,6 +37,7 @@ Date        Modification                                    Name
 #if defined(__TDT__)
 #include <linux/version.h>
 #endif
+
 #include "player_types.h"
 #include "manifestor_audio_ksound.h"
 #include "mixer.h"
@@ -102,10 +103,11 @@ Date        Modification                                    Name
 #define MIXER_AUDIO_MAX_OUTPUT_BUFFERS 4
 #define MIXER_AUDIO_MAX_BUFFERS        (MIXER_AUDIO_MAX_INPUT_BUFFERS +\
                                              MIXER_AUDIO_MAX_OUTPUT_BUFFERS)
+
 #if defined(__TDT__)
-#define MIXER_AUDIO_PAGES_PER_BUFFER   32
+#define MIXER_AUDIO_PAGES_PER_BUFFER   32 
 #else
-#define MIXER_AUDIO_PAGES_PER_BUFFER   8
+#define MIXER_AUDIO_PAGES_PER_BUFFER   16
 #endif
 #define MIXER_AUDIO_MAX_PAGES          (MIXER_AUDIO_PAGES_PER_BUFFER * MIXER_AUDIO_MAX_BUFFERS)
 

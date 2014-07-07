@@ -982,8 +982,7 @@ ManifestorStatus_t Manifestor_AudioKsound_c::UpdateInputBuffer( MME_DataBuffer_t
     // Handle other bits of status (mostly the play state)
     //
     
-#if 0
-    if( OutputState == PLAYING )
+    /*if( OutputState == PLAYING )
     {
         if( InputStatus->State != MIXER_INPUT_RUNNING )
         {
@@ -1003,8 +1002,7 @@ ManifestorStatus_t Manifestor_AudioKsound_c::UpdateInputBuffer( MME_DataBuffer_t
         {
             MANIFESTOR_ERROR( "Unexpected mixer mode MIXER_INPUT_RUNNING whilst %s\n", LookupState() );
         }        
-    }
-#endif
+    }*/
 
     //MANIFESTOR_DEBUG("DataBuffer->TotalSize %d DataBuffer->NumberOfScatterPages %d\n",
     //                 DataBuffer->TotalSize, DataBuffer->NumberOfScatterPages);
