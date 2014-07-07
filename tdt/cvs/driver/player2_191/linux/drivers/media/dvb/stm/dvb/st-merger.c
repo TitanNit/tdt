@@ -40,6 +40,11 @@ unsigned long TSM_NUM_1394_ALT_OUT;
 #define LOAD_TSM_DATA
 #endif
 
+static short camRouting = 0;
+
+module_param(camRouting, short, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP);
+MODULE_PARM_DESC(camRouting, "Enable camRouting 0=disabled 1=enabled");
+
 #if defined(UFS912) || defined(UFS913) || defined(SPARK) || defined(SPARK7162) || defined(ATEVIO7500) || defined(HS7810A) || defined(HS7110) || defined(ATEMIO520) || defined(ATEMIO530) || defined(VITAMIN_HD5000)
 #define TSMergerBaseAddress   	0xFE242000
 #else
@@ -368,7 +373,7 @@ int stm_tsm_inject_user_data(const char __user *data, off_t size)
 #if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,24)
   dma_unmap_sg(NULL, sg, nr_pages, DMA_TO_DEVICE);
 #else
-#warning FIXME, STM24, skipping dma_unmap_sg
+/* #warning FIXME, STM24, skipping dma_unmap_sg */
 /* dma_unmap_sg(NULL, sg, nr_pages, DMA_TO_DEVICE); */
 #endif
 
@@ -619,7 +624,7 @@ void stm_tsm_init (int use_cimax)
    int              n;
 
 //#if defined(UFS910) ???
-#if defined(VIP2_V1) || defined(SPARK) || defined(SPARK7162) || defined(IPBOX99) || defined(IPBOX55) || defined(ADB_BOX) // none ci targets
+#if defined(VIP2_V1) || defined(SPARK) || defined(SPARK7162) || defined(IPBOX99) || defined(IPBOX55) || defined(ADB_BOX) || defined(CUBEREVO_2000HD) // none ci targets
    use_cimax = 0;
 #endif
 
@@ -653,7 +658,7 @@ void stm_tsm_init (int use_cimax)
          printk("[TSM] skip stpio stuff in reinit\n");
 #elif defined(ATEVIO7500)
       if (!reinit) {
-         struct stpio* pin;
+         struct stpio_pin* pin;
          /* set the muxer pin otherwise startci output will
           * not properly passed to tsmerger.
           */
@@ -706,11 +711,10 @@ void stm_tsm_init (int use_cimax)
         * packet len = 188
         */
 
-//#if defined(UFS910) ???
 #if !defined(FORTIS_HDBOX) && !defined(UFS912) && !defined(UFS913) && !defined(SPARK) && !defined(OCTAGON1008) && !defined(HOMECAST5101) && \
     !defined(ATEVIO7500) && !defined(HS7810A) && !defined(HS7110) && !defined(ATEMIO520) && !defined(ATEMIO530) && !defined(CUBEREVO) && !defined(CUBEREVO_MINI2) && \
     !defined(CUBEREVO_MINI) && !defined(CUBEREVO_250HD) && !defined(CUBEREVO_2000HD) && \
-        !defined(CUBEREVO_9500HD) && !defined(CUBEREVO_MINI_FTA) && !defined(VITAMIN_HD5000)
+    !defined(CUBEREVO_9500HD) && !defined(CUBEREVO_MINI_FTA) && !defined(VITAMIN_HD5000)
       unsigned int stream_sync = 0xbc4733;
 #else
       unsigned int stream_sync = 0xbc4722;
@@ -751,7 +755,10 @@ void stm_tsm_init (int use_cimax)
        */
 
       /* from fw 202 rc ->see also pti */
+if (camRouting == 1 )
       ctrl_outl(0x6, reg_sys_config + SYS_CFG0);
+else
+      ctrl_outl(0x2, reg_sys_config + SYS_CFG0);
 
 #elif defined(FORTIS_HDBOX)
       /* ->TSIN0 routes to TSIN2 */
@@ -977,7 +984,6 @@ void stm_tsm_init (int use_cimax)
       ctrl_outl(stream_sync, tsm_io + TSM_STREAM0_SYNC);
       ctrl_outl(0x0, tsm_io + 0x18 /* reserved ??? */);
 
-
       /* add tag bytes to stream + stream priority */
 #if defined(FORTIS_HDBOX) || defined(OCTAGON1008) || defined(ATEVIO7500)
 
@@ -989,7 +995,6 @@ void stm_tsm_init (int use_cimax)
 #endif
       ctrl_outl(stream_sync, tsm_io + TSM_STREAM1_SYNC);
       ctrl_outl(0x0, tsm_io + 0x38 /* reserved ??? */);
-
 
       /* add tag bytes to stream + stream priority */
 #if defined(FORTIS_HDBOX) || defined(OCTAGON1008) || defined(ATEVIO7500)
@@ -1004,7 +1009,6 @@ void stm_tsm_init (int use_cimax)
 #endif
       ctrl_outl(stream_sync, tsm_io + TSM_STREAM2_SYNC);
       ctrl_outl(0x0, tsm_io + 0x58 /* reserved ??? */);
-
 
       /* add tag bytes to stream + stream priority */
 #if defined(FORTIS_HDBOX) || defined(OCTAGON1008)
@@ -1031,7 +1035,6 @@ void stm_tsm_init (int use_cimax)
       ctrl_outl(stream_sync, tsm_io + TSM_STREAM3_SYNC);
       ctrl_outl(0x0, tsm_io + 0x78 /* reserved ??? */);
 
-//-if definied (UFS910) ???
 #if !defined(FORTIS_HDBOX) && !defined(UFS912) && !defined(UFS913) && !defined(CUBEREVO) && !defined(CUBEREVO_MINI2) && !defined(CUBEREVO_MINI) && !defined(CUBEREVO_250HD) && !defined(CUBEREVO_2000HD) && !defined(CUBEREVO_9500HD) && !defined(CUBEREVO_MINI_FTA) && !defined(ATEVIO7500) && !defined(HS7810A) && !defined(HS7110) && !defined(ATEMIO520) && !defined(ATEMIO530) && !defined(IPBOX9900) && !defined(VITAMIN_HD5000)
       /* swts_req_trigger + pace cycles (1101) */
       ctrl_outl(0x800000d, tsm_io + SWTS_CFG(0));
@@ -1075,7 +1078,10 @@ void stm_tsm_init (int use_cimax)
       else
          ctrl_outl(0x70014 ,tsm_io + TS_1394_CFG);
 #elif defined(UFS910)
+if (camRouting == 1)
       ctrl_outl(0x70014 ,tsm_io + TS_1394_CFG);
+else
+      ctrl_outl(0x50014 ,tsm_io + TS_1394_CFG);
 #else
       /* logged from fw 202rc ->see also pti */
       ctrl_outl(0x50014 ,tsm_io + TS_1394_CFG);
@@ -1157,7 +1163,6 @@ void stm_tsm_init (int use_cimax)
       ret = ctrl_inl(tsm_io + TSM_1394_DEST);
       ctrl_outl(ret | 0x38 , tsm_io + TSM_1394_DEST);
 #elif defined(CUBEREVO) || defined(CUBEREVO_MINI2) || defined(CUBEREVO_MINI) || defined(CUBEREVO_250HD) || defined(CUBEREVO_2000HD) || defined(CUBEREVO_9500HD) || defined(CUBEREVO_MINI_FTA)
-
       /* route stream 1 to PTI */
       ret = ctrl_inl(tsm_io + TSM_PTI_SEL);
       ctrl_outl(ret | 0x2,tsm_io + TSM_PTI_SEL);
@@ -1380,7 +1385,7 @@ void stm_tsm_init (int use_cimax)
       if (reinit) {
          printk("reinit\n");
       } else {
-#if	defined(SPARK) || defined(SPARK7162) || defined(HS7110) || defined(ATEMIO520) || defined(ATEMIO530) || defined(VITAMIN_HD5000)
+#if defined(SPARK) || defined(SPARK7162) || defined(HS7110) || defined(ATEMIO520) || defined(ATEMIO530) || defined(VITAMIN_HD5000)
          tsm_io = ioremap (/* config->tsm_base_address */ TSMergerBaseAddress, 0x1000);
 #else // !defined(SPARK) && !defined(SPARK7162) && !defined(HS7110) && !defined(ATEMIO520) && !defined(ATEMIO530)
          tsm_io = ioremap (/* config->tsm_base_address */ 0x19242000, 0x1000);
@@ -1460,7 +1465,6 @@ Dies sind die Options (also wohl auch view channel):
      ctrl_outl(0x1D00, tsm_io + TSM_STREAM5_CFG); // 0x1D00-0x1DFF
      ctrl_outl(0x1E00, tsm_io + TSM_STREAM6_CFG); // 0x1E00-0x1EFF
      ctrl_outl(0x1F00, tsm_io + TSM_STREAM7_CFG); // 0x1F00-0x1FFF
-
 #else // !defined(SPARK) && !defined(HS7110) && !defined(ATEMIO520) && !defined(ATEMIO530)
       for (n=0;n<5;n++) {
          writel( TSM_RAM_ALLOC_START( 0x3 *n ), tsm_io + TSM_STREAM_CONF(n));
