@@ -28,7 +28,7 @@
 +      {
 +	      .name  = "LMI_SYS",
 +	      .start = 0,
-+	      .size  = 0x00E00000,
++	      .size  = 0x00F00000,
 +	      .flags = 0,
 +	      .aka   = LMI_SYS_partalias
 +      }
@@ -84,7 +84,7 @@
  };
  
  static void mb442_set_vpp(struct map_info *info, int enable)
-@@ -70,28 +98,66 @@
+@@ -70,28 +98,71 @@
  	gpio_set_value(MB442_PIO_FLASH_VPP, enable);
  }
  
@@ -94,41 +94,46 @@
 +	.flags		= IORESOURCE_MEM,
 +};
 +
-+static struct mtd_partition mtd_parts_table[7] = {
++static struct mtd_partition mtd_parts_table[8] = {
 +    {
 +	.name = "Boot firmware",
-+	.size = 0x00020000,
-+	.offset = 0x00000000
++	.size = 0x20000,
++	.offset = MTDPART_OFS_APPEND
 +    },
 +    {
-+	.name = "Kernel - RAW",
-+	.size = 0x00190000,
++	.name = "Kernel",
++	.size = 0x220000,
 +	.offset = 0x00040000
 +    },
 +    {
-+	.name = "ROOT - SQUASHFS",
-+	.size = 0x00B40000,
-+	.offset = 0x001D0000
++	.name = "Root",
++	.size = 0x00960000,
++	.offset = MTDPART_OFS_APPEND
 +    },
 +    {
-+	.name = "Var - JFFS2",
-+	.size = 0x002F0000,
-+	.offset = 0x00D10000
-+    },
++	.name = "Var",
++	.size = 0x00280000,
++	.offset = MTDPART_OFS_APPEND
++	},
 +    {
++	.name = "Swap",
++	.size   = MTDPART_SIZ_FULL,
++	.offset = MTDPART_OFS_APPEND
++	},
++	{
++	.name = "MiniUboot",
++	.size = 0x00010000,
++	.offset = 0x00030000
++    },
++	{
 +	.name = "BootConfiguration",
 +	.size = 0x00010000,
 +	.offset = 0x00020000
 +    },
 +    {
-+	.name = "Full w/o BL",
-+	.size = 0x00fc0000,
++	.name = "Full",
++	.size = MTDPART_SIZ_FULL,
 +	.offset = 0x00040000
-+    },
-+    {
-+	.name = "MiniUboot - RAW",
-+	.size = 0x00010000,
-+	.offset = 0x00030000
 +    }
 +};
 +
@@ -160,7 +165,7 @@
  	return 1;
  }
  
-@@ -106,9 +172,15 @@
+@@ -106,9 +177,15 @@
  	.irqs = stmmac_phy_irqs,
  };
  
@@ -177,7 +182,7 @@
  };
  
  static int __init mb442_device_init(void)
-@@ -120,7 +192,7 @@
+@@ -120,7 +197,7 @@
  			.out1_enabled = 1, });
  
  	stx7100_configure_ssc_i2c(0, NULL);
@@ -186,7 +191,7 @@
  	stx7100_configure_ssc_i2c(2, NULL);
  
  	stx7100_configure_usb();
-@@ -138,25 +210,6 @@
+@@ -138,25 +215,6 @@
  	gpio_request(MB442_PIO_FLASH_VPP, "Flash VPP");
  	gpio_direction_output(MB442_PIO_FLASH_VPP, 0);
  

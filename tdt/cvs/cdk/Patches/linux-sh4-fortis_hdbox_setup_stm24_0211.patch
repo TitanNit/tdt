@@ -1,3 +1,43 @@
+*** a/arch/sh/kernel/setup.c	2012-03-31 15:26:54.000000000 +0100
+--- a/arch/sh/kernel/setup.c.patched	2012-03-31 15:26:54.340928000 +0100
+***************
+*** 389,394 ****
+--- 389,422 ----
+  #endif
+  #endif
+  
++ 	{
++ 	char org_command_line[] = "console=ttyAS1,115200 root=/dev/mtdblock3";
++ 	char tdt_command_line[] = "console=ttyAS1,115200 root=/dev/mtdblock2 rootfstype=squashfs init=/bin/devinit coprocessor_mem=4m@0x10000000,4m@0x10400000 mem=128m printk=1 console_loglevel=7 stmmaceth=ethaddr:";
++ 	char mac[] = "00:00:00:00:00:00";
++ 	int command_line_len = strlen(command_line);
++ 	int org_command_line_len = strlen(org_command_line);
++ 
++ 	if(command_line_len >= org_command_line_len && !strncmp(command_line, org_command_line, org_command_line_len))
++ 	{
++ 		int i;
++ 		for(i = 0; i < (command_line_len - 7); i++)
++ 		{
++ 			if(!strncmp(command_line + i, "ethaddr", 7))
++ 			{
++ 				strlcpy(mac, command_line + i + 8, sizeof(mac));
++ 				break;
++ 			}
++ 			if(!strncmp(command_line + i, "hwaddr", 6))
++ 			{
++ 				strlcpy(mac, command_line + i + 7, sizeof(mac));
++ 				break;
++ 			}
++ 		}
++ 		strlcpy(command_line, tdt_command_line, sizeof(command_line));
++ 		strlcat(command_line, mac, sizeof(command_line));
++ 	}
++ 	}
++ 
+  	/* Save unparsed command line copy for /proc/cmdline */
+  	memcpy(boot_command_line, command_line, COMMAND_LINE_SIZE);
+  	*cmdline_p = command_line;
+
 --- a/arch/sh/boards/mach-mb448/setup.c	2011-07-15 00:53:16.000000000 +0200
 +++ b/setup.c.patched	2011-07-20 15:08:41.000000000 +0200
 @@ -19,6 +19,7 @@
@@ -26,7 +66,7 @@
 +      {
 +	      .name  = "LMI_SYS",
 +	      .start = 0,
-+	      .size  = 0x01300000,
++	      .size  = 0x02600000,
 +	      .flags = 0,
 +	      .aka   = LMI_SYS_partalias
 +      }
@@ -50,7 +90,7 @@
  }
  
  
-@@ -68,25 +90,119 @@
+@@ -68,25 +90,118 @@
  
  static void mb448_set_vpp(struct map_info *info, int enable)
  {
@@ -63,36 +103,35 @@
 +//enable this part if you want to build usb/mtd flash image:
 +#if 1
 +	{
-+		.name = "Boot Firmware",
-+		.size =   0x00020000,	//u-boot 0x00000000-0xa001ffff  128k
-+		.offset = 0x00000000,
-+		mask_flags: 0
++		.name = "Boot firmware",
++		.size = 0x60000,
++		.offset = 0
 +	},
 +	{
 +		.name = "Kernel",
-+		.size =   0x00200000,	//kernel 0x40000-0x1fffff 2MB
-+		.offset = 0x00040000
++		.size = 0x2a0000,
++		.offset = 0x60000
 +	},
 +	{
-+		.name = "ROOT SQUASHFS",
-+		.size =   0x00C00000, //root 0x240000-0xcffff 12,0MB
-+		.offset = 0x00240000
++		.name = "Root",
++		.size = 0xd40000,
++		.offset = 0x300000
++	 },
++    {
++		.name = "Var",
++		.size = MTDPART_SIZ_FULL,
++		.offset = 0x1c00000 
++	 },
++	 {
++		.name = "Swap",
++		.size = 0xbc0000,
++		.offset = 0x1040000
++	 },
++	 {
++		.name = "Full",
++		.size = MTDPART_SIZ_FULL,
++		.offset = 0x60000
 +	},
-+	{
-+		.name = "VAR-JFFS2",
-+		.size =   0x011C0000,  //0xa40000-0x1dfffff 17,5MB
-+		.offset = 0x00E40000
-+	},
-+	{
-+		.name = "Boot Config",
-+		.size =   0x00020000,	//boot config 0xa0020000-0xa003ffff  128k
-+		.offset = 0x00020000
-+ 	},
-+ 	{
-+		.name = "Full without bootloader",
-+		.size =   0x01FC0000,
-+		.offset = 0x00040000
-+	}
 +//};
 +//set above to #if 0 if you want to build an ird image
 +#else
@@ -173,7 +212,7 @@
  static int stmmac_phy_irqs[PHY_MAX_ADDR] = {
  	[STMMAC_PHY_ADDR] = IRL0_IRQ,
  };
-@@ -106,7 +222,7 @@
+@@ -106,7 +221,7 @@
  	stx7100_configure_sata();
  
  	stx7100_configure_ssc_i2c(0, NULL);
@@ -182,7 +221,7 @@
  	stx7100_configure_ssc_i2c(2, NULL);
  
  	stx7100_configure_usb();
-@@ -119,17 +235,17 @@
+@@ -119,17 +234,17 @@
  			.mdio_bus_data = &stmmac_mdio_bus,
  		});
  
@@ -204,6 +243,7 @@
  	return platform_add_devices(mb448_devices,
  			ARRAY_SIZE(mb448_devices));
  }
+
 *** a/drivers/stm/stx7100_comms.c	2011-07-11 21:21:19.000000000 +0200
 --- b/stx7100_comms.c	2011-07-14 19:51:23.729808261 +0200
 ***************
