@@ -5583,159 +5583,183 @@ diff -uN b/sound/stm/pcm_reader.c a/sound/stm/pcm_reader.c
 -module_init(snd_stm_pcm_reader_init);
 -module_exit(snd_stm_pcm_reader_exit);
 diff -uN b/sound/stm/reg_7105_audcfg.h a/sound/stm/reg_7105_audcfg.h
---- b/sound/stm/reg_7105_audcfg.h	1970-01-01 01:00:00.000000000 +0100
-+++ a/sound/stm/reg_7105_audcfg.h	2014-07-04 09:53:02.000000000 +0200
-@@ -0,0 +1,154 @@
-+#ifndef __SND_STM_7105_AUDCFG_H
-+#define __SND_STM_7105_AUDCFG_H
+--- b/sound/stm/reg_7100_audcfg.h	1970-01-01 01:00:00.000000000 +0100
++++ a/sound/stm/reg_7100_audcfg.h	2014-07-04 09:53:02.000000000 +0200
+@@ -0,0 +1,178 @@
++#ifndef __SND_STM_7100_AUDCFG_H
++#define __SND_STM_7100_AUDCFG_H
 +
 +
 +
 +/*
-+ * 7105_AUDCFG_IO_CTRL
++ * 7100_AUDCFG_IO_CTRL
 + */
 +
-+#define offset__7105_AUDCFG_IO_CTRL(ip) 0x00
-+#define get__7105_AUDCFG_IO_CTRL(ip) readl(ip->base + \
-+	offset__7105_AUDCFG_IO_CTRL(ip))
-+#define set__7105_AUDCFG_IO_CTRL(ip, value) writel(value, ip->base + \
-+	offset__7105_AUDCFG_IO_CTRL(ip))
++#define offset__7100_AUDCFG_IO_CTRL(ip) 0x00
++#define get__7100_AUDCFG_IO_CTRL(ip) readl(ip->base + \
++	offset__7100_AUDCFG_IO_CTRL(ip))
++#define set__7100_AUDCFG_IO_CTRL(ip, value) writel(value, ip->base + \
++	offset__7100_AUDCFG_IO_CTRL(ip))
 +
 +/* PCM_CLK_EN */
 +
-+#define shift__7105_AUDCFG_IO_CTRL__PCM_CLK_EN(ip) 0
-+#define mask__7105_AUDCFG_IO_CTRL__PCM_CLK_EN(ip) 0x1
-+#define get__7105_AUDCFG_IO_CTRL__PCM_CLK_EN(ip) ((readl(ip->base + \
-+	offset__7105_AUDCFG_IO_CTRL(ip)) >> \
-+	shift__7105_AUDCFG_IO_CTRL__PCM_CLK_EN(ip)) & \
-+	mask__7105_AUDCFG_IO_CTRL__PCM_CLK_EN(ip))
-+#define set__7105_AUDCFG_IO_CTRL__PCM_CLK_EN(ip, value) \
-+	writel((readl(ip->base + offset__7105_AUDCFG_IO_CTRL(ip)) & \
-+	~(mask__7105_AUDCFG_IO_CTRL__PCM_CLK_EN(ip) << \
-+	shift__7105_AUDCFG_IO_CTRL__PCM_CLK_EN(ip))) | (((value) & \
-+	mask__7105_AUDCFG_IO_CTRL__PCM_CLK_EN(ip)) << \
-+	shift__7105_AUDCFG_IO_CTRL__PCM_CLK_EN(ip)), ip->base + \
-+	offset__7105_AUDCFG_IO_CTRL(ip))
++#define shift__7100_AUDCFG_IO_CTRL__PCM_CLK_EN(ip) 0
++#define mask__7100_AUDCFG_IO_CTRL__PCM_CLK_EN(ip) 0x1
++#define get__7100_AUDCFG_IO_CTRL__PCM_CLK_EN(ip) ((readl(ip->base + \
++	offset__7100_AUDCFG_IO_CTRL(ip)) >> \
++	shift__7100_AUDCFG_IO_CTRL__PCM_CLK_EN(ip)) & \
++	mask__7100_AUDCFG_IO_CTRL__PCM_CLK_EN(ip))
++#define set__7100_AUDCFG_IO_CTRL__PCM_CLK_EN(ip, value) \
++	writel((readl(ip->base + offset__7100_AUDCFG_IO_CTRL(ip)) & \
++	~(mask__7100_AUDCFG_IO_CTRL__PCM_CLK_EN(ip) << \
++	shift__7100_AUDCFG_IO_CTRL__PCM_CLK_EN(ip))) | (((value) & \
++	mask__7100_AUDCFG_IO_CTRL__PCM_CLK_EN(ip)) << \
++	shift__7100_AUDCFG_IO_CTRL__PCM_CLK_EN(ip)), ip->base + \
++	offset__7100_AUDCFG_IO_CTRL(ip))
 +
-+#define value__7105_AUDCFG_IO_CTRL__PCM_CLK_EN__INPUT(ip) 0x0
-+#define mask__7105_AUDCFG_IO_CTRL__PCM_CLK_EN__INPUT(ip) \
-+	(value__7105_AUDCFG_IO_CTRL__PCM_CLK_EN__INPUT(ip) << \
-+	shift__7105_AUDCFG_IO_CTRL__PCM_CLK_EN(ip))
-+#define set__7105_AUDCFG_IO_CTRL__PCM_CLK_EN__INPUT(ip) \
-+	set__7105_AUDCFG_IO_CTRL__PCM_CLK_EN(ip, \
-+	value__7105_AUDCFG_IO_CTRL__PCM_CLK_EN__INPUT(ip))
++#define value__7100_AUDCFG_IO_CTRL__PCM_CLK_EN__INPUT(ip) 0x0
++#define mask__7100_AUDCFG_IO_CTRL__PCM_CLK_EN__INPUT(ip) \
++	(value__7100_AUDCFG_IO_CTRL__PCM_CLK_EN__INPUT(ip) << \
++	shift__7100_AUDCFG_IO_CTRL__PCM_CLK_EN(ip))
++#define set__7100_AUDCFG_IO_CTRL__PCM_CLK_EN__INPUT(ip) \
++	set__7100_AUDCFG_IO_CTRL__PCM_CLK_EN(ip, \
++	value__7100_AUDCFG_IO_CTRL__PCM_CLK_EN__INPUT(ip))
 +
-+#define value__7105_AUDCFG_IO_CTRL__PCM_CLK_EN__OUTPUT(ip) 0x1
-+#define mask__7105_AUDCFG_IO_CTRL__PCM_CLK_EN__OUTPUT(ip) \
-+	(value__7105_AUDCFG_IO_CTRL__PCM_CLK_EN__OUTPUT(ip) << \
-+	shift__7105_AUDCFG_IO_CTRL__PCM_CLK_EN(ip))
-+#define set__7105_AUDCFG_IO_CTRL__PCM_CLK_EN__OUTPUT(ip) \
-+	set__7105_AUDCFG_IO_CTRL__PCM_CLK_EN(ip, \
-+	value__7105_AUDCFG_IO_CTRL__PCM_CLK_EN__OUTPUT(ip))
++#define value__7100_AUDCFG_IO_CTRL__PCM_CLK_EN__OUTPUT(ip) 0x1
++#define mask__7100_AUDCFG_IO_CTRL__PCM_CLK_EN__OUTPUT(ip) \
++	(value__7100_AUDCFG_IO_CTRL__PCM_CLK_EN__OUTPUT(ip) << \
++	shift__7100_AUDCFG_IO_CTRL__PCM_CLK_EN(ip))
++#define set__7100_AUDCFG_IO_CTRL__PCM_CLK_EN__OUTPUT(ip) \
++	set__7100_AUDCFG_IO_CTRL__PCM_CLK_EN(ip, \
++	value__7100_AUDCFG_IO_CTRL__PCM_CLK_EN__OUTPUT(ip))
 +
-+/* SPDIFHDMI_EN */
++/* DATA0_EN */
 +
-+#define shift__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN(ip) 3
-+#define mask__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN(ip) 0x1
-+#define get__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN(ip) ((readl(ip->base + \
-+	offset__7105_AUDCFG_IO_CTRL(ip)) >> \
-+	shift__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN(ip)) & \
-+	mask__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN(ip))
-+#define set__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN(ip, value) \
-+	writel((readl(ip->base + offset__7105_AUDCFG_IO_CTRL(ip)) & \
-+	~(mask__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN(ip) << \
-+	shift__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN(ip))) | (((value) & \
-+	mask__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN(ip)) << \
-+	shift__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN(ip)), ip->base + \
-+	offset__7105_AUDCFG_IO_CTRL(ip))
++#define shift__7100_AUDCFG_IO_CTRL__DATA0_EN(ip) 1
++#define mask__7100_AUDCFG_IO_CTRL__DATA0_EN(ip) 0x1
++#define get__7100_AUDCFG_IO_CTRL__DATA0_EN(ip) ((readl(ip->base + \
++	offset__7100_AUDCFG_IO_CTRL(ip)) >> \
++	shift__7100_AUDCFG_IO_CTRL__DATA0_EN(ip)) & \
++	mask__7100_AUDCFG_IO_CTRL__DATA0_EN(ip))
++#define set__7100_AUDCFG_IO_CTRL__DATA0_EN(ip, value) \
++	writel((readl(ip->base + offset__7100_AUDCFG_IO_CTRL(ip)) & \
++	~(mask__7100_AUDCFG_IO_CTRL__DATA0_EN(ip) << \
++	shift__7100_AUDCFG_IO_CTRL__DATA0_EN(ip))) | (((value) & \
++	mask__7100_AUDCFG_IO_CTRL__DATA0_EN(ip)) << \
++	shift__7100_AUDCFG_IO_CTRL__DATA0_EN(ip)), ip->base + \
++	offset__7100_AUDCFG_IO_CTRL(ip))
 +
-+#define value__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN__INPUT(ip) 0x0
-+#define mask__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN__INPUT(ip) \
-+	(value__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN__INPUT(ip) << \
-+	shift__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN(ip))
-+#define set__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN__INPUT(ip) \
-+	set__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN(ip, \
-+	value__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN__INPUT(ip))
++#define value__7100_AUDCFG_IO_CTRL__DATA0_EN__INPUT(ip) 0x0
++#define mask__7100_AUDCFG_IO_CTRL__DATA0_EN__INPUT(ip) \
++	(value__7100_AUDCFG_IO_CTRL__DATA0_EN__INPUT(ip) << \
++	shift__7100_AUDCFG_IO_CTRL__DATA0_EN(ip))
++#define set__7100_AUDCFG_IO_CTRL__DATA0_EN__INPUT(ip) \
++	set__7100_AUDCFG_IO_CTRL__DATA0_EN(ip, \
++	value__7100_AUDCFG_IO_CTRL__DATA0_EN__INPUT(ip))
 +
-+#define value__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN__OUTPUT(ip) 0x1
-+#define mask__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN__OUTPUT(ip) \
-+	(value__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN__OUTPUT(ip) << \
-+	shift__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN(ip))
-+#define set__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN__OUTPUT(ip) \
-+	set__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN(ip, \
-+	value__7105_AUDCFG_IO_CTRL__SPDIFHDMI_EN__OUTPUT(ip))
++#define value__7100_AUDCFG_IO_CTRL__DATA0_EN__OUTPUT(ip) 0x1
++#define mask__7100_AUDCFG_IO_CTRL__DATA0_EN__OUTPUT(ip) \
++	(value__7100_AUDCFG_IO_CTRL__DATA0_EN__OUTPUT(ip) << \
++	shift__7100_AUDCFG_IO_CTRL__DATA0_EN(ip))
++#define set__7100_AUDCFG_IO_CTRL__DATA0_EN__OUTPUT(ip) \
++	set__7100_AUDCFG_IO_CTRL__DATA0_EN(ip, \
++	value__7100_AUDCFG_IO_CTRL__DATA0_EN__OUTPUT(ip))
 +
-+/* PCMPLHDMI_EN */
++/* DATA1_EN */
 +
-+#define shift__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN(ip) 5
-+#define mask__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN(ip) 0x1
-+#define get__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN(ip) ((readl(ip->base + \
-+	offset__7105_AUDCFG_IO_CTRL(ip)) >> \
-+	shift__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN(ip)) & \
-+	mask__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN(ip))
-+#define set__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN(ip, value) \
-+	writel((readl(ip->base + offset__7105_AUDCFG_IO_CTRL(ip)) & \
-+	~(mask__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN(ip) << \
-+	shift__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN(ip))) | (((value) & \
-+	mask__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN(ip)) << \
-+	shift__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN(ip)), ip->base + \
-+	offset__7105_AUDCFG_IO_CTRL(ip))
++#define shift__7100_AUDCFG_IO_CTRL__DATA1_EN(ip) 2
++#define mask__7100_AUDCFG_IO_CTRL__DATA1_EN(ip) 0x1
++#define get__7100_AUDCFG_IO_CTRL__DATA1_EN(ip) ((readl(ip->base + \
++	offset__7100_AUDCFG_IO_CTRL(ip)) >> \
++	shift__7100_AUDCFG_IO_CTRL__DATA1_EN(ip)) & \
++	mask__7100_AUDCFG_IO_CTRL__DATA1_EN(ip))
++#define set__7100_AUDCFG_IO_CTRL__DATA1_EN(ip, value) \
++	writel((readl(ip->base + offset__7100_AUDCFG_IO_CTRL(ip)) & \
++	~(mask__7100_AUDCFG_IO_CTRL__DATA1_EN(ip) << \
++	shift__7100_AUDCFG_IO_CTRL__DATA1_EN(ip))) | (((value) & \
++	mask__7100_AUDCFG_IO_CTRL__DATA1_EN(ip)) << \
++	shift__7100_AUDCFG_IO_CTRL__DATA1_EN(ip)), ip->base + \
++	offset__7100_AUDCFG_IO_CTRL(ip))
 +
-+#define value__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN__INPUT(ip) 0x0
-+#define mask__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN__INPUT(ip) \
-+	(value__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN__INPUT(ip) << \
-+	shift__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN(ip))
-+#define set__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN__INPUT(ip) \
-+	set__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN(ip, \
-+	value__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN__INPUT(ip))
++#define value__7100_AUDCFG_IO_CTRL__DATA1_EN__INPUT(ip) 0x0
++#define mask__7100_AUDCFG_IO_CTRL__DATA1_EN__INPUT(ip) \
++	(value__7100_AUDCFG_IO_CTRL__DATA1_EN__INPUT(ip) << \
++	shift__7100_AUDCFG_IO_CTRL__DATA1_EN(ip))
++#define set__7100_AUDCFG_IO_CTRL__DATA1_EN__INPUT(ip) \
++	set__7100_AUDCFG_IO_CTRL__DATA1_EN(ip, \
++	value__7100_AUDCFG_IO_CTRL__DATA1_EN__INPUT(ip))
 +
-+#define value__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN__OUTPUT(ip) 0x1
-+#define mask__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN__OUTPUT(ip) \
-+	(value__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN__OUTPUT(ip) << \
-+	shift__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN(ip))
-+#define set__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN__OUTPUT(ip) \
-+	set__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN(ip, \
-+	value__7105_AUDCFG_IO_CTRL__PCMPLHDMI_EN__OUTPUT(ip))
++#define value__7100_AUDCFG_IO_CTRL__DATA1_EN__OUTPUT(ip) 0x1
++#define mask__7100_AUDCFG_IO_CTRL__DATA1_EN__OUTPUT(ip) \
++	(value__7100_AUDCFG_IO_CTRL__DATA1_EN__OUTPUT(ip) << \
++	shift__7100_AUDCFG_IO_CTRL__DATA1_EN(ip))
++#define set__7100_AUDCFG_IO_CTRL__DATA1_EN__OUTPUT(ip) \
++	set__7100_AUDCFG_IO_CTRL__DATA1_EN(ip, \
++	value__7100_AUDCFG_IO_CTRL__DATA1_EN__OUTPUT(ip))
 +
-+/* CLKREC_SEL */
++/* SPDIF_EN */
 +
-+#define shift__7105_AUDCFG_IO_CTRL__CLKREC_SEL(ip) 9
-+#define mask__7105_AUDCFG_IO_CTRL__CLKREC_SEL(ip) 0x3
-+#define get__7105_AUDCFG_IO_CTRL__CLKREC_SEL(ip) ((readl(ip->base + \
-+	offset__7105_AUDCFG_IO_CTRL(ip)) >> \
-+	shift__7105_AUDCFG_IO_CTRL__CLKREC_SEL(ip)) & \
-+	mask__7105_AUDCFG_IO_CTRL__CLKREC_SEL(ip))
-+#define set__7105_AUDCFG_IO_CTRL__CLKREC_SEL(ip, value) \
-+	writel((readl(ip->base + offset__7105_AUDCFG_IO_CTRL(ip)) & \
-+	~(mask__7105_AUDCFG_IO_CTRL__CLKREC_SEL(ip) << \
-+	shift__7105_AUDCFG_IO_CTRL__CLKREC_SEL(ip))) | (((value) & \
-+	mask__7105_AUDCFG_IO_CTRL__CLKREC_SEL(ip)) << \
-+	shift__7105_AUDCFG_IO_CTRL__CLKREC_SEL(ip)), ip->base + \
-+	offset__7105_AUDCFG_IO_CTRL(ip))
++#define shift__7100_AUDCFG_IO_CTRL__SPDIF_EN(ip) 3
++#define mask__7100_AUDCFG_IO_CTRL__SPDIF_EN(ip) 0x1
++#define get__7100_AUDCFG_IO_CTRL__SPDIF_EN(ip) ((readl(ip->base + \
++	offset__7100_AUDCFG_IO_CTRL(ip)) >> \
++	shift__7100_AUDCFG_IO_CTRL__SPDIF_EN(ip)) & \
++	mask__7100_AUDCFG_IO_CTRL__SPDIF_EN(ip))
++#define set__7100_AUDCFG_IO_CTRL__SPDIF_EN(ip, value) \
++	writel((readl(ip->base + offset__7100_AUDCFG_IO_CTRL(ip)) & \
++	~(mask__7100_AUDCFG_IO_CTRL__SPDIF_EN(ip) << \
++	shift__7100_AUDCFG_IO_CTRL__SPDIF_EN(ip))) | (((value) & \
++	mask__7100_AUDCFG_IO_CTRL__SPDIF_EN(ip)) << \
++	shift__7100_AUDCFG_IO_CTRL__SPDIF_EN(ip)), ip->base + \
++	offset__7100_AUDCFG_IO_CTRL(ip))
 +
-+#define value__7105_AUDCFG_IO_CTRL__CLKREC_SEL__PCMPLHDMI(ip) 0x0
-+#define mask__7105_AUDCFG_IO_CTRL__CLKREC_SEL__PCMPLHDMI(ip) \
-+	(value__7105_AUDCFG_IO_CTRL__CLKREC_SEL__PCMPLHDMI(ip) << \
-+	shift__7105_AUDCFG_IO_CTRL__CLKREC_SEL(ip))
-+#define set__7105_AUDCFG_IO_CTRL__CLKREC_SEL__PCMPLHDMI(ip) \
-+	set__7105_AUDCFG_IO_CTRL__CLKREC_SEL(ip, \
-+	value__7105_AUDCFG_IO_CTRL__CLKREC_SEL__PCMPLHDMI(ip))
++#define value__7100_AUDCFG_IO_CTRL__SPDIF_EN__DISABLE(ip) 0x0
++#define mask__7100_AUDCFG_IO_CTRL__SPDIF_EN__DISABLE(ip) \
++	(value__7100_AUDCFG_IO_CTRL__SPDIF_EN__DISABLE(ip) << \
++	shift__7100_AUDCFG_IO_CTRL__SPDIF_EN(ip))
++#define set__7100_AUDCFG_IO_CTRL__SPDIF_EN__DISABLE(ip) \
++	set__7100_AUDCFG_IO_CTRL__SPDIF_EN(ip, \
++	value__7100_AUDCFG_IO_CTRL__SPDIF_EN__DISABLE(ip))
 +
-+#define value__7105_AUDCFG_IO_CTRL__CLKREC_SEL__SPDIFHDMI(ip) 0x1
-+#define mask__7105_AUDCFG_IO_CTRL__CLKREC_SEL__SPDIFHDMI(ip) \
-+	(value__7105_AUDCFG_IO_CTRL__CLKREC_SEL__SPDIFHDMI(ip) << \
-+	shift__7105_AUDCFG_IO_CTRL__CLKREC_SEL(ip))
-+#define set__7105_AUDCFG_IO_CTRL__CLKREC_SEL__SPDIFHDMI(ip) \
-+	set__7105_AUDCFG_IO_CTRL__CLKREC_SEL(ip, \
-+	value__7105_AUDCFG_IO_CTRL__CLKREC_SEL__SPDIFHDMI(ip))
++#define value__7100_AUDCFG_IO_CTRL__SPDIF_EN__ENABLE(ip) 0x1
++#define mask__7100_AUDCFG_IO_CTRL__SPDIF_EN__ENABLE(ip) \
++	(value__7100_AUDCFG_IO_CTRL__SPDIF_EN__ENABLE(ip) << \
++	shift__7100_AUDCFG_IO_CTRL__SPDIF_EN(ip))
++#define set__7100_AUDCFG_IO_CTRL__SPDIF_EN__ENABLE(ip) \
++	set__7100_AUDCFG_IO_CTRL__SPDIF_EN(ip, \
++	value__7100_AUDCFG_IO_CTRL__SPDIF_EN__ENABLE(ip))
 +
-+#define value__7105_AUDCFG_IO_CTRL__CLKREC_SEL__PCMPL1(ip) 0x2
-+#define mask__7105_AUDCFG_IO_CTRL__CLKREC_SEL__PCMPL1(ip) \
-+	(value__7105_AUDCFG_IO_CTRL__CLKREC_SEL__PCMPL1(ip) << \
-+	shift__7105_AUDCFG_IO_CTRL__CLKREC_SEL(ip))
-+#define set__7105_AUDCFG_IO_CTRL__CLKREC_SEL__PCMPL1(ip) \
-+	set__7105_AUDCFG_IO_CTRL__CLKREC_SEL(ip, \
-+	value__7105_AUDCFG_IO_CTRL__CLKREC_SEL__PCMPL1(ip))
++/* HDMI_AUD_SRC */
++
++#define shift__7100_AUDCFG_IO_CTRL__HDMI_AUD_SRC(ip) 4
++#define mask__7100_AUDCFG_IO_CTRL__HDMI_AUD_SRC(ip) 0x1
++#define get__7100_AUDCFG_IO_CTRL__HDMI_AUD_SRC(ip) ((readl(ip->base + \
++	offset__7100_AUDCFG_IO_CTRL(ip)) >> \
++	shift__7100_AUDCFG_IO_CTRL__HDMI_AUD_SRC(ip)) & \
++	mask__7100_AUDCFG_IO_CTRL__HDMI_AUD_SRC(ip))
++#define set__7100_AUDCFG_IO_CTRL__HDMI_AUD_SRC(ip, value) \
++	writel((readl(ip->base + offset__7100_AUDCFG_IO_CTRL(ip)) & \
++	~(mask__7100_AUDCFG_IO_CTRL__HDMI_AUD_SRC(ip) << \
++	shift__7100_AUDCFG_IO_CTRL__HDMI_AUD_SRC(ip))) | (((value) & \
++	mask__7100_AUDCFG_IO_CTRL__HDMI_AUD_SRC(ip)) << \
++	shift__7100_AUDCFG_IO_CTRL__HDMI_AUD_SRC(ip)), ip->base + \
++	offset__7100_AUDCFG_IO_CTRL(ip))
++
++#define value__7100_AUDCFG_IO_CTRL__HDMI_AUD_SRC__PCM_PLAYER(ip) 0x0
++#define mask__7100_AUDCFG_IO_CTRL__HDMI_AUD_SRC__PCM_PLAYER(ip) \
++	(value__7100_AUDCFG_IO_CTRL__HDMI_AUD_SRC__PCM_PLAYER(ip) << \
++	shift__7100_AUDCFG_IO_CTRL__HDMI_AUD_SRC(ip))
++#define set__7100_AUDCFG_IO_CTRL__HDMI_AUD_SRC__PCM_PLAYER(ip) \
++	set__7100_AUDCFG_IO_CTRL__HDMI_AUD_SRC(ip, \
++	value__7100_AUDCFG_IO_CTRL__HDMI_AUD_SRC__PCM_PLAYER(ip))
++
++#define value__7100_AUDCFG_IO_CTRL__HDMI_AUD_SRC__SPDIF_PLAYER(ip) 0x1
++#define mask__7100_AUDCFG_IO_CTRL__HDMI_AUD_SRC__SPDIF_PLAYER(ip) \
++	(value__7100_AUDCFG_IO_CTRL__HDMI_AUD_SRC__SPDIF_PLAYER(ip) << \
++	shift__7100_AUDCFG_IO_CTRL__HDMI_AUD_SRC(ip))
++#define set__7100_AUDCFG_IO_CTRL__HDMI_AUD_SRC__SPDIF_PLAYER(ip) \
++	set__7100_AUDCFG_IO_CTRL__HDMI_AUD_SRC(ip, \
++	value__7100_AUDCFG_IO_CTRL__HDMI_AUD_SRC__SPDIF_PLAYER(ip))
 +
 +
 +
