@@ -27,9 +27,11 @@ COMMONPATCHES_24 = \
 		linux-tune_stm24.patch \
 		linux-sh4-permit_gcc_command_line_sections_stm24.patch \
 		$(if $(P0209)$(P0211)$(P0215),linux-sh4-mmap_stm24.patch) \
+		$(if $(P0215),linux-ratelimit-bug_stm24$(PATCH_STR).patch) \
 		$(if $(P0209),linux-sh4-dwmac_stm24_0209.patch) \
 		$(if $(P0207),linux-sh4-sti7100_missing_clk_alias_stm24$(PATCH_STR).patch) \
 		$(if $(P0209),linux-sh4-directfb_stm24$(PATCH_STR).patch) \
+		$(if $(P0211)$(P0214)$(P0215),linux-sh4-console_missing_argument_stm24$(PATCH_STR).patch) \
 		linux-squashfs-downgrade-stm24$(PATCH_STR)-to-stm23.patch \
 		linux-squashfs3.0_lzma_stm24.patch \
 		linux-squashfs-downgrade-stm24-2.6.25.patch \
