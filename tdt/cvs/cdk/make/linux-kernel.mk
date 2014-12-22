@@ -175,7 +175,7 @@ CUBEREVOPATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-$(CUBEMOD)_setup_stm24$(PATCH_STR).patch \
 		linux-sh4-i2c-st40-pio_stm24$(PATCH_STR).patch \
 		linux-sh4-cuberevo_rtl8201_stm24$(PATCH_STR).patch \
-		$(if $(P0215)$(CUBEREVO_250HD),linux-sh4-$(CUBEREVO_250HD)_sound_stm24$(PATCH_STR).patch)
+		$(if $(P0215)$(CUBEMOD),linux-sh4-$(CUBEMOD)_sound_stm24$(PATCH_STR).patch)
 
 VITAMINHD5000PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-vitamin_hd5000_setup_stm24$(PATCH_STR).patch \
