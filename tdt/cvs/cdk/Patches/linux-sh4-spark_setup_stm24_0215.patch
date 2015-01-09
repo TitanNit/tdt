@@ -39,7 +39,7 @@
   	*cmdline_p = command_line;
 --- linux-sh4/arch/sh/boards/mach-sat7111/setup.c.org	2012-03-08 08:58:51.000000000 -0800
 +++ linux-sh4/arch/sh/boards/mach-sat7111/setup.c	2012-03-28 01:30:08.000000000 -0700
-@@ -33,126 +33,111 @@
+@@ -33,126 +33,110 @@
  #include <asm/irq-ilc.h>
  #include <asm/irl.h>
  #include <sound/stm.h>
@@ -229,7 +229,6 @@
 +		 .name = "Mnt",
 +		 .size = 0x3C00000,
 +		 .offset = 0x19C00000
-+	     },
 +	     }, {
 +		 .name = "Full",
 +		 .size = 0x1F400000,
@@ -238,7 +237,7 @@
  	},
  	.timing_data	= &(struct stm_nand_timing_data) {
  		.sig_setup	= 50,		/* times in ns */
-@@ -167,28 +152,12 @@
+@@ -167,28 +151,12 @@
  	},
  };
  
@@ -273,7 +272,7 @@
  	},
  };
  
-@@ -209,22 +178,15 @@
+@@ -209,22 +177,15 @@
  };
  
  static struct platform_device *sat7111_devices[] __initdata = {
@@ -300,7 +299,7 @@
  	stx7111_configure_ssc_i2c(3, NULL);
  
  	stx7111_configure_usb(&(struct stx7111_usb_config) {
-@@ -252,8 +214,6 @@
+@@ -252,8 +213,6 @@
  			.banks = &sat7111_nand_flash,
  			.rbn.flex_connected = 1,});
  
