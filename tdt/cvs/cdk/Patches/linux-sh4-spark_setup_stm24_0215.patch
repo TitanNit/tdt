@@ -348,7 +348,7 @@
 ! 					(phydev->phy_id == 0x00181b80) || // Davicom DM9131
 ! 					(phydev->phy_id == 0x1c040011) || // STe100p
 ! 					(phydev->phy_id == 0x00061c50) || // STe101p
-! 					(phydev->phy_id == 0x00008201) || //
+! 					(phydev->phy_id == 0x00008201) || // RTL8201CP
 ! 					(phydev->phy_id == 0x0007c0f1) || // Pingulux
 ! 					(phydev->phy_id == 0x001cc912)))  // RTL821x
 ! 			{
@@ -399,9 +399,9 @@
   	return -1;
   }
   EXPORT_SYMBOL(__nand_correct_data);
-*** linux-sh4/drivers/mtd/nand/nand_base.c_org
---- linux-sh4/drivers/mtd/nand/nand_base.c
-@@ -1386,20 +1386,15 @@
+--- linux-sh4/drivers/mtd/nand/nand_base.c	2014-06-11 15:54:03.000000000 +0200
++++ linux-sh4/drivers/mtd/nand/nand_base.c.patched	2015-01-23 02:47:21.000000000 +0100
+@@ -1386,13 +1386,10 @@
  
  			/* Now read the page into the buffer */
  			if (unlikely(ops->mode == MTD_OOB_RAW))
@@ -414,13 +414,14 @@
 -				ret = chip->ecc.read_page(mtd, chip, bufpoi,
 -							  page);
 +				ret = chip->ecc.read_page(mtd, chip, bufpoi, page);
++
  			if (ret < 0)
  				break;
  
- 			/* Transfer not aligned data */
+@@ -1400,6 +1397,7 @@
  			if (!aligned) {
--				if (!NAND_SUBPAGE_READ(chip) && !oob)
--					chip->pagebuf = realpage;
+ 				if (!NAND_SUBPAGE_READ(chip) && !oob)
+ 					chip->pagebuf = realpage;
 +				chip->pagebuf = realpage;
  				memcpy(buf, chip->buffers->databuf + col, bytes);
  			}
