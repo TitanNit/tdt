@@ -424,3 +424,4 @@
 +				chip->pagebuf = realpage;
  				memcpy(buf, chip->buffers->databuf + col, bytes);
  			}
+ 
