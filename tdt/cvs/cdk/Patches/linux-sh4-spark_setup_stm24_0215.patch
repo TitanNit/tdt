@@ -220,18 +220,18 @@
 +	     }, {
 +		 .name = "Kernel",
 +		 .size = 0x800000,
-+		 .offset = 0x18000000
++		 .offset = MTDPART_OFS_APPEND
 +	     }, {
 +		 .name = "Root",
-+		 .size = 0x01400000,
-+		 .offset = 0x18800000
++		 .size = 0x02000000,
++		 .offset = MTDPART_OFS_APPEND
 +	     }, {
 +		 .name = "Mnt",
-+		 .size = 0x3C00000,
-+		 .offset = 0x19C00000
++		 .size = MTDPART_SIZ_FULL,
++		 .offset = MTDPART_OFS_APPEND
 +	     }, {
 +		 .name = "Full",
-+		 .size = 0x1F400000,
++		 .size = MTDPART_SIZ_FULL,
 +		 .offset = 0x18000000
 +	     },
  	},
