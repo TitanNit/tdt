@@ -223,7 +223,7 @@ release_titan_ufs922: release_titan_common_utils
 #
 # release_ufc960
 #
-release_ufc960: release_titan_common_utils
+release_titan_ufc960: release_titan_common_utils
 	echo "ufc960" > $(prefix)/release_titan/etc/hostname
 	cp $(buildprefix)/root/release_titan/halt_ufs $(prefix)/release/etc/init.d/halt
 	chmod 755 $(prefix)/release_titan/etc/init.d/halt
