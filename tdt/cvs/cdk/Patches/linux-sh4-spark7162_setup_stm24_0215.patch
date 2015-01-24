@@ -142,12 +142,12 @@ index 78e905e..5d19d2a 100644
 +		{
 +			.name	= "Root",
 +			.offset	= 0x18800000,
-+			.size	= 0x04000000 //64M
++			.size	= 0x02000000 
 +		},
 +		{
 +			.name	= "Mnt",
-+			.offset	= 0x1C800000,
-+			.size	= 0x03700000 //55M	cc changed reserved 1024KB for u-boot bbt
++			.offset	= 0x1a800000;
++			.size	= 0x5700000 // cc changed reserved 1024KB for u-boot bbt
 +		},
 +		{
 +			.name	= "Full",
