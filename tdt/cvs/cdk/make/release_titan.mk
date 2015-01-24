@@ -225,7 +225,7 @@ release_titan_ufs922: release_titan_common_utils
 #
 release_titan_ufc960: release_titan_common_utils
 	echo "ufc960" > $(prefix)/release_titan/etc/hostname
-	cp $(buildprefix)/root/release_titan/halt_ufs $(prefix)/release/etc/init.d/halt
+	cp $(buildprefix)/root/release/halt_ufs $(prefix)/release_titan/etc/init.d/halt
 	chmod 755 $(prefix)/release_titan/etc/init.d/halt
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/micom/micom.ko $(prefix)/release_titan/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontends/*.ko $(prefix)/release_titan/lib/modules/
