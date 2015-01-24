@@ -146,7 +146,7 @@ index 78e905e..5d19d2a 100644
 +		},
 +		{
 +			.name	= "Mnt",
-+			.offset	= 0x1a800000;
++			.offset	= 0x1a800000,
 +			.size	= 0x5700000 // cc changed reserved 1024KB for u-boot bbt
 +		},
 +		{
