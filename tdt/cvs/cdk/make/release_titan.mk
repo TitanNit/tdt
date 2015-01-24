@@ -221,6 +221,22 @@ release_titan_ufs922: release_titan_common_utils
 	rm -f $(prefix)/release_titan/bin/eeprom
 
 #
+# release_ufc960
+#
+release_ufc960: release_titan_common_utils
+	echo "ufc960" > $(prefix)/release_titan/etc/hostname
+	cp $(buildprefix)/root/release_titan/halt_ufs $(prefix)/release/etc/init.d/halt
+	chmod 755 $(prefix)/release_titan/etc/init.d/halt
+	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontcontroller/micom/micom.ko $(prefix)/release_titan/lib/modules/
+	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontends/*.ko $(prefix)/release_titan/lib/modules/
+	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-stx7109c3.ko $(prefix)/release_titan/lib/modules/
+#	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/ufs922_fan/fan_ctrl.ko $(prefix)/release_titan/lib/modules/
+	cp $(targetprefix)/boot/video_7109.elf $(prefix)/release_titan/boot/video.elf
+	rm -f $(prefix)/release_titan/lib/firmware/dvb-fe-{avl2108,avl6222,cx24116}.fw
+	rm -f $(prefix)/release_titan/bin/evremote
+	rm -f $(prefix)/release_titan/bin/gotosleep
+
+#
 # release_spark
 #
 release_titan_spark: release_titan_common_utils
@@ -554,7 +570,7 @@ release_titan_base:
 	cp -aR $(buildprefix)/root/usr/share/udhcpc/* $(prefix)/release_titan/usr/share/udhcpc/ && \
 	cp -aR $(buildprefix)/root/usr/share/zoneinfo/* $(prefix)/release_titan/usr/share/zoneinfo/ && \
 	echo "576i50" > $(prefix)/release_titan/etc/videomode && \
-	cp $(buildprefix)/root/release/rcS_titan$(if $(TF7700),_$(TF7700))$(if $(OCTAGON1008),_$(OCTAGON1008))$(if $(FORTIS_HDBOX),_$(FORTIS_HDBOX))$(if $(ATEVIO7500),_$(ATEVIO7500))$(if $(HS7810A),_$(HS7810A))$(if $(HS7110),_$(HS7110))$(if $(ATEMIO520),_$(ATEMIO520))$(if $(ATEMIO530),_$(ATEMIO530))$(if $(HL101),_$(HL101))$(if $(VIP1_V2),_$(VIP1_V2))$(if $(VIP2_V1),_$(VIP2_V1))$(if $(ADB_BOX),_$(ADB_BOX))$(if $(UFS910),_$(UFS910))$(if $(UFS912),_$(UFS912))$(if $(UFS913),_$(UFS913))$(if $(UFS922),_$(UFS922))$(if $(CUBEREVO),_$(CUBEREVO))$(if $(CUBEREVO_MINI),_$(CUBEREVO_MINI))$(if $(CUBEREVO_MINI2),_$(CUBEREVO_MINI2))$(if $(CUBEREVO_MINI_FTA),_$(CUBEREVO_MINI_FTA))$(if $(CUBEREVO_250HD),_$(CUBEREVO_250HD))$(if $(CUBEREVO_2000HD),_$(CUBEREVO_2000HD))$(if $(CUBEREVO_9500HD),_$(CUBEREVO_9500HD))$(if $(SPARK),_$(SPARK))$(if $(SPARK7162),_$(SPARK7162)) $(prefix)/release_titan/etc/init.d/rcS
+	cp $(buildprefix)/root/release/rcS_titan$(if $(TF7700),_$(TF7700))$(if $(OCTAGON1008),_$(OCTAGON1008))$(if $(FORTIS_HDBOX),_$(FORTIS_HDBOX))$(if $(ATEVIO7500),_$(ATEVIO7500))$(if $(HS7810A),_$(HS7810A))$(if $(HS7110),_$(HS7110))$(if $(ATEMIO520),_$(ATEMIO520))$(if $(ATEMIO530),_$(ATEMIO530))$(if $(HL101),_$(HL101))$(if $(VIP1_V2),_$(VIP1_V2))$(if $(VIP2_V1),_$(VIP2_V1))$(if $(ADB_BOX),_$(ADB_BOX))$(if $(UFS910),_$(UFS910))$(if $(UFS912),_$(UFS912))$(if $(UFS913),_$(UFS913))$(if $(UFS922),_$(UFS922))$(if $(UFC960),_$(UFC960))$(if $(CUBEREVO),_$(CUBEREVO))$(if $(CUBEREVO_MINI),_$(CUBEREVO_MINI))$(if $(CUBEREVO_MINI2),_$(CUBEREVO_MINI2))$(if $(CUBEREVO_MINI_FTA),_$(CUBEREVO_MINI_FTA))$(if $(CUBEREVO_250HD),_$(CUBEREVO_250HD))$(if $(CUBEREVO_2000HD),_$(CUBEREVO_2000HD))$(if $(CUBEREVO_9500HD),_$(CUBEREVO_9500HD))$(if $(SPARK),_$(SPARK))$(if $(SPARK7162),_$(SPARK7162)) $(prefix)/release_titan/etc/init.d/rcS
 	chmod 755 $(prefix)/release_titan/etc/init.d/rcS && \
 	cp -dp $(targetprefix)/usr/sbin/vsftpd $(prefix)/release_titan/usr/bin/ && \
 	cp $(buildprefix)/root/bin/autologin $(prefix)/release_titan/bin/ && \
@@ -567,6 +583,7 @@ release_titan_base:
 	cp -dp $(targetprefix)/sbin/mkfs $(prefix)/release_titan/sbin/
 if !ENABLE_UFS910
 if !ENABLE_UFS922
+if !ENABLE_UFC960
 	cp -dp $(targetprefix)/sbin/jfs_fsck $(prefix)/release_titan/sbin/ && \
 	ln -sf /sbin/jfs_fsck $(prefix)/release_titan/sbin/fsck.jfs && \
 	cp -dp $(targetprefix)/sbin/jfs_mkfs $(prefix)/release_titan/sbin/ && \
@@ -574,9 +591,10 @@ if !ENABLE_UFS922
 	cp -dp $(targetprefix)/sbin/jfs_tune $(prefix)/release_titan/sbin/
 endif
 endif
+endif
 
 	cp -dp $(buildprefix)/root/etc/inittab$(if $(FORTIS_HDBOX)$(OCTAGON1008)$(CUBEREVO)$(CUBEREVO_MINI2)$(CUBEREVO_2000HD),_ttyAS1) $(prefix)/release_titan/etc/inittab
-	cp $(buildprefix)/root/etc/fw_env.config$(if $(ATEVIO7500),_$(ATEVIO7500))$(if $(FORTIS_HDBOX),_$(FORTIS_HDBOX))$(if $(OCTAGON1008),_$(OCTAGON1008))$(if $(TF7700),_$(TF7700))$(if $(UFS910),_$(UFS910))$(if $(UFS912),_$(UFS912))$(if $(UFS913),_$(UFS913))$(if $(UFS922),_$(UFS922))$(if $(ADB_BOX),_$(ADB_BOX))$(if $(CUBEREVO_2000HD),_$(CUBEREVO_2000HD))$(if $(IPBOX9900),_$(IPBOX9900))$(if $(IPBOX99),_$(IPBOX99))$(if $(IPBOX55),_$(IPBOX55))$(if $(SPARK),_$(SPARK))$(if $(SPARK7162),_$(SPARK7162)) $(prefix)/release_titan/etc/fw_env.config
+	cp $(buildprefix)/root/etc/fw_env.config$(if $(ATEVIO7500),_$(ATEVIO7500))$(if $(FORTIS_HDBOX),_$(FORTIS_HDBOX))$(if $(OCTAGON1008),_$(OCTAGON1008))$(if $(TF7700),_$(TF7700))$(if $(UFS910),_$(UFS910))$(if $(UFS912),_$(UFS912))$(if $(UFS913),_$(UFS913))$(if $(UFS922),_$(UFS922))$(if $(UFC960),_$(UFC960))$(if $(ADB_BOX),_$(ADB_BOX))$(if $(CUBEREVO_2000HD),_$(CUBEREVO_2000HD))$(if $(IPBOX9900),_$(IPBOX9900))$(if $(IPBOX99),_$(IPBOX99))$(if $(IPBOX55),_$(IPBOX55))$(if $(SPARK),_$(SPARK))$(if $(SPARK7162),_$(SPARK7162)) $(prefix)/release_titan/etc/fw_env.config
 
 #
 # Player
