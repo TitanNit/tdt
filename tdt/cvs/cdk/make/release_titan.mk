@@ -231,7 +231,7 @@ release_titan_ufc960: release_titan_common_utils
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/frontends/*.ko $(prefix)/release_titan/lib/modules/
 	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/stgfb/stmfb/stmcore-display-stx7109c3.ko $(prefix)/release_titan/lib/modules/
 #	cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/ufs922_fan/fan_ctrl.ko $(prefix)/release_titan/lib/modules/
-	cp $(targetprefix)/boot/video_7109.elf $(prefix)/release_titan/boot/video.elf
+	cp $(targetprefix)/boot/video_7109.elf $(prefix)/release_titan/lib/firmware/video.elf
 	rm -f $(prefix)/release_titan/lib/firmware/dvb-fe-{avl2108,avl6222,cx24116}.fw
 	rm -f $(prefix)/release_titan/bin/evremote
 	rm -f $(prefix)/release_titan/bin/gotosleep
