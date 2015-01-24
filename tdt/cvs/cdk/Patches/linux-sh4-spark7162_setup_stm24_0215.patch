@@ -63,7 +63,7 @@ index 78e905e..5d19d2a 100644
  
  
  
-@@ -70,8 +105,11 @@ static void __init hdk7105_setup(char **cmdline_p)
+@@ -70,8 +105,11 @@
  	stx7105_configure_asc(3, &(struct stx7105_asc_config) {
  			.hw_flow_control = 1,
  			.is_console = 0, });
@@ -75,7 +75,7 @@ index 78e905e..5d19d2a 100644
  /* PCI configuration */
  static struct stm_plat_pci_config hdk7105_pci_config = {
  	.pci_irq = {
-@@ -98,6 +136,7 @@ int pcibios_map_platform_irq(struct pci_dev *dev, u8 slot, u8 pin)
+@@ -98,6 +136,7 @@
          /* We can use the standard function on this board */
  	return stx7105_pcibios_map_platform_irq(&hdk7105_pci_config, pin);
  }
@@ -83,7 +83,7 @@ index 78e905e..5d19d2a 100644
  
  static struct platform_device hdk7105_leds = {
  	.name = "leds-gpio",
-@@ -162,7 +201,7 @@ static struct platform_device hdk7105_front_panel = {
+@@ -162,7 +201,7 @@
  static int hdk7105_phy_reset(void *bus)
  {
  	gpio_set_value(HDK7105_PIO_PHY_RESET, 0);
@@ -92,20 +92,19 @@ index 78e905e..5d19d2a 100644
  	gpio_set_value(HDK7105_PIO_PHY_RESET, 1);
  
  	return 1;
-@@ -212,8 +251,11 @@ static struct platform_device hdk7105_nor_flash = {
+@@ -212,8 +251,10 @@
  struct stm_nand_bank_data hdk7105_nand_flash = {
  	.csn		= 1,
  	.options	= NAND_NO_AUTOINCR | NAND_USE_FLASH_BBT,
 -	.nr_partitions	= 2,
-+//	.nr_partitions	= 2,
-+	.nr_partitions	= 8,
++	.nr_partitions	= 9,
  	.partitions	= (struct mtd_partition []) {
 +
 +#if 0
  		{
  			.name	= "NAND Flash 1",
  			.offset	= 0,
-@@ -223,22 +265,77 @@ struct stm_nand_bank_data hdk7105_nand_flash = {
+@@ -223,22 +264,82 @@
  			.offset = MTDPART_OFS_NXTBLK,
  			.size	= MTDPART_SIZ_FULL
  		},
@@ -150,6 +149,11 @@ index 78e905e..5d19d2a 100644
 +			.offset	= 0x1C800000,
 +			.size	= 0x03700000 //55M	cc changed reserved 1024KB for u-boot bbt
 +		},
++		{
++			.name	= "Full",
++			.offset	= 0x18000000,
++			.size	= 0x1FF00000
++		},
  	},
  	.timing_spec	= &NAND_TSPEC_HYNIX_HY27UH08AG5B,
  };
@@ -184,7 +188,7 @@ index 78e905e..5d19d2a 100644
  			{
  				.name = "Serial Flash 1",
  				.size = 0x00080000,
-@@ -248,16 +345,43 @@ static struct spi_board_info hdk7105_serial_flash = {
+@@ -248,16 +349,43 @@
  				.size = MTDPART_SIZ_FULL,
  				.offset = MTDPART_OFS_NXTBLK,
  			},
@@ -230,7 +234,7 @@ index 78e905e..5d19d2a 100644
  static int __init hdk7105_device_init(void)
  {
  	struct sysconf_field *sc;
-@@ -288,7 +412,11 @@ static int __init hdk7105_device_init(void)
+@@ -288,7 +416,11 @@
  		/* NOR mapped to EMIB, with physical offset of 0x06000000! */
  		nor_bank_base = emi_bank_base(1);
  		nor_bank_size = emi_bank_base(2) - nor_bank_base;
@@ -242,7 +246,7 @@ index 78e905e..5d19d2a 100644
  		break;
  	default:
  		BUG();
-@@ -303,7 +431,7 @@ static int __init hdk7105_device_init(void)
+@@ -303,7 +435,7 @@
  	/*     - update resource parameters */
  	hdk7105_nor_flash.resource[0].start += nor_bank_base;
  	hdk7105_nor_flash.resource[0].end += nor_bank_base;
@@ -251,7 +255,7 @@ index 78e905e..5d19d2a 100644
  	/* Setup the PCI_SERR# PIO */
  	if (gpio_request(HDK7105_PIO_PCI_SERR, "PCI_SERR#") == 0) {
  		gpio_direction_input(HDK7105_PIO_PCI_SERR);
-@@ -314,12 +442,15 @@ static int __init hdk7105_device_init(void)
+@@ -314,12 +446,15 @@
  		printk(KERN_WARNING "hdk7105: Failed to claim PCI SERR PIO!\n");
  	}
  	stx7105_configure_pci(&hdk7105_pci_config);
@@ -267,7 +271,7 @@ index 78e905e..5d19d2a 100644
  
  	/* Set SPI Boot pads as inputs to avoid contention with SSC1 */
  	gpio_request(stm_gpio(15, 0), "SPI Boot CLK");
-@@ -345,10 +476,15 @@ static int __init hdk7105_device_init(void)
+@@ -345,10 +480,15 @@
  			.routing.ssc0.sclk = stx7105_ssc0_sclk_pio2_2,
  			.routing.ssc0.mtsr = stx7105_ssc0_mtsr_pio2_3, });
  	/* SPI - SerialFLASH */
@@ -283,7 +287,7 @@ index 78e905e..5d19d2a 100644
  	/* I2C_xxxC - JN1 (NIM), JN3, UT1 (CI chip), US2 (EEPROM) */
  	stx7105_configure_ssc_i2c(2, &(struct stx7105_ssc_config) {
  			.routing.ssc2.sclk = stx7105_ssc2_sclk_pio3_4,
-@@ -361,13 +497,13 @@ static int __init hdk7105_device_init(void)
+@@ -361,13 +501,13 @@
  	stx7105_configure_usb(0, &(struct stx7105_usb_config) {
  			.ovrcur_mode = stx7105_usb_ovrcur_active_low,
  			.pwr_enabled = 1,
@@ -301,7 +305,7 @@ index 78e905e..5d19d2a 100644
  
  	gpio_request(HDK7105_PIO_PHY_RESET, "eth_phy_reset");
  	gpio_direction_output(HDK7105_PIO_PHY_RESET, 1);
-@@ -397,8 +533,8 @@ static int __init hdk7105_device_init(void)
+@@ -397,8 +537,8 @@
  	 * since NAND MTD has no concept of write-protect, we permanently
  	 * disable WP.
  	 */
