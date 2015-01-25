@@ -152,7 +152,7 @@ index 78e905e..5d19d2a 100644
 +		{
 +			.name	= "Full",
 +			.offset	= 0x18000000,
-+			.size	= 0x1FF00000
++			.size	= 0x7F00000
 +		},
  	},
  	.timing_spec	= &NAND_TSPEC_HYNIX_HY27UH08AG5B,
