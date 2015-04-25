@@ -154,6 +154,116 @@ static int container_ffmpeg_seek_bytes_rel(off_t start, off_t bytes);
 /* MISC Functions                */
 /* ***************************** */
 
+struct splitstr
+{
+	char* part;
+};
+
+struct splitstr* strsplit(char *str, char *tok, int* count)
+{
+	char *tmpstr = NULL;
+	struct splitstr *array = NULL, *tmparray = NULL;
+	*count = 0;
+
+	if(str == NULL || tok == NULL)
+		return NULL;
+
+	tmpstr = strtok(str, tok);
+	while(tmpstr != NULL)
+	{
+		*count = *count + 1;
+		tmparray = array; array = (struct splitstr*)realloc(array, sizeof(struct splitstr*) * (*count));
+		if(array == NULL)
+		{
+//			err("no mem");
+			free(tmparray);
+			return NULL;
+		}
+		
+		(&array[(*count) - 1])->part = tmpstr;
+		tmpstr = strtok(NULL, tok);
+	}
+
+	return array;
+}
+
+char* ostrcat(char* value1, char* value2, int free1, int free2)
+{
+	int len = 0, len1 = 0, len2 = 0;
+	char* buf = NULL;
+
+	if(value1 == NULL && value2 == NULL) return NULL;
+
+	if(value1 != NULL) len1 = strlen(value1);
+	if(value2 != NULL) len2 = strlen(value2);
+
+	len = len1 + len2 + 1;
+
+	if(free1 == 1)
+		buf = realloc(value1, len);
+	else
+		buf = malloc(len);
+	if(buf == NULL)
+	{
+		if(free1 == 1) free(value1);
+		if(free2 == 1) free(value2);
+		return NULL;
+	}
+
+	if(free1 == 0 && len1 > 0) memcpy(buf, value1, len1);
+	if(len2 > 0) memcpy(buf + len1, value2, len2);
+	buf[len - 1] = '\0';
+
+	if(free2 == 1) free(value2);
+
+	//helpfull for memleak detect
+	//if(buf != NULL && strlen(buf) == 0x0b - 0x01)
+	//	printf("******** memleak string (%s) (%p) ********\n", buf, buf);
+
+	return buf;
+}
+
+char* ostrstr(char* str, char* search)
+{
+	char* ret = NULL;
+
+	if(str == NULL || search == NULL) return NULL;
+	ret = strstr(str, search);
+
+	return ret;
+}
+
+char* string_replace(char *search, char *replace, char *string, int free1)
+{
+	char* searchpos = NULL;
+	char* tmpstr = NULL;
+
+	if(string == NULL || search == NULL)
+	{
+		tmpstr = ostrcat(tmpstr, string, 1, 0);
+		if(free1 == 1) free(string);
+		return tmpstr;
+	}
+
+	searchpos = ostrstr(string, search);
+
+	if(searchpos == NULL)
+	{
+		tmpstr = ostrcat(tmpstr, string, 1, 0);
+		if(free1 == 1) free(string);
+		return tmpstr;
+	}
+
+	tmpstr = strndup(string, searchpos - string);
+	if(replace != NULL)
+		tmpstr = ostrcat(tmpstr, replace, 1, 0);
+	tmpstr = ostrcat(tmpstr, string + (searchpos - string) + strlen(search), 1, 0);
+
+	if(free1 == 1) free(string);
+
+	return tmpstr;
+}
+
 static int mutexInitialized = 0;
 
 static void initMutex(void)
@@ -1362,6 +1472,29 @@ int container_ffmpeg_init(Context_t *context, char * filename)
     if(strstr(filename, "http://") == filename)
 	{
 	    av_dict_set(&avio_opts, "timeout", "20000000", 0); //20sec
+        av_dict_set(&avio_opts, "seekable", "0", 0);
+//      av_dict_set(&avio_opts, "cookies", c->cookies, 0);
+
+		if(ostrstr(filename, "|User-Agent=") != NULL)
+        {
+			char* tmpstr = ostrcat(filename, NULL, 0, 0);
+			tmpstr = string_replace("|User-Agent=", "|", tmpstr, 1);
+			int count = 0;
+			struct splitstr* ret1 = NULL;
+			ret1 = strsplit(tmpstr, "|", &count);
+
+			if(ret1 != NULL && count > 1)
+			{
+				av_dict_set(&avio_opts, "user-agent", ret1[1].part, 0);
+//				free(filename);
+				filename = ostrcat(ret1[0].part, NULL, 0, 0);
+			   	ffmpeg_printf(10, "set filename %s\n", ret1[0].part);
+			   	ffmpeg_printf(10, "set user-agent: %s\n", ret1[1].part);
+			}
+			free(ret1), ret1 = NULL;
+			free(tmpstr), tmpstr = NULL;			
+		}
+
 	    if ((err = avformat_open_input(&avContext, filename, NULL, &avio_opts)) != 0)
 	    {
 			char error[512];
