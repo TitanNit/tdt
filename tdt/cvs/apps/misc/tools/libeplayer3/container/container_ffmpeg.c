@@ -264,6 +264,21 @@ char* string_replace(char *search, char *replace, char *string, int free1)
 	return tmpstr;
 }
 
+char* stringreplacechar(char *str, char c1, char c2)
+{
+	char *p1 = str;
+
+	if(str == NULL) return NULL;
+
+	while(*p1 != '\0')
+	{
+		if(*p1 == c1) *p1 = c2;
+		p1++;
+	}
+
+	return str;
+}
+
 static int mutexInitialized = 0;
 
 static void initMutex(void)
@@ -1487,12 +1502,14 @@ int container_ffmpeg_init(Context_t *context, char * filename)
 			{
 				av_dict_set(&avio_opts, "user-agent", ret1[1].part, 0);
 //				free(filename);
-				filename = ostrcat(ret1[0].part, NULL, 0, 0);
-			   	ffmpeg_printf(10, "set filename %s\n", ret1[0].part);
+//				filename = ostrcat(ret1[0].part, NULL, 0, 0);
+//			   	ffmpeg_printf(10, "set filename %s\n", ret1[0].part);
 			   	ffmpeg_printf(10, "set user-agent: %s\n", ret1[1].part);
 			}
 			free(ret1), ret1 = NULL;
-			free(tmpstr), tmpstr = NULL;			
+			free(tmpstr), tmpstr = NULL;
+			stringreplacechar(filename, '|', '\0');		
+		   	ffmpeg_printf(10, "changed filename: %s\n", filename);
 		}
 
 	    if ((err = avformat_open_input(&avContext, filename, NULL, &avio_opts)) != 0)
