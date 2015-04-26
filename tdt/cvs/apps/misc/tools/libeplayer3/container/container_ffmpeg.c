@@ -1487,7 +1487,7 @@ int container_ffmpeg_init(Context_t *context, char * filename)
     if(strstr(filename, "http://") == filename)
 	{
 	    av_dict_set(&avio_opts, "timeout", "20000000", 0); //20sec
-        av_dict_set(&avio_opts, "seekable", "0", 0);
+//        av_dict_set(&avio_opts, "seekable", "0", 0);
 //      av_dict_set(&avio_opts, "cookies", c->cookies, 0);
 
 		if(ostrstr(filename, "|User-Agent=") != NULL)
