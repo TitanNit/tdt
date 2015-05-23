@@ -807,7 +807,7 @@ $(DEPDIR)/ffmpeg: bootstrap libass rtmpdump @DEPENDS_ffmpeg@
 			--prefix=/usr && \
 		$(MAKE) && \
 		@INSTALL_ffmpeg@
-#	@DISTCLEANUP_ffmpeg@
+	@DISTCLEANUP_ffmpeg@
 	touch $@
 
 $(DEPDIR)/ffmpeg_old: bootstrap libass rtmpdump @DEPENDS_ffmpeg_old@
@@ -2291,7 +2291,7 @@ $(DEPDIR)/gmediarender: libupnp @DEPENDS_gmediarender@
 		LD="$(target)-gcc -L/home/aaf-svn/flashimg/source.titan/titan" \
 		$(MAKE) all && \
 		@INSTALL_gmediarender@
-#	@DISTCLEANUP_gmediarender@
+	@DISTCLEANUP_gmediarender@
 	touch $@
 
 #			--with-libupnp=$(targetprefix)/usr
