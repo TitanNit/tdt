@@ -128,8 +128,6 @@ release_xbmc_base:
 	cp -dp $(buildprefix)/root/etc/init.d/udhcpc $(prefix)/release/etc/init.d/ && \
 	cp -dp $(targetprefix)/sbin/MAKEDEV $(prefix)/release/sbin/MAKEDEV && \
 	cp -f $(buildprefix)/root/release/makedev $(prefix)/release/etc/init.d/ && \
-	cp -dp $(targetprefix)/usr/bin/grep $(prefix)/release/bin/ && \
-	cp -dp $(targetprefix)/usr/bin/egrep $(prefix)/release/bin/ && \
 	cp $(targetprefix)/boot/audio.elf $(prefix)/release/boot/audio.elf && \
 	cp -a $(targetprefix)/dev/* $(prefix)/release/dev/ && \
 	cp -dp $(targetprefix)/etc/fstab $(prefix)/release/etc/ && \
@@ -160,7 +158,6 @@ release_xbmc_base:
 	cp -aR $(buildprefix)/root/usr/share/udhcpc/* $(prefix)/release/usr/share/udhcpc/ && \
 	cp -aR $(buildprefix)/root/usr/share/zoneinfo/* $(prefix)/release/usr/share/zoneinfo/ && \
 	echo "576i50" > $(prefix)/release/etc/videomode && \
-	cp -R $(targetprefix)/etc/fonts/* $(prefix)/release/etc/fonts/ && \
 	cp $(buildprefix)/root/release/rcS_stm23$(if $(TF7700),_$(TF7700))$(if $(HL101),_$(HL101))$(if $(VIP1_V2),_$(VIP1_V2))$(if $(VIP2_V1),_$(VIP2_V1))$(if $(UFS912),_$(UFS912))$(if $(UFS913),_$(UFS913))$(if $(SPARK),_$(SPARK))$(if $(SPARK7162),_$(SPARK7162))$(if $(UFS922),_$(UFS922))$(if $(OCTAGON1008),_$(OCTAGON1008))$(if $(FORTIS_HDBOX),_$(FORTIS_HDBOX))$(if $(ATEVIO7500),_$(ATEVIO7500))$(if $(HS7810A),_$(HS7810A))$(if $(HS7110),_$(HS7110))$(if $(WHITEBOX),_$(WHITEBOX))$(if $(CUBEREVO),_$(CUBEREVO))$(if $(CUBEREVO_MINI),_$(CUBEREVO_MINI))$(if $(CUBEREVO_MINI2),_$(CUBEREVO_MINI2))$(if $(CUBEREVO_MINI_FTA),_$(CUBEREVO_MINI_FTA))$(if $(CUBEREVO_250HD),_$(CUBEREVO_250HD))$(if $(CUBEREVO_2000HD),_$(CUBEREVO_2000HD))$(if $(CUBEREVO_9500HD),_$(CUBEREVO_9500HD))$(if $(IPBOX9900),_$(IPBOX9900))$(if $(IPBOX99),_$(IPBOX99))$(if $(IPBOX55),_$(IPBOX55))$(if $(ADB_BOX),_$(ADB_BOX)) $(prefix)/release/etc/init.d/rcS && \
 	chmod 755 $(prefix)/release/etc/init.d/rcS && \
 	cp $(buildprefix)/root/release/mountvirtfs $(prefix)/release/etc/init.d/ && \
@@ -176,13 +173,15 @@ release_xbmc_base:
 	cp $(buildprefix)/root/bin/autologin $(prefix)/release/bin/ && \
 	cp -p $(targetprefix)/usr/bin/killall $(prefix)/release/usr/bin/ && \
 	cp -p $(targetprefix)/usr/bin/opkg-cl $(prefix)/release/usr/bin/opkg && \
-	cp -p $(targetprefix)/usr/bin/python $(prefix)/release/usr/bin/ && \
-	cp -p $(targetprefix)/usr/sbin/ethtool $(prefix)/release/usr/sbin/
+	cp -p $(targetprefix)/usr/bin/python $(prefix)/release/usr/bin/
 if STM24
 	cp -dp $(targetprefix)/sbin/mkfs $(prefix)/release/sbin/
 endif
 
-
+#	cp -dp $(targetprefix)/usr/bin/grep $(prefix)/release/bin
+#	cp -dp $(targetprefix)/usr/bin/egrep $(prefix)/release/bin
+#	cp -R $(targetprefix)/etc/fonts/* $(prefix)/release/etc/fonts
+#	cp -p $(targetprefix)/usr/sbin/ethtool $(prefix)/release/usr/sbin
 
 #
 # Player
@@ -270,11 +269,7 @@ endif
 	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt3070sta/rt3070sta.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt3070sta/rt3070sta.ko $(prefix)/release/lib/modules || true
 	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt5370sta/rt5370sta.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rt5370sta/rt5370sta.ko $(prefix)/release/lib/modules || true
 	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rtl871x/8712u.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rtl871x/8712u.ko $(prefix)/release/lib/modules || true
-if STM23
-	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rtl8192cu_hs7110/8192cu.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rtl8192cu_hs7110/8192cu.ko $(prefix)/release/lib/modules || true
-else
 	[ -e $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rtl8192cu/8192cu.ko ] && cp $(targetprefix)/lib/modules/$(KERNELVERSION)/extra/wireless/rtl8192cu/8192cu.ko $(prefix)/release/lib/modules || true
-endif
 
 	find $(prefix)/release/lib/modules/ -name '*.ko' -exec sh4-linux-strip --strip-unneeded {} \;
 
@@ -288,7 +283,7 @@ endif
 	find $(prefix)/release/lib/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 
 	cp -R $(targetprefix)/usr/lib/* $(prefix)/release/usr/lib/
-	rm -rf $(prefix)/release/usr/lib/{engines,gconv,ldscripts,libxslt-plugins,pkgconfig,python2.6,sigc++-1.2,X11}
+	rm -rf $(prefix)/release/usr/lib/{engines,gconv,ldscripts,libxslt-plugins,pkgconfig,python2.7,sigc++-1.2,X11}
 	rm -f $(prefix)/release/usr/lib/*.{a,o,la}
 	find $(prefix)/release/usr/lib/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 
@@ -298,43 +293,43 @@ endif
 	rm -rf $(prefix)/release/lib/autofs
 	rm -rf $(prefix)/release/lib/modules/$(KERNELVERSION)
 
-	$(INSTALL_DIR) $(prefix)/release/usr/lib/python2.6
-	cp -a $(targetprefix)/usr/lib/python2.6/* $(prefix)/release/usr/lib/python2.6/
-	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/Cheetah-2.4.4-py2.6.egg-info
-	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/elementtree-1.2.6_20050316-py2.6.egg-info
-	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/lxml
-	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/lxml-2.0.5-py2.6.egg-info
-	rm -f $(prefix)/release/usr/lib/python2.6/site-packages/libxml2mod.so
-	rm -f $(prefix)/release/usr/lib/python2.6/site-packages/libxsltmod.so
-	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/OpenSSL/test
-	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/pyOpenSSL-0.8-py2.6.egg-info
-	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/python_wifi-0.5.0-py2.6.egg-info
-	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/setuptools
-	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/setuptools-0.6c8-py2.6.egg-info
-	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/zope.interface-3.3.0-py2.6.egg-info
-	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/Twisted-8.2.0-py2.6.egg-info
-	rm -rf $(prefix)/release/usr/lib/python2.6/site-packages/twisted/{test,conch,mail,manhole,names,news,trial,words,application,enterprise,flow,lore,pair,runner,scripts,tap,topfiles}
-	rm -rf $(prefix)/release/usr/lib/python2.6/{bsddb,compiler,config,ctypes,curses,distutils,email,plat-linux3,test}
+	$(INSTALL_DIR) $(prefix)/release/usr/lib/python2.7
+	cp -a $(targetprefix)/usr/lib/python2.7/* $(prefix)/release/usr/lib/python2.7/
+	rm -rf $(prefix)/release/usr/lib/python2.7/site-packages/Cheetah-2.4.4-py2.6.egg-info
+	rm -rf $(prefix)/release/usr/lib/python2.7/site-packages/elementtree-1.2.6_20050316-py2.6.egg-info
+	rm -rf $(prefix)/release/usr/lib/python2.7/site-packages/lxml
+	rm -rf $(prefix)/release/usr/lib/python2.7/site-packages/lxml-2.0.5-py2.6.egg-info
+	rm -f $(prefix)/release/usr/lib/python2.7/site-packages/libxml2mod.so
+	rm -f $(prefix)/release/usr/lib/python2.7/site-packages/libxsltmod.so
+	rm -rf $(prefix)/release/usr/lib/python2.7/site-packages/OpenSSL/test
+	rm -rf $(prefix)/release/usr/lib/python2.7/site-packages/pyOpenSSL-0.8-py2.6.egg-info
+	rm -rf $(prefix)/release/usr/lib/python2.7/site-packages/python_wifi-0.5.0-py2.6.egg-info
+	rm -rf $(prefix)/release/usr/lib/python2.7/site-packages/setuptools
+	rm -rf $(prefix)/release/usr/lib/python2.7/site-packages/setuptools-0.6c8-py2.6.egg-info
+	rm -rf $(prefix)/release/usr/lib/python2.7/site-packages/zope.interface-3.3.0-py2.6.egg-info
+	rm -rf $(prefix)/release/usr/lib/python2.7/site-packages/Twisted-8.2.0-py2.6.egg-info
+	rm -rf $(prefix)/release/usr/lib/python2.7/site-packages/twisted/{test,conch,mail,manhole,names,news,trial,words,application,enterprise,flow,lore,pair,runner,scripts,tap,topfiles}
+	rm -rf $(prefix)/release/usr/lib/python2.7/{bsddb,compiler,config,ctypes,curses,distutils,email,plat-linux3,test}
 
 #
 # Dont remove pyo files, remove pyc instead
 #
-	find $(prefix)/release/usr/lib/python2.6/ -name '*.pyc' -exec rm -f {} \;
-	find $(prefix)/release/usr/lib/python2.6/ -name '*.a' -exec rm -f {} \;
-	find $(prefix)/release/usr/lib/python2.6/ -name '*.o' -exec rm -f {} \;
-	find $(prefix)/release/usr/lib/python2.6/ -name '*.la' -exec rm -f {} \;
-	find $(prefix)/release/usr/lib/python2.6/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
+	find $(prefix)/release/usr/lib/python2.7/ -name '*.pyc' -exec rm -f {} \;
+	find $(prefix)/release/usr/lib/python2.7/ -name '*.a' -exec rm -f {} \;
+	find $(prefix)/release/usr/lib/python2.7/ -name '*.o' -exec rm -f {} \;
+	find $(prefix)/release/usr/lib/python2.7/ -name '*.la' -exec rm -f {} \;
+	find $(prefix)/release/usr/lib/python2.7/ -name '*.so*' -exec sh4-linux-strip --strip-unneeded {} \;
 
 #
 # hotplug
 #
-	if [ -e $(targetprefix)/usr/bin/hotplug_e2_helper ]; then \
-		cp -dp $(targetprefix)/usr/bin/hotplug_e2_helper $(prefix)/release/sbin/hotplug; \
-		cp -dp $(targetprefix)/usr/bin/bdpoll $(prefix)/release/sbin/; \
-		rm -f $(prefix)/release/bin/hotplug; \
-	else \
-		cp -dp $(targetprefix)/bin/hotplug $(prefix)/release/sbin/; \
-	fi;
+#	if [ -e $(targetprefix)/usr/bin/hotplug_e2_helper ]; then \
+#		cp -dp $(targetprefix)/usr/bin/hotplug_e2_helper $(prefix)/release/sbin/hotplug; \
+#		cp -dp $(targetprefix)/usr/bin/bdpoll $(prefix)/release/sbin/; \
+#		rm -f $(prefix)/release/bin/hotplug; \
+#	else \
+#		cp -dp $(targetprefix)/bin/hotplug $(prefix)/release/sbin/; \
+#	fi;
 
 
 #

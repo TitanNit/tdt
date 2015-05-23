@@ -89,6 +89,8 @@ include make/release_neutrino.mk
 
 include make/release_titan.mk
 
+include make/release_xbmc.mk
+
 # Give the user rope to hang himself :-).  (Note: read from the
 # generated Makefile during make run, automake or configure does not
 # see it.)
