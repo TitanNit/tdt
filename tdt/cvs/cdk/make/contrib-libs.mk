@@ -807,7 +807,7 @@ $(DEPDIR)/ffmpeg: bootstrap libass rtmpdump @DEPENDS_ffmpeg@
 			--prefix=/usr && \
 		$(MAKE) && \
 		@INSTALL_ffmpeg@
-	@DISTCLEANUP_ffmpeg@
+#	@DISTCLEANUP_ffmpeg@
 	touch $@
 
 $(DEPDIR)/ffmpeg_old: bootstrap libass rtmpdump @DEPENDS_ffmpeg_old@
@@ -1966,7 +1966,7 @@ $(DEPDIR)/tuxtxt32bpp: tuxtxtlib @DEPENDS_tuxtxt32bpp@
 # libmpeg2
 #
 $(DEPDIR)/libmpeg2: bootstrap @DEPENDS_libmpeg2@
-	@PREPARE_libmpeg2)
+	@PREPARE_libmpeg2@
 	export PATH=$(hostprefix)/bin:$(PATH) && \
 	cd @DIR_libmpeg2@ && \
 		$(BUILDENV) \
@@ -2271,20 +2271,48 @@ $(DEPDIR)/sshfs: bootstrap fuse @DEPENDS_sshfs@
 #
 # gmediarender
 #
-$(DEPDIR)/gmediarender: bootstrap libstdc++-dev gst_plugins_dvbmediasink libupnp @DEPENDS_gmediarender@
-	@PREPARE_gmediarender@
+$(DEPDIR)/gmediarender: libupnp @DEPENDS_gmediarender@
+#	@PREPARE_gmediarender@
 	export PATH=$(hostprefix)/bin:$(PATH) && \
 	cd @DIR_gmediarender@ && \
+		aclocal -I $(hostprefix)/share/aclocal && \
+		autoheader && \
+		autoconf && \
+		automake --foreign && \
+		libtoolize --force && \
 		$(BUILDENV) \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
 			--prefix=/usr \
-			--with-libupnp=$(targetprefix)/usr && \
+			--with-libupnp=yes \
+		CFLAGS="$(TARGET_CFLAGS) -fno-inline -L/home/aaf-svn/flashimg/source.titan/titan" \
+		LDFLAGS="$(TARGET_LDFLAGS) -L/home/aaf-svn/flashimg/source.titan/titan" \
+		LD="$(target)-gcc -L/home/aaf-svn/flashimg/source.titan/titan" \
 		$(MAKE) all && \
 		@INSTALL_gmediarender@
-	@DISTCLEANUP_gmediarender@
+#	@DISTCLEANUP_gmediarender@
 	touch $@
+
+#			--with-libupnp=$(targetprefix)/usr
+	
+#
+# gmediarender
+#
+#$(DEPDIR)/gmediarender: bootstrap libstdc++-dev gst_plugins_dvbmediasink libupnp @DEPENDS_gmediarender@
+#	@PREPARE_gmediarender@
+#	export PATH=$(hostprefix)/bin:$(PATH) && \
+#	cd @DIR_gmediarender@ && \
+#		$(BUILDENV) \
+#		./configure \
+#			--build=$(build) \
+#			--host=$(target) \
+#			--prefix=/usr \
+#			--with-libupnp=$(targetprefix)/usr && \
+#		$(MAKE) all && \
+#		@INSTALL_gmediarender@
+#	@DISTCLEANUP_gmediarender@
+#	touch $@
 
 #
 # tinyxml

@@ -81,7 +81,7 @@ $(appsdir)/xbmc-nightly/config.status: bootstrap opkg libboost directfb libstgle
 			--disable-gles \
 			--disable-sdl \
 			--enable-webserver \
-			--enable-nfs \
+			--disable-nfs \
 			--disable-x11 \
 			--disable-samba \
 			--disable-mysql \

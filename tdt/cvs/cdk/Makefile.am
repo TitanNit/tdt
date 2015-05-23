@@ -67,6 +67,9 @@ include make/neutrino-plugins.mk
 # Include titan gui targets
 include make/titan.mk
 
+# Include xbmc gui targets
+include make/xbmc-nightly.mk
+
 # Include misc targets (SPECS derived)
 include make/misc-specs.mk
 

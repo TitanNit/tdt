@@ -57,7 +57,7 @@ fbset_2.1-6.diff.gz;http://archive.debian.org/debian/dists/potato/main/source/ad
 boost_1_53_0.tar.bz2;http://prdownloads.sourceforge.net/sourceforge/boost
 pngquant-1.1-src.tgz;ftp://ftp.simplesystems.org/pub/libpng/png/applications/pngquant
 mplayer-export-snapshot.tar.bz2;ftp://ftp.mplayerhq.hu/MPlayer/releases
-opkg-0.1.8+svnr587.tar.gz;http://src.evolux.yourweb.de
+opkg-0.2.0.tar.gz;http://opkg.googlecode.com/files
 sysstat-10.0.4.tar.gz;http://pagesperso-orange.fr/sebastien.godard
 ImageMagick-6.7.7-7.tar.bz2;ftp://ftp.fifi.org/pub/ImageMagick
 shairport.git;git://github.com/abrasive/shairport;1.0-dev
@@ -127,7 +127,7 @@ libmodplug-0.8.8.4.tar.gz;http://downloads.sourceforge.net/project/modplug-xmms/
 tiff-4.0.1.tar.gz;ftp://ftp.remotesensing.org/pub/libtiff
 lzo-2.06.tar.gz;http://www.oberhumer.com/opensource/lzo/download
 yajl.git;git://github.com/lloyd/yajl;f4b2b1af87483caac60e50e5352fc783d9b2de2d
-pcre-8.30.tar.bz2;ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre
+pcre-8.30.tar.bz2;http://sourceforge.net/projects/pcre/files/pcre/8.30
 libcdio-0.83.tar.gz;ftp://ftp.gnu.org/gnu/libcdio
 jasper-1.900.1.zip;http://www.ece.uvic.ca/~frodo/jasper/software
 mysql-5.1.40.tar.gz;http://downloads.mysql.com/archives/mysql-5.1
@@ -141,8 +141,8 @@ rarfs-0.1.0.tar.gz;http://downloads.sourceforge.net/project/rarfs/rarfs/0.1.0
 sshfs-fuse-2.4.tar.bz2;http://fossies.org/linux/misc
 gmediarender-0.0.6.tar.bz2;http://savannah.nongnu.org/download/gmrender
 mediatomb-0.12.1.tar.gz;http://downloads.sourceforge.net/mediatomb
-tinyxml_2_6_2.tar.gz;http://ignum.dl.sourceforge.net/project/tinyxml/tinyxml/2.6.2
-taglib-1.8.tar.gz;https://github.com/downloads/taglib/taglib
+tinyxml_2_6_2.tar.gz;http://sources.openelec.tv/mirror/tinyxml
+taglib-1.8.tar.gz;ftp://ftp.netbsd.org/pub/pkgsrc/distfiles
 libnfs.git;git://github.com/sahlberg/libnfs.git;c0ebf57b212ffefe83e2a50358499f68e7289e93
 
 #
