@@ -1,0 +1,649 @@
+diff -crp linux-sh4/arch/sh/kernel/setup.c linux-sh4/arch/sh/kernel/setup.c
+*** linux-sh4/arch/sh/kernel/setup.c	2012-09-14 12:37:42.000000000 +0200
+--- linux-sh4/arch/sh/kernel/setup.c	2012-09-14 13:22:11.000000000 +0200
+*************** void __init setup_arch(char **cmdline_p)
+*** 389,394 ****
+--- 389,418 ----
+  #endif
+  #endif
+  
++ 	{
++ 		/* spider: remove bigphysarea allocation from command line */
++ 		int i;
++ 		int command_line_len = strlen(command_line);
++ 
++ 		for(i = 0; i < (command_line_len-11); i++)
++ 		{
++ 			if(!strncmp(command_line + i + 1, "bigphysarea", 11))
++ 			{
++ 				// search for next pos
++ 				int k;
++ 				int pos=command_line_len;
++ 				for(k=i+1; k<command_line_len; k++)
++ 					if(command_line[k]==' ') {
++ 						pos=k;
++ 						break;
++ 					}
++ 				memmove(command_line+i, command_line+pos, command_line_len-pos);
++ 				memset(&command_line[command_line_len-(pos-i)], '\0', pos-i);
++ 				break;
++ 			}
++ 		}
++ 	}
++ 
+  	/* Save unparsed command line copy for /proc/cmdline */
+  	memcpy(boot_command_line, command_line, COMMAND_LINE_SIZE);
+  	*cmdline_p = command_line;
+diff -urN linux-sh4-2.6.32.61_stm24_0215.org/arch/sh/boards/DP7000/Makefile linux-sh4/arch/sh/boards/DP7000/Makefile
+--- linux-sh4-2.6.32.61_stm24_0215.org/arch/sh/boards/forever9898/Makefile	1970-01-01 01:00:00.000000000 +0100
++++ linux-sh4/arch/sh/boards/DP7000/Makefile	2011-07-03 17:37:41.000000000 +0200
+@@ -0,0 +1,5 @@
++#
++# Makefile for FORTIS DP7000 (STxH238-HDK) board
++#
++
++obj-y := setup.o
+diff -urN linux-sh4-2.6.32.61_stm24_0215.org/arch/sh/boards/DP7000/setup.c linux-sh4/arch/sh/boards/DP7000/setup.c
+--- linux-sh4-2.6.32.61_stm24_0215.org/arch/sh/boards/DP7000/setup.c	1970-01-01 01:00:00.000000000 +0100
++++ linux-sh4/arch/sh/boards/DP7000/setup.c	2011-07-03 17:37:41.000000000 +0200
+@@ -0,0 +1,438 @@
++/*
++ * arch/sh/boards/mach-b2067/setup.c
++ *
++ * Copyright (C) 2012 STMicroelectronics Limited
++ * Author: Stuart Menefy (stuart.menefy@st.com)
++ *
++ * May be copied or modified under the terms of the GNU General Public
++ * License.  See linux/COPYING for more information.
++ */
++
++#include <linux/init.h>
++#include <linux/platform_device.h>
++#include <linux/delay.h>
++#include <linux/io.h>
++#include <linux/phy.h>
++#include <linux/gpio.h>
++#include <linux/gpio_keys.h>
++#include <linux/leds.h>
++#include <linux/tm1668.h>
++#include <linux/mtd/partitions.h>
++#include <linux/mtd/nand.h>
++#include <linux/spi/spi.h>
++#include <linux/spi/flash.h>
++#include <linux/stm/platform.h>
++#include <linux/stm/stxh205.h>
++#include <linux/stm/sysconf.h>
++#include <asm/irq-ilc.h>
++
++#define CONFIG_SH_ST_B2067C_BOARD
++#define B2067_GPIO_FLASH_WP		stm_gpio(6, 2)
++#ifndef CONFIG_SH_ST_B2067C_BOARD
++#define B2067_GPIO_POWER_ON_ETH		stm_gpio(2, 5)
++#else
++//jdc1004 '12.12.10 ETH_RET pio 3.3
++#define B2067_GPIO_POWER_ON_ETH		stm_gpio(3, 3)
++#endif
++#define B2067_MII1_TXER			stm_gpio(0, 4)
++#define B2067_POWER_ON                  stm_gpio(3, 7)
++
++#define ET6226_I2C_SCL                  stm_gpio(2, 6)
++#define ET6226_I2C_SDA                  stm_gpio(2, 7)
++
++// jdc1004 '13.07.30 HW request, change to input mode
++#define B2067_HDMI                  	stm_gpio(2, 5)
++
++static void __init b2067_setup(char **cmdline_p)
++{
++	printk(KERN_INFO "STMicroelectronics B2067 board initialisation\n");
++
++	stxh205_early_device_init();
++
++	/*
++	 * UART_SW: On board DB9 connector JM5
++	 */
++	stxh205_configure_asc(STXH205_ASC(10), &(struct stxh205_asc_config) {
++			.hw_flow_control = 0,
++			.is_console = 1, });
++
++// constantine blocked to use this pins for the smartcard 1
++//jdc1004 '12.12.10 not use UART1 tx:pio 11.0, rx:pio 11.1
++#if 0 // For capturing LIRC message at irw, using uart serial loopback mode
++	/*
++	 * Header JB4 (with flow control) and JK1 (no flow control)
++	 */
++	stxh205_configure_asc(STXH205_ASC(1), &(struct stxh205_asc_config) {
++			.hw_flow_control = 0,
++		});
++#endif
++}
++
++static struct platform_device b2067_leds = {
++	.name = "leds-gpio",
++	.id = -1,
++	.dev.platform_data = &(struct gpio_led_platform_data) {
++		.num_leds = 1,
++		.leds = (struct gpio_led[]) {
++			{
++				.name = "RED",
++				.default_trigger = "heartbeat",
++				.gpio = stm_gpio(3, 1),
++			},
++			/*
++			 * Its not clear what's happening here, but it
++			 * appears as if STxH238 has three balls connected
++			 * on the b2067 as:
++			 *   PIO32 - 7108_LMI_RET#
++			 *   PIO33 - LED_GREEN
++			 *   PIO32B - LED_GREEN
++			 * The net effects appers to be a short between
++			 * LMI_RET and LED GREEN which means any attemmpt
++			 * to use the LED causes the system to crash.
++			 *
++			 * This has been fixed on B2067 revB, so if you know
++			 * you're on a rev B uncomment the following block
++			 * and change .num_leds above to 2.
++			 * {
++			 *	.name = "GREEN",
++			 *	.gpio = stm_gpio(3, 3),
++			 * },
++			 */
++		},
++	},
++};
++
++static struct tm1668_key b2067_front_panel_keys[] = {
++	{ 0x00001000, KEY_UP, "Up (SWF2)" },
++	{ 0x00800000, KEY_DOWN, "Down (SWF7)" },
++	{ 0x00008000, KEY_LEFT, "Left (SWF6)" },
++	{ 0x00000010, KEY_RIGHT, "Right (SWF5)" },
++	{ 0x00000080, KEY_OK, "Menu/OK (SWF1)" },
++	{ 0x00100000, KEY_BACK, "Back (SWF4)" },
++	{ 0x80000000, KEY_TV, "DOXTV (SWF9)" },
++};
++
++static struct tm1668_character b2067_front_panel_characters[] = {
++	TM1668_7_SEG_HEX_DIGITS,
++	TM1668_7_SEG_SEGMENTS,
++	TM1668_7_SEG_LETTERS
++};
++
++static struct platform_device b2067_front_panel = {
++	.name = "tm1668",
++	.id = -1,
++	.dev.platform_data = &(struct tm1668_platform_data) {
++		.gpio_dio = stm_gpio(15, 4),
++		.gpio_sclk = stm_gpio(14, 7),
++		.gpio_stb = stm_gpio(14, 4),
++		.config = tm1668_config_6_digits_12_segments,
++
++		.keys_num = ARRAY_SIZE(b2067_front_panel_keys),
++		.keys = b2067_front_panel_keys,
++		.keys_poll_period = DIV_ROUND_UP(HZ, 5),
++
++		.brightness = 8,
++		.characters_num = ARRAY_SIZE(b2067_front_panel_characters),
++		.characters = b2067_front_panel_characters,
++		.text = "H238",
++	},
++};
++
++/* Serial Flash */
++static struct stm_plat_spifsm_data b2067_serial_flash =  {
++	.name		= "n25q256",
++	.nr_parts	= 2,
++	.parts = (struct mtd_partition []) {
++		{
++			.name = "Serial Flash 1",
++			.size = 0x00080000,
++			.offset = 0,
++		}, {
++			.name = "Serial Flash 2",
++			.size = MTDPART_SIZ_FULL,
++			.offset = MTDPART_OFS_NXTBLK,
++		},
++	},
++	.capabilities = {
++		/* Capabilities may be overriden by SoC configuration */
++		.dual_mode = 1,
++#ifdef CONFIG_SH_ST_B2067A_BOARD
++		/* HOLD and RESET misconnected on Rev A boards*/
++		.quad_mode = 0,
++		.reset_signal = 0,
++#else 
++		.quad_mode = 1,
++		.reset_signal = 0,  /* Reset signal can be routed to U4 and U12
++				     * by fitting RM52 (default is DNF)
++				    */
++#endif	
++	},
++};
++
++/* Rev A/B : set JF3 2-3 (EMI_CS0 -> NAND_CS)
++ * Rev C   : EMI_CS0 hardwired to NAND_CS
++ */
++				 
++/* NAND Flash */
++static struct stm_nand_bank_data b2067_nand_flash = {
++	.csn		= 0, //jdc1004 '12.09.05 must change 1 to 0, for flex driver
++	.options	= NAND_NO_AUTOINCR | NAND_USE_FLASH_BBT,
++	.nr_partitions	= 9,
++	.partitions	= (struct mtd_partition []) {
++	        {
++	                .name   = "boot",
++	                .offset = 0,
++	                .size   = 0x00100000
++	        }, {
++	                .name   = "kernel",
++	                .offset = 0x00400000,
++	                .size   = 0x00400000
++	        }, {
++	                .name   = "rootfs",
++	                .offset = 0x00800000,
++	                .size   = 0x0B600000 //182M
++	        }, {
++	                .name   = "logo",
++	                .offset = 0x00180000,
++	                .size   = 0x00200000
++
++	        }, {
++	                .name   = "eeprom",
++	                .offset = 0x00380000,
++	                .size   = 0x00080000
++	        }, {
++	                .name   = "config", //config
++	                .offset = 0x08000000,
++	                .size   = 0x00100000
++	        }, {
++
++	                .name   = "user", //var
++	                .offset = 0xBE00000, //B6+8=BE
++	                .size   =  0x4000000 //64M
++	        }, {
++	                .name   = "ALL", //all
++	                .offset = 0x0,
++	                .size   =  MTDPART_SIZ_FULL
++	        }, {
++	                .name   = "config1", //config1
++	                .offset = 0xFE00000, // BE+40=FE
++	                .size   =  MTDPART_SIZ_FULL
++
++	        },
++
++	},
++	.timing_data	= &(struct stm_nand_timing_data) {
++		.sig_setup	= 50,		/* times in ns */
++		.sig_hold	= 50,
++		.CE_deassert	= 0,
++		.WE_to_RBn	= 100,
++		.wr_on		= 10,
++		.wr_off		= 40,
++		.rd_on		= 10,
++		.rd_off		= 40,
++		.chip_delay	= 30,		/* in us */
++	},
++};
++
++static int b2067_phy_reset(void *bus)
++{
++	/*
++	 * IC+ IP101 datasheet specifies 10mS low period and device usable
++	 * 2.5mS after rising edge. However experimentally it appear
++	 * 10mS is required for reliable functioning.
++	 */
++	gpio_set_value(B2067_GPIO_POWER_ON_ETH, 0);
++	mdelay(10);
++	gpio_set_value(B2067_GPIO_POWER_ON_ETH, 1);
++	mdelay(10);
++
++	return 1;
++}
++
++static struct stmmac_mdio_bus_data stmmac_mdio_bus = {
++	.bus_id = 0,
++	.phy_reset = b2067_phy_reset,
++	.phy_mask = 0,
++	.probed_phy_irq = ILC_IRQ(25), /* MDINT */
++};
++
++static struct platform_device *b2067_devices[] __initdata = {
++//	&b2067_leds,
++//	&b2067_front_panel,
++};
++
++static int __init device_init(void)
++{
++	/* The "POWER_ON_ETH" line should be rather called "PHY_RESET",
++	 * but it isn't... ;-) */
++	gpio_request(B2067_GPIO_POWER_ON_ETH, "POWER_ON_ETH");
++	gpio_direction_output(B2067_GPIO_POWER_ON_ETH, 0);
++
++       gpio_request(B2067_POWER_ON, "POWER_ON");
++       gpio_direction_output(B2067_POWER_ON, 0);
++#if 1
++       stm_gpio_direction(stm_gpio(2, 6), STM_GPIO_DIRECTION_BIDIR);
++       stm_gpio_direction(stm_gpio(2, 7), STM_GPIO_DIRECTION_BIDIR);
++#endif
++
++	// jdc1004 '13.07.30 HW request, change to input mode
++	gpio_request(B2067_HDMI, "HDMI_HPD");
++	gpio_direction_input(B2067_HDMI);
++	
++	stxh205_configure_ethernet(&(struct stxh205_ethernet_config) {
++			.mode = stxh205_ethernet_mode_mii,
++			.ext_clk = 1,
++			.phy_bus = 0,
++			.phy_addr = -1,
++			.mdio_bus_data = &stmmac_mdio_bus,
++		});
++
++	/* PHY IRQ has to be triggered LOW */
++	set_irq_type(ILC_IRQ(25), IRQ_TYPE_LEVEL_LOW);
++
++	stxh205_configure_miphy(&(struct stxh205_miphy_config){
++			.mode = SATA_MODE,
++			.iface = UPORT_IF,
++		});
++	stxh205_configure_sata();
++
++	stxh205_configure_usb(0);
++
++	stxh205_configure_usb(1);
++
++	/*
++	 * SSC1: FE/DEMO
++	 * U14: LNBH26PQR, STxH238: J_SCL/SDA (internal demod), JB6
++	 */
++	stxh205_configure_ssc_i2c(STXH205_SSC(1), &(struct stxh205_ssc_config) {
++			.routing.ssc1.sclk = stxh205_ssc1_sclk_pio12_0,
++			.routing.ssc1.mtsr = stxh205_ssc1_mtsr_pio12_1, });
++
++//jdc1004 '12.12.10 i2c3
++	/*
++	 * SSC3: SYS
++	 * UQ1: STV6440, UK2: M24256 (EEPROM), JQ3
++	 * Also JK2 (front panel) on rev A only
++	 */
++	stxh205_configure_ssc_i2c(STXH205_SSC(3), &(struct stxh205_ssc_config) {
++			.routing.ssc3.sclk = stxh205_ssc3_sclk_pio15_5,
++			.routing.ssc3.mtsr = stxh205_ssc3_mtsr_pio15_6, });
++
++//jdc1004 '12.12.10 HDMI PIO SCDL:2.6, SDA:2.7 ==> CHANGE VFD PIO BIT BANGING
++	/*
++	 * SSC11: HDMI
++	 * UG1: HDMI2C1 -> HDMI
++	 */
++
++#if 0  // OLD DP6010 board
++	stxh205_configure_ssc_i2c(STXH205_SSC(11), NULL);
++#else
++
++
++//jdc1004 '12.12.10 HDMI PIO SCDL:6.2, SDA:6.3
++
++	stxh205_configure_ssc_i2c(STXH205_SSC(0), &(struct stxh205_ssc_config) {
++			.routing.ssc0.sclk = stxh205_ssc0_sclk_pio6_2,
++			.routing.ssc0.mtsr = stxh205_ssc0_mtsr_pio6_3, });
++#endif
++
++//jdc1004 '12.12.10 LMB i2c 
++	stxh205_configure_ssc_i2c(STXH205_SSC(2), &(struct stxh205_ssc_config) {
++			.routing.ssc2.sclk = stxh205_ssc2_sclk_pio9_4,
++			.routing.ssc2.mtsr = stxh205_ssc2_mtsr_pio9_5, });
++
++	stxh205_configure_lirc(&(struct stxh205_lirc_config) {
++#ifdef CONFIG_LIRC_STM_UHF
++			.rx_mode = stxh205_lirc_rx_mode_uhf, });
++#else
++			.rx_mode = stxh205_lirc_rx_mode_ir, });
++#endif
++
++	stxh205_configure_pwm(&(struct stxh205_pwm_config) {
++			/*
++			 * PWM10 is connected to 12V->1.2V power supply
++			 * for "debug purposes". Enable at your own risk!
++			 */
++			.out10_enabled = 0 });
++
++	stxh205_configure_mmc(&(struct stxh205_mmc_config) {
++			.emmc = 0,
++			.no_mmc_boot_data_error = 1,
++		});
++
++#if 0 //jdc1004 .05.01 i2c bus_num=2 pio 6.2 request fail
++	/*
++	 * NAND MTD has no concept of write-protect, so permanently disable WP
++	 */
++	gpio_request(B2067_GPIO_FLASH_WP, "FLASH_WP");
++	gpio_direction_output(B2067_GPIO_FLASH_WP, 1);
++#endif
++
++#if 1 //jdc1004 nand flex driver
++	stxh205_configure_nand(&(struct stm_nand_config) {
++			.driver = stm_nand_flex,
++			.nr_banks = 1,
++			.banks = &b2067_nand_flash,
++			.rbn.flex_connected = 1,
++			});
++#else
++	stxh205_configure_nand(&(struct stm_nand_config) {
++			.driver = stm_nand_bch,
++			.nr_banks = 1,
++			.banks = &b2067_nand_flash,
++			.rbn.flex_connected = 1,
++			.bch_ecc_cfg = BCH_ECC_CFG_AUTO});
++#endif
++
++//	stxh205_configure_spifsm(&b2067_serial_flash);
++
++	return platform_add_devices(b2067_devices,
++			ARRAY_SIZE(b2067_devices));
++}
++arch_initcall(device_init);
++
++static void __iomem *b2067_ioport_map(unsigned long port, unsigned int size)
++{
++	/* If we have PCI then this should never be called because we
++	 * are using the generic iomap implementation. If we don't
++	 * have PCI then there are no IO mapped devices, so it still
++	 * shouldn't be called. */
++	BUG();
++	return NULL;
++}
++
++struct sh_machine_vector mv_b2067 __initmv = {
++	.mv_name = "dp7000",
++	.mv_setup = b2067_setup,
++	.mv_nr_irqs = NR_IRQS,
++	.mv_ioport_map = b2067_ioport_map,
++};
++
++#if defined(CONFIG_HIBERNATION_ON_MEMORY)
++
++#include "../../kernel/cpu/sh4/stm_hom.h"
++
++static int b2067_board_freeze(void)
++{
++	gpio_set_value(B2067_GPIO_POWER_ON_ETH, 0);
++	return 0;
++}
++
++static int b2067_board_defrost(void)
++{
++	b2067_phy_reset(NULL);
++	return 0;
++}
++
++static struct stm_hom_board b2067_hom = {
++	.freeze = b2067_board_freeze,
++	.restore = b2067_board_defrost,
++};
++
++static int __init b2067_hom_register(void)
++{
++	return stm_hom_board_register(&b2067_hom);
++}
++
++module_init(b2067_hom_register);
++#endif
+diff -urN linux-sh4-2.6.32.61_stm24_0215.org/arch/sh/boards/DP7000/Kconfig linux-sh4/arch/sh/boards/DP7000/Kconfig
+--- linux-sh4-2.6.32.61_stm24_0215.org/arch/sh/boards/DP7000/Kconfig	2011-07-17 20:30:23.000000000 +0200
++++ linux-sh4/arch/sh/boards/DP7000/Kconfig	2011-07-17 23:23:34.590734928 +0200
+@@ -0,0 +1,30 @@
++if SH_FORTIS_DP7000
++
++menu "FORTIS : DP7000 board options"
++
++choice
++	prompt  "DP7000: Reference Board Version selection"
++	default SH_ST_B2067C_BOARD
++	help
++	  Select the appropriate version of the board which you will be using.
++	  This controls which PIO ports will be used for PHY reset.
++
++config SH_ST_B2067A_BOARD
++	bool "B2067A Board"
++	help
++	  B2067A Board for CUT1.0
++
++config SH_ST_B2067B_BOARD
++	bool "B2067B Board"
++	help
++	  B2067B Board for CUT1.0
++
++config SH_ST_B2067C_BOARD
++	bool "B2067C Board"
++	help
++	  B2067C Board for CUT2.0
++endchoice
++
++endmenu
++
++endif
+diff -urN linux-sh4-2.6.32.61_stm24_0215.org/arch/sh/boards/Kconfig linux-sh4/arch/sh/boards/Kconfig
+--- linux-sh4-2.6.32.61_stm24_0215.org/arch/sh/boards/Kconfig	2011-07-17 20:30:23.000000000 +0200
++++ linux-sh4/arch/sh/boards/Kconfig	2011-07-17 23:23:34.590734928 +0200
+@@ -369,6 +702,14 @@
+ 	  Select SH_ST_B2067 if configuring for a
+ 	  STMicroelectronics STxH238-HDK Reference Board.
+ 
++config SH_FORTIS_DP7000
++        bool "DP7000: DP7000/DP2010 board"
++        depends on CPU_SUBTYPE_STXH205
++        default n
++        help
++          Select SH_FORTIS_FX6010 if configuring for a
++          FORTIS DP7000/DP2010  Board.
++
+ config SH_ST_B2068
+ 	bool "B2068 : STx7167 Reference board"
+ 	depends on CPU_SUBTYPE_STX7105
+diff -urN linux-sh4-2.6.32.61_stm24_0215.org/arch/sh/Makefile linux-sh4/arch/sh/Makefile
+--- linux-sh4-2.6.32.61_stm24_0215.org/arch/sh/Makefile	2011-07-17 20:30:23.000000000 +0200
++++ linux-sh4/arch/sh/Makefile	2011-07-17 23:24:40.798578590 +0200
+@@ -182,6 +182,7 @@
+ machdir-$(CONFIG_SH_ST_MB837)			+= mach-mb837
+ machdir-$(CONFIG_SH_ST_MB839)			+= mach-mb839
+ machdir-$(CONFIG_SH_ST_MB903)			+= mach-mb903
++machdir-$(CONFIG_SH_FORTIS_DP7000)		+= DP7000
+ 
+ ifneq ($(machdir-y),)
+ core-y	+= $(addprefix arch/sh/boards/, \
+diff -urN linux-sh4-2.6.32.61_stm24_0215.org/arch/sh/kernel/cpu/sh4/setup-stxh205.c linux-sh4-2.6.32.61_stm24_0215/arch/sh/kernel/cpu/sh4/setup-stxh205.c
+--- slinux-sh4-2.6.32.61_stm24_0215.org/arch/sh/kernel/cpu/sh4/setup-stxh205.c	2014-06-03 21:31:03.000000000 +0200
++++ linux-sh4-2.6.32.61_stm24_0215/arch/sh/kernel/cpu/sh4/setup-stxh205.c	2013-05-15 03:35:35.000000000 +0200
+@@ -11,17 +11,10 @@
+ #include <linux/init.h>
+ #include <linux/platform_device.h>
+ #include <linux/io.h>
+-#include <linux/reboot.h>
+-#include <linux/pm.h>
+ #include <linux/stm/platform.h>
+ #include <linux/stm/stxh205.h>
+ #include <linux/stm/sysconf.h>
+-#ifdef CONFIG_STM_LPM
+-#include <linux/stm/lpm.h>
+-#include <linux/stm/wakeup_devices.h>
+-#endif
+ #include <asm/irq-ilc.h>
+-#include <asm/restart.h>
+ 
+ /* SH4-only resources ----------------------------------------------------- */
+ 
+@@ -65,60 +58,14 @@
+ }
+ core_initcall(stxh205_sh4_devices_setup);
+ 
+-/* Warm reboot --------------------------------------------------------- */
+-
+-#ifdef CONFIG_STM_LPM
+-static void stxh205_lpm_poweroff(void)
+-{
+-	struct stm_wakeup_devices wkd;
+-
+-	stm_check_wakeup_devices(&wkd);
+-
+-	stm_lpm_config_reboot(stm_lpm_reboot_with_ddr_off);
+-
+-	stm_lpm_power_off();
+-
+-	machine_halt();
+-}
+-
+-void stxh205_prepare_restart(void)
+-{
+-	stm_lpm_config_reboot(stm_lpm_reboot_with_ddr_off);
+-
+-	stm_lpm_reset(STM_LPM_SOC_RESET);
+-
+-	machine_halt();
+-}
+-
+-static int __init stxh205_machine_init(void)
+-{
+-	register_prepare_restart_handler(stxh205_prepare_restart);
+-
+-	pm_power_off = stxh205_lpm_poweroff;
+-
+-	return 0;
+-}
+-arch_initcall(stxh205_machine_init);
+-#else
+-void stxh205_prepare_restart(void)
++void machine_restart(char * __unused)
+ {
+ 	struct sysconf_field *sc;
+-
+-	sc = sysconf_claim(SYSCONF(498), 0, 0, "reset");
+-	sysconf_write(sc, 0);
+-
+-	sc = sysconf_claim(SYSCONF(475), 2, 2, "reset");
+-	sysconf_write(sc, 0);
+-}
+-
+-static int __init stxh205_reset_init(void)
+-{
+-	register_prepare_restart_handler(stxh205_prepare_restart);
+-
+-	return 0;
++         sc = sysconf_claim(SYSCONF(498), 0, 0, "st40_mask");
++         sysconf_write(sc, 0);
++         sc = sysconf_claim(SYSCONF(475), 2, 2, "st40_reset");
++         sysconf_write(sc, 0);
+ }
+-arch_initcall(stxh205_reset_init);
+-#endif
+ 
+ /* Interrupt initialisation ----------------------------------------------- */
+ 
+diff -urN linux-sh4-2.6.32.61_stm24_0215.org/arch/sh/kernel/process_32.c linux-sh4-2.6.32.61_stm24_0215/arch/sh/kernel/process_32.c
+--- slinux-sh4-2.6.32.61_stm24_0215.org/arch/sh/kernel/process_32.c	2014-06-03 21:31:03.000000000 +0200
++++ linux-sh4-2.6.32.61_stm24_0215/arch/sh/kernel/process_32.c	2013-05-15 03:35:35.000000000 +0200
+@@ -61,7 +61,7 @@
+ 	list_add(&(s->list), &(restart_prep_handler_list));
+ }
+ 
+-void machine_restart(char * __unused)
++void __weak machine_restart(char * __unused)
+ {
+ 	struct restart_prep_handler *tmp;
+ 	struct list_head *pos, *q;

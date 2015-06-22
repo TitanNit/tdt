@@ -26,12 +26,12 @@ COMMONPATCHES_24 = \
 		linux-sh4-lzma-fix_stm24$(PATCH_STR).patch \
 		linux-tune_stm24.patch \
 		linux-sh4-permit_gcc_command_line_sections_stm24.patch \
-		$(if $(P0209)$(P0211)$(P0215),linux-sh4-mmap_stm24.patch) \
-		$(if $(P0215),linux-ratelimit-bug_stm24$(PATCH_STR).patch) \
+		$(if $(P0209)$(P0211)$(P0215)$(P0217),linux-sh4-mmap_stm24.patch) \
+		$(if $(P0215)$(P0217),linux-ratelimit-bug_stm24$(PATCH_STR).patch) \
 		$(if $(P0209),linux-sh4-dwmac_stm24_0209.patch) \
 		$(if $(P0207),linux-sh4-sti7100_missing_clk_alias_stm24$(PATCH_STR).patch) \
 		$(if $(P0209),linux-sh4-directfb_stm24$(PATCH_STR).patch) \
-		$(if $(P0211)$(P0214)$(P0215),linux-sh4-console_missing_argument_stm24$(PATCH_STR).patch) \
+		$(if $(P0211)$(P0214)$(P0215)$(P0217),linux-sh4-console_missing_argument_stm24$(PATCH_STR).patch) \
 		linux-squashfs-downgrade-stm24$(PATCH_STR)-to-stm23.patch \
 		linux-squashfs3.0_lzma_stm24.patch \
 		linux-squashfs-downgrade-stm24-2.6.25.patch \
@@ -86,19 +86,19 @@ HS7110PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-stmmac_stm24$(PATCH_STR).patch \
 		linux-sh4-lmb_stm24$(PATCH_STR).patch \
 		linux-sh4-hs7110_setup_stm24$(PATCH_STR).patch \
-		$(if $(P0209)$(P0211)$(P0214)$(P0215),linux-sh4-i2c-stm-downgrade_stm24$(PATCH_STR).patch)
+		$(if $(P0209)$(P0211)$(P0214)$(P0215)$(P0217),linux-sh4-i2c-stm-downgrade_stm24$(PATCH_STR).patch)
 
 ATEMIO520PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-stmmac_stm24$(PATCH_STR).patch \
 		linux-sh4-lmb_stm24$(PATCH_STR).patch \
 		linux-sh4-atemio520_setup_stm24$(PATCH_STR).patch \
-		$(if $(P0209)$(P0211)$(P0214)$(P0215),linux-sh4-i2c-stm-downgrade_stm24$(PATCH_STR).patch)
+		$(if $(P0209)$(P0211)$(P0214)$(P0215)$(P0217),linux-sh4-i2c-stm-downgrade_stm24$(PATCH_STR).patch)
 
 ATEMIO530PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-stmmac_stm24$(PATCH_STR).patch \
 		linux-sh4-lmb_stm24$(PATCH_STR).patch \
 		linux-sh4-atemio530_setup_stm24$(PATCH_STR).patch \
-		$(if $(P0209)$(P0211)$(P0214)$(P0215),linux-sh4-i2c-stm-downgrade_stm24$(PATCH_STR).patch)
+		$(if $(P0209)$(P0211)$(P0214)$(P0215)$(P0217),linux-sh4-i2c-stm-downgrade_stm24$(PATCH_STR).patch)
 
 UFS922PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-ufs922_setup_stm24$(PATCH_STR).patch \
@@ -130,8 +130,8 @@ SPARK_PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-spark_setup_stm24$(PATCH_STR).patch \
 		$(if $(P0209),linux-sh4-linux_yaffs2_stm24_0209.patch) \
 		$(if $(P0209),linux-sh4-lirc_stm.patch) \
-		$(if $(P0211)$(P0214)$(P0215),linux-sh4-lirc_stm_stm24$(PATCH_STR).patch) \
-		$(if $(P0211)$(P0214)$(P0215),af901x-NXP-TDA18218.patch) \
+		$(if $(P0211)$(P0214)$(P0215)$(P0217),linux-sh4-lirc_stm_stm24$(PATCH_STR).patch) \
+		$(if $(P0211)$(P0214)$(P0215)$(P0217),af901x-NXP-TDA18218.patch) \
 		dvb-as102.patch
 
 SPARK7162_PATCHES_24 = $(COMMONPATCHES_24) \
@@ -175,7 +175,7 @@ CUBEREVOPATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-$(CUBEMOD)_setup_stm24$(PATCH_STR).patch \
 		linux-sh4-i2c-st40-pio_stm24$(PATCH_STR).patch \
 		linux-sh4-cuberevo_rtl8201_stm24$(PATCH_STR).patch \
-		$(if $(P0215)$(CUBEMOD),linux-sh4-$(CUBEMOD)_sound_stm24$(PATCH_STR).patch)
+		$(if $(P0215)$(P0217)$(CUBEMOD),linux-sh4-$(CUBEMOD)_sound_stm24$(PATCH_STR).patch)
 
 VITAMINHD5000PATCHES_24 = $(COMMONPATCHES_24) \
 		linux-sh4-vitamin_hd5000_setup_stm24$(PATCH_STR).patch \
@@ -209,56 +209,6 @@ KERNELPATCHES_24 = \
 		$(if $(CUBEMOD),$(CUBEREVOPATCHES_24)) \
 		$(if $(VITAMIN_HD5000),$(VITAMINHD5000PATCHES_24))
 
-#
-# KERNEL-HEADERS
-#
-$(DEPDIR)/kernel-headers: linux-kernel.do_prepare
-	cd $(KERNEL_DIR) && \
-		$(INSTALL) -d $(targetprefix)/usr/include && \
-		cp -a include/linux $(targetprefix)/usr/include && \
-		cp -a include/asm-sh $(targetprefix)/usr/include/asm && \
-		cp -a include/asm-generic $(targetprefix)/usr/include && \
-		cp -a include/mtd $(targetprefix)/usr/include
-	touch $@
-
-KERNELHEADERS := linux-kernel-headers
-if ENABLE_P0207
-KERNELHEADERS_VERSION := 2.6.32.16-44
-endif
-if ENABLE_P0209
-KERNELHEADERS_VERSION := 2.6.32.46-47
-endif
-if ENABLE_P0211
-KERNELHEADERS_VERSION := 2.6.32.46-47
-endif
-if ENABLE_P0214
-KERNELHEADERS_VERSION := 2.6.32.46-48
-endif
-if ENABLE_P0215
-KERNELHEADERS_VERSION := 2.6.32.46-48
-endif
-KERNELHEADERS_SPEC := stm-target-kernel-headers-kbuild.spec
-KERNELHEADERS_SPEC_PATCH :=
-KERNELHEADERS_PATCHES :=
-
-KERNELHEADERS_RPM := RPMS/noarch/$(STLINUX)-sh4-$(KERNELHEADERS)-$(KERNELHEADERS_VERSION).noarch.rpm
-
-$(KERNELHEADERS_RPM): \
-		$(if $(KERNELHEADERS_SPEC_PATCH),Patches/$(KERNELHEADERS_SPEC_PATCH)) \
-		$(if $(KERNELHEADERS_PATCHES),$(KERNELHEADERS_PATCHES:%=Patches/%)) \
-		$(archivedir)/$(STLINUX)-target-$(KERNELHEADERS)-$(KERNELHEADERS_VERSION).src.rpm \
-		| linux-kernel.do_prepare
-	rpm $(DRPM) --nosignature -Uhv $(lastword $^) && \
-	$(if $(KERNELHEADERS_SPEC_PATCH),( cd SPECS && patch -p1 $(KERNELHEADERS_SPEC) < $(buildprefix)/Patches/$(KERNELHEADERS_SPEC_PATCH) ) &&) \
-	$(if $(KERNELHEADERS_PATCHES),cp $(KERNELHEADERS_PATCHES:%=Patches/%) SOURCES/ &&) \
-	export PATH=$(hostprefix)/bin:$(PATH) && \
-	rpmbuild $(DRPMBUILD) -bb -v --clean --target=sh4-linux SPECS/$(KERNELHEADERS_SPEC)
-
-$(DEPDIR)/$(KERNELHEADERS): $(KERNELHEADERS_RPM)
-	@rpm $(DRPM) --ignorearch --nodeps -Uhv --badreloc --relocate $(targetprefix)=$(prefix)/$*cdkroot $(lastword $^)
-	touch $@
-
-
 if DEBUG
 DEBUG_STR=.debug
 else !DEBUG
@@ -268,117 +218,63 @@ endif !DEBUG
 #
 # HOST-KERNEL
 #
-HOST_KERNEL := host-kernel
-
-if ENABLE_P0207
-HOST_KERNEL_VERSION = 2.6.32.28$(KERNELSTMLABEL)-$(KERNELLABEL)
-endif
 if ENABLE_P0209
-HOST_KERNEL_VERSION = 2.6.32.46$(KERNELSTMLABEL)-$(KERNELLABEL)
+HOST_KERNEL_REVISION = 8c676f1a85935a94de1fb103c0de1dd25ff69014
 endif
 if ENABLE_P0211
-HOST_KERNEL_VERSION = 2.6.32.59$(KERNELSTMLABEL)-$(KERNELLABEL)
+HOST_KERNEL_REVISION = 3bce06ff873fb5098c8cd21f1d0e8d62c00a4903
 endif
 if ENABLE_P0214
-HOST_KERNEL_VERSION = 2.6.32.61$(KERNELSTMLABEL)-$(KERNELLABEL)
+HOST_KERNEL_REVISION = 5cf7f6f209d832a4cf645125598f86213f556fb3
 endif
 if ENABLE_P0215
-HOST_KERNEL_VERSION = 2.6.32.61$(KERNELSTMLABEL)-$(KERNELLABEL)
+HOST_KERNEL_REVISION = 5384bd391266210e72b2ca34590bd9f543cdb5a3
 endif
-
-HOST_KERNEL_SPEC = stm-$(HOST_KERNEL)-sh4.spec
-HOST_KERNEL_SPEC_PATCH =
+if ENABLE_P0217
+HOST_KERNEL_REVISION = b43f8252e9f72e5b205c8d622db3ac97736351fc
+endif
 HOST_KERNEL_PATCHES = $(KERNELPATCHES_24)
-HOST_KERNEL_CONFIG = linux-sh4-$(subst _stm24_,-,$(KERNELVERSION))_$(MODNAME).config$(DEBUG_STR)
-HOST_KERNEL_SRC_RPM = $(STLINUX)-$(HOST_KERNEL)-source-sh4-$(HOST_KERNEL_VERSION).src.rpm
-HOST_KERNEL_RPM = RPMS/noarch/$(STLINUX)-$(HOST_KERNEL)-source-sh4-$(HOST_KERNEL_VERSION).noarch.rpm
+HOST_KERNEL_CONFIG = linux-sh4-$(subst _stm24_,_,$(KERNELVERSION))_$(MODNAME).config$(DEBUG_STR)
 
-$(HOST_KERNEL_RPM): \
-		$(if $(HOST_KERNEL_SPEC_PATCH),Patches/$(HOST_KERNEL_SPEC_PATCH)) \
-		$(archivedir)/$(HOST_KERNEL_SRC_RPM)
-	rpm $(DRPM) --nosignature --nodeps -Uhv $(lastword $^) && \
-	$(if $(HOST_KERNEL_SPEC_PATCH),( cd SPECS; patch -p1 $(HOST_KERNEL_SPEC) < $(buildprefix)/Patches/$(HOST_KERNEL_SPEC_PATCH) ) &&) \
-	rpmbuild $(DRPMBUILD) -ba -v --clean --target=sh4-linux SPECS/$(HOST_KERNEL_SPEC)
-
-$(DEPDIR)/linux-kernel.do_prepare: \
-		$(if $(HOST_KERNEL_PATCHES),$(HOST_KERNEL_PATCHES:%=Patches/%)) \
-		$(HOST_KERNEL_RPM)
+$(D)/linux-kernel: $(D)/bootstrap $(buildprefix)/Patches/$(BUILDCONFIG)/$(HOST_KERNEL_CONFIG) | $(HOST_U_BOOT_TOOLS)
 	rm -rf linux-sh4*
-	@rpm $(DRPM) --ignorearch --nodeps -Uhv $(lastword $^)
-	$(if $(HOST_KERNEL_PATCHES),cd $(KERNEL_DIR) && cat $(HOST_KERNEL_PATCHES:%=$(buildprefix)/Patches/%) | patch -p1)
-	$(INSTALL) -m644 Patches/$(HOST_KERNEL_CONFIG) $(KERNEL_DIR)/.config
+	REPO=git://git.stlinux.com/stm/linux-sh4-2.6.32.y.git;protocol=git;branch=stmicro; \
+	[ -d "$(archivedir)/linux-sh4-2.6.32.y.git" ] && \
+	(echo "Updating STlinux kernel source"; cd $(archivedir)/linux-sh4-2.6.32.y.git; git pull;); \
+	[ -d "$(archivedir)/linux-sh4-2.6.32.y.git" ] || \
+	(echo "Getting STlinux kernel source"; git clone -n $$REPO $(archivedir)/linux-sh4-2.6.32.y.git); \
+	(echo "Copying kernel source code to build environment"; cp -ra $(archivedir)/linux-sh4-2.6.32.y.git $(buildprefix)/$(KERNEL_DIR)); \
+	(echo "Applying patch level P0$(KERNELLABEL)"; cd $(KERNEL_DIR); git checkout -q $(HOST_KERNEL_REVISION))
+	$(if $(HOST_KERNEL_PATCHES),cd $(KERNEL_DIR) && cat $(HOST_KERNEL_PATCHES:%=$(buildprefix)/Patches/$(BUILDCONFIG)/%) | patch -p1)
+	$(INSTALL) -m644 Patches/$(BUILDCONFIG)/$(HOST_KERNEL_CONFIG) $(KERNEL_DIR)/.config
 	-rm $(KERNEL_DIR)/localversion*
 	echo "$(KERNELSTMLABEL)" > $(KERNEL_DIR)/localversion-stm
 	$(MAKE) -C $(KERNEL_DIR) ARCH=sh oldconfig
 	$(MAKE) -C $(KERNEL_DIR) ARCH=sh include/asm
 	$(MAKE) -C $(KERNEL_DIR) ARCH=sh include/linux/version.h
-	rm $(KERNEL_DIR)/.config
+	$(MAKE) -C $(KERNEL_DIR) uImage modules \
+		ARCH=sh \
+		CROSS_COMPILE=$(target)-
+	$(MAKE) -C $(KERNEL_DIR) modules_install \
+		ARCH=sh \
+		CROSS_COMPILE=$(target)- \
+		INSTALL_MOD_PATH=$(targetprefix)
+	$(INSTALL) -m644 $(KERNEL_DIR)/arch/sh/boot/uImage $(bootprefix)/vmlinux.ub && \
+	$(INSTALL) -m644 $(KERNEL_DIR)/vmlinux $(targetprefix)/boot/vmlinux-sh4-$(KERNELVERSION) && \
+	$(INSTALL) -m644 $(KERNEL_DIR)/System.map $(targetprefix)/boot/System.map-sh4-$(KERNELVERSION) && \
+	$(INSTALL) -m644 $(KERNEL_DIR)/COPYING $(targetprefix)/boot/LICENSE && \
+	cp $(KERNEL_DIR)/arch/sh/boot/uImage $(targetprefix)/boot/ && \
+	rm $(targetprefix)/lib/modules/$(KERNELVERSION)/build || true && \
+	rm $(targetprefix)/lib/modules/$(KERNELVERSION)/source || true
 	touch $@
 
-$(DEPDIR)/linux-kernel.do_compile: \
-		bootstrap-cross \
-		linux-kernel.do_prepare \
-		Patches/$(HOST_KERNEL_CONFIG) \
-		| $(HOST_U_BOOT_TOOLS)
+$(D)/tfkernel.do_compile:
 	cd $(KERNEL_DIR) && \
-		export PATH=$(hostprefix)/bin:$(PATH) && \
-		$(MAKE) ARCH=sh CROSS_COMPILE=$(target)- mrproper && \
-		@M4@ $(buildprefix)/Patches/$(HOST_KERNEL_CONFIG) > .config && \
-		$(MAKE) $(if $(TF7700),TF7700=y) ARCH=sh CROSS_COMPILE=$(target)- uImage modules
-	touch $@
-
-$(DEPDIR)/tfkernel.do_compile:
-	cd $(KERNEL_DIR) && \
-		export PATH=$(hostprefix)/bin:$(PATH) && \
 		$(MAKE) $(if $(TF7700),TF7700=y) ARCH=sh CROSS_COMPILE=$(target)- uImage
 	touch $@
 
-$(DEPDIR)/linux-kernel: bootstrap $(DEPDIR)/linux-kernel.do_compile
-	@$(INSTALL) -d $(prefix)/$*cdkroot/boot && \
-	$(INSTALL) -d $(prefix)/$*$(notdir $(bootprefix)) && \
-	$(INSTALL) -m644 $(KERNEL_DIR)/arch/sh/boot/uImage $(prefix)/$*$(notdir $(bootprefix))/vmlinux.ub && \
-	$(INSTALL) -m644 $(KERNEL_DIR)/vmlinux $(prefix)/$*cdkroot/boot/vmlinux-sh4-$(KERNELVERSION) && \
-	$(INSTALL) -m644 $(KERNEL_DIR)/System.map $(prefix)/$*cdkroot/boot/System.map-sh4-$(KERNELVERSION) && \
-	$(INSTALL) -m644 $(KERNEL_DIR)/COPYING $(prefix)/$*cdkroot/boot/LICENSE && \
-	cp $(KERNEL_DIR)/arch/sh/boot/uImage $(prefix)/$*cdkroot/boot/ && \
-	$(MAKE) -C $(KERNEL_DIR) ARCH=sh INSTALL_MOD_PATH=$(prefix)/$*cdkroot modules_install && \
-	rm $(prefix)/$*cdkroot/lib/modules/$(KERNELVERSION)/build || true && \
-	rm $(prefix)/$*cdkroot/lib/modules/$(KERNELVERSION)/source || true
-	touch $@
-
-linux-kernel-distclean:
-	rm $(prefix)/$*cdkroot-rpmdb/*
-#	$(KERNELHEADERS)-distclean
+linux-kernel-clean:
 	rm -f $(DEPDIR)/linux-kernel
-	rm -f $(DEPDIR)/linux-kernel.do_compile
-	rm -f $(DEPDIR)/linux-kernel.do_prepare
-
-$(DEPDIR)/driver: $(driverdir)/Makefile glibc-dev linux-kernel.do_compile
-	$(if $(PLAYER191),cp $(driverdir)/stgfb/stmfb/linux/drivers/video/stmfb.h $(targetprefix)/usr/include/linux)
-	cp $(driverdir)/player2/linux/include/linux/dvb/stm_ioctls.h $(targetprefix)/usr/include/linux/dvb
-	$(MAKE) -C $(driverdir) ARCH=sh \
-		CONFIG_MODULES_PATH=$(targetprefix) \
-		KERNEL_LOCATION=$(buildprefix)/$(KERNEL_DIR) \
-		DRIVER_TOPDIR=$(driverdir) \
-		$(DRIVER_PLATFORM) \
-		CROSS_COMPILE=$(target)-
-	$(MAKE) -C $(driverdir) ARCH=sh \
-		CONFIG_MODULES_PATH=$(targetprefix) \
-		KERNEL_LOCATION=$(buildprefix)/$(KERNEL_DIR) \
-		DRIVER_TOPDIR=$(driverdir) \
-		BIN_DEST=$(targetprefix)/bin \
-		INSTALL_MOD_PATH=$(targetprefix) \
-		DEPMOD=$(DEPMOD) \
-		$(DRIVER_PLATFORM) \
-		install
-	$(DEPMOD) -ae -b $(targetprefix) -F $(buildprefix)/$(KERNEL_DIR)/System.map -r $(KERNELVERSION)
-	touch $@
-
-driver-clean:
-	rm -f $(DEPDIR)/driver
-	$(MAKE) -C $(driverdir) ARCH=sh \
-		KERNEL_LOCATION=$(buildprefix)/$(KERNEL_DIR) \
-		distclean
 
 #
 # Helper
