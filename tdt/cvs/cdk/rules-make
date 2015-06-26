@@ -17,6 +17,7 @@ linuxp0209;2.6.32.46_stm24_0209;linux-sh4-2.6.32.46_stm24_0209;stlinux24-host-ke
 linuxp0211;2.6.32.59_stm24_0211;linux-sh4-2.6.32.59_stm24_0211;stlinux24-host-kernel-source-sh4-2.6.32.59_stm24_0211-211.src.rpm
 linuxp0214;2.6.32.61_stm24_0214;linux-sh4-2.6.32.61_stm24_0214;stlinux24-host-kernel-source-sh4-2.6.32.61_stm24_0214-214.src.rpm
 linuxp0215;2.6.32.61_stm24_0215;linux-sh4-2.6.32.61_stm24_0215;stlinux24-host-kernel-source-sh4-2.6.32.61_stm24_0215-215.src.rpm
+linuxp0217;2.6.32.61_stm24_0215;linux-sh4-2.6.32.61_stm24_0215;stlinux24-host-kernel-source-sh4-2.6.32.61_stm24_0215-217.src.rpm
 
 squashfs;3.0;mksquashfs;squashfs3.0.tar.gz:mksquashfs_lzma.diff:lzma442.tar.bz2:lzma_zlib-stream.diff;dircreate:mksquashfs;extract:lzma442.tar.bz2;patch:lzma_zlib-stream.diff;extract:squashfs3.0.tar.gz;patch:mksquashfs_lzma.diff
 squashfs;4.0;mksquashfs;squashfs4.0.tar.gz:squashfs-tools-4.0-lzma.patch:lzma465.tar.bz2;dircreate:mksquashfs;extract:lzma465.tar.bz2;extract:squashfs4.0.tar.gz;patch:squashfs-tools-4.0-lzma.patch
