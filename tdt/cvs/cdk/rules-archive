@@ -112,6 +112,7 @@ libdvdnav-4.2.0.tar.bz2;http://dvdnav.mplayerhq.hu/releases
 libdvdread-4.2.0.tar.bz2;http://dvdnav.mplayerhq.hu/releases
 ffmpeg-1.2.1.tar.gz;http://ffmpeg.org/releases
 ffmpeg-2.0.3.tar.bz2;http://ffmpeg.org/releases
+ffmpeg-2.6.3.tar.bz2;http://ffmpeg.org/releases
 libass-0.11.1.tar.gz;https://github.com/libass/libass/releases/download/0.11.1
 libcap-2.22.tar.bz2;http://mirror.linux.org.au/linux/libs/security/linux-privs/libcap2
 libogg-1.2.2.tar.gz;http://downloads.xiph.org/releases/ogg

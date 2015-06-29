@@ -122,7 +122,8 @@ libdvdcss;1.2.12;libdvdcss-1.2.12;libdvdcss-1.2.12.tar.bz2;extract:libdvdcss-1.2
 libdvdnav;4.2.0;libdvdnav-4.2.0;libdvdnav-4.2.0.tar.bz2:libdvdnav_4.2.0.patch;extract:libdvdnav-4.2.0.tar.bz2;patch:libdvdnav_4.2.0.patch
 libdvdread;4.2.0;libdvdread-4.2.0;libdvdread-4.2.0.tar.bz2:libdvdread_4.2.0.patch;extract:libdvdread-4.2.0.tar.bz2;patch:libdvdread_4.2.0.patch
 ffmpeg_old;1.2.1;ffmpeg-1.2.1;ffmpeg-1.2.1.tar.gz;extract:ffmpeg-1.2.1.tar.gz;patch:ffmpeg-1.2.1.patch
-ffmpeg;2.0.3;ffmpeg-2.0.3;ffmpeg-2.0.3.tar.bz2;extract:ffmpeg-2.0.3.tar.bz2;patch:ffmpeg-2.0.patch
+ffmpeg1;2.0.3;ffmpeg-2.0.3;ffmpeg-2.0.3.tar.bz2;extract:ffmpeg-2.0.3.tar.bz2;patch:ffmpeg-2.0.patch
+ffmpeg;2.6.3;ffmpeg-2.6.3;ffmpeg-2.6.3.tar.bz2;extract:ffmpeg-2.6.3.tar.bz2;patch:ffmpeg-2.6.patch;patch:ffmpeg-hds-2.6.patch;patch:ffmpeg-aac-2.6.patch
 libass;0.11.1;libass-0.11.1;libass-0.11.1.tar.gz;extract:libass-0.11.1.tar.gz;patch:libass-0.11.1.patch
 libcap;2.22;libcap-2.22;libcap-2.22.tar.bz2;extract:libcap-2.22.tar.bz2
 libogg;1.2.2;libogg-1.2.2;libogg-1.2.2.tar.gz;extract:libogg-1.2.2.tar.gz
