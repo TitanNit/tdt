@@ -771,7 +771,7 @@ $(DEPDIR)/libdreamdvd: bootstrap @DEPENDS_libdreamdvd@
 FFMPEG_EXTRA  = --enable-librtmp
 FFMPEG_EXTRA += --enable-protocol=librtmp --enable-protocol=librtmpe --enable-protocol=librtmps --enable-protocol=librtmpt --enable-protocol=librtmpte
 
-$(DEPDIR)/ffmpeg: bootstrap openssl libass $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpeg@
+$(DEPDIR)/ffmpeg: bootstrap openssl libass rtmpdump $(LIBXML2) $(LIBRTMPDUMP) @DEPENDS_ffmpeg@
 	@PREPARE_ffmpeg@
 	cd @DIR_ffmpeg@ && \
 		./configure \
