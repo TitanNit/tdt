@@ -288,22 +288,22 @@
  	.phy_mask = 0,
  };
  
-+static struct platform_device sat7111_epld_device = {
-+	.name		= "epld",
-+	.id		= -1,
-+	.num_resources	= 1,
-+	.resource	= (struct resource[]) {
-+		{
-+			.start	= 0x06000000,
-+			/* Minimum size to ensure mapped by PMB */
-+			.end	= 0x06000000+(8*1024*1024)-1,
-+			.flags	= IORESOURCE_MEM,
-+		}
-+	},
-+	.dev.platform_data = &(struct plat_epld_data) {
++//static struct platform_device sat7111_epld_device = {
++//	.name		= "epld",
++//	.id		= -1,
++//	.num_resources	= 1,
++//	.resource	= (struct resource[]) {
++//		{
++//			.start	= 0x06000000,
++//			/* Minimum size to ensure mapped by PMB */
++//			.end	= 0x06000000+(8*1024*1024)-1,
++//			.flags	= IORESOURCE_MEM,
++//		}
++//	},
++//	.dev.platform_data = &(struct plat_epld_data) {
 +//		 .opsize = 8,
-+	},
-+};
++//	},
++//};
 +
  static struct platform_device *sat7111_devices[] __initdata = {
 +//	&sat7111_epld_device,
